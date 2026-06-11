@@ -132,11 +132,11 @@ export default function GameBoard() {
       </AnimatePresence>
 
       {/* 手牌エリア */}
-      <div className="w-full bg-green-800 rounded-2xl p-6 shadow-xl">
-        <p className="text-center text-green-200 text-sm mb-4 font-medium">
+      <div className="w-full bg-green-800 rounded-2xl p-4 shadow-xl">
+        <p className="text-center text-green-200 text-sm mb-3 font-medium">
           捨てる牌をタップ
         </p>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex justify-center gap-1 overflow-x-auto pb-1">
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
             let wrong = false;
@@ -168,7 +168,7 @@ export default function GameBoard() {
                 disabled={isDisabled}
                 highlighted={highlighted}
                 wrong={wrong}
-                size="lg"
+                size="md"
               />
             );
           })}

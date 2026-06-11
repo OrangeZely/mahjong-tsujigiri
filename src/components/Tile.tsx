@@ -22,8 +22,8 @@ export default function Tile({
   size = "md",
 }: TileProps) {
   const sizeClasses = {
-    sm: "w-8 h-12 text-xs",
-    md: "w-12 h-16 text-sm",
+    sm: "w-7 h-10 text-xs",
+    md: "w-10 h-14 text-xs",
     lg: "w-14 h-20 text-base",
   };
 
@@ -61,10 +61,10 @@ export default function Tile({
         </span>
       ) : (
         <>
-          <span className={`${suitColors[tile.suit]} text-lg leading-none font-black`}>
+          <span className={`${suitColors[tile.suit]} text-base leading-none font-black`}>
             {tile.num}
           </span>
-          <span className={`${suitColors[tile.suit]} text-xs leading-none`}>
+          <span className={`${suitColors[tile.suit]} text-[10px] leading-none`}>
             {SUIT_LABELS[tile.suit]}
           </span>
         </>

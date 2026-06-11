@@ -174,7 +174,7 @@ export function bestDiscards(tiles: Tile[]): string[] {
 
 export function generateProblem(id: string): Problem {
   const deck = shuffle(createFullDeck());
-  const hand = deck.slice(0, 13);
+  const hand = deck.slice(0, 14);
   hand.sort((a, b) => {
     const so = suitOffset(a.suit) - suitOffset(b.suit);
     return so !== 0 ? so : a.num - b.num;
