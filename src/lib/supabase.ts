@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import { RankingEntry, GameResult } from "@/types/mahjong";
+import { RankingEntry, GameResult, Problem } from "@/types/mahjong";
+import { rowToProblem } from "@/lib/mahjong";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -54,6 +55,28 @@ export async function fetchMyRank(score: number): Promise<number> {
     .select("*", { count: "exact", head: true })
     .gt("score", score);
   return (count || 0) + 1;
+}
+
+// 問題一覧を取得（シャッフル済み）
+export async function fetchProblems(): Promise<Problem[]> {
+  const { data, error } = await supabase
+    .from("problems")
+    .select("*")
+    .order("id");
+
+  if (error || !data || data.length === 0) return [];
+
+  // シャッフルして返す
+  const shuffled = [...data].sort(() => Math.random() - 0.5);
+  return shuffled.map((row) =>
+    rowToProblem({
+      id: row.id,
+      tiles_str: row.tiles_str,
+      correct_discards: row.correct_discards,
+      difficulty: row.difficulty,
+      description: row.description,
+    })
+  );
 }
 
 function rowToRanking(row: Record<string, unknown>): RankingEntry {

@@ -197,3 +197,41 @@ export function generateProblemPool(size: number): Problem[] {
     generateProblem(`auto_${Date.now()}_${i}`)
   );
 }
+
+// ==================== 牌文字列パース ====================
+// 例: "1m2m3m4p5p6pz1z1z7z7" → Tile[]
+export function parseTileString(str: string): Tile[] {
+  const tiles: Tile[] = [];
+  const regex = /(\d)([mpsz])/g;
+  let match;
+  const countMap: Record<string, number> = {};
+
+  while ((match = regex.exec(str)) !== null) {
+    const num = parseInt(match[1]);
+    const suit = match[2] as Suit;
+    const key = `${suit}${num}`;
+    countMap[key] = (countMap[key] || 0) + 1;
+    tiles.push(createTile(suit, num, countMap[key] - 1));
+  }
+  return tiles;
+}
+
+// Supabaseのレコードから Problem を生成
+export function rowToProblem(row: {
+  id: string;
+  tiles_str: string;
+  correct_discards: string;
+  difficulty: number;
+  description?: string;
+}): Problem {
+  const tiles = parseTileString(row.tiles_str);
+  const corrects = row.correct_discards.split(",").map((s) => s.trim());
+  return {
+    id: row.id,
+    tiles,
+    correctDiscards: corrects,
+    difficulty: row.difficulty as 1 | 2 | 3,
+    description: row.description,
+    isAuto: false,
+  };
+}

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Problem, GameAnswer, GameResult, Tile } from "@/types/mahjong";
 import { generateProblemPool } from "@/lib/mahjong";
+import { fetchProblems } from "@/lib/supabase";
 
 export type GamePhase =
   | "idle"        // スタート前
@@ -49,12 +50,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameTimeLeft: GAME_DURATION_MS,
   questionTimeLeft: QUESTION_DURATION_MS,
 
-  startGame: () => {
-    const problems = generateProblemPool(PROBLEM_POOL_SIZE);
+  startGame: async () => {
     const now = Date.now();
+    // まずローディング状態にする
     set({
       phase: "playing",
-      problems,
+      problems: [],
       currentIndex: 0,
       answers: [],
       lastAnswer: null,
@@ -63,6 +64,23 @@ export const useGameStore = create<GameState>((set, get) => ({
       gameTimeLeft: GAME_DURATION_MS,
       questionTimeLeft: QUESTION_DURATION_MS,
     });
+
+    // DBから問題を取得し、足りない分はオート生成で補う
+    const dbProblems = await fetchProblems();
+    let problems: Problem[];
+    if (dbProblems.length > 0) {
+      // DB問題をループしながら200問分用意
+      const repeated: Problem[] = [];
+      while (repeated.length < PROBLEM_POOL_SIZE) {
+        repeated.push(...dbProblems);
+      }
+      problems = repeated.slice(0, PROBLEM_POOL_SIZE);
+    } else {
+      // DB問題がない場合は自動生成にフォールバック
+      problems = generateProblemPool(PROBLEM_POOL_SIZE);
+    }
+
+    set({ problems });
   },
 
   submitAnswer: (tile: Tile) => {
