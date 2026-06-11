@@ -34,7 +34,7 @@ export default function HomePage() {
         <div className="bg-white/10 backdrop-blur rounded-2xl p-5 mb-8 text-left max-w-sm mx-auto space-y-2">
           <div className="flex items-center gap-3 text-white">
             <span className="text-2xl">🀄</span>
-            <span>13枚の手牌が表示される</span>
+            <span>14枚の手牌が表示される</span>
           </div>
           <div className="flex items-center gap-3 text-white">
             <span className="text-2xl">👆</span>
