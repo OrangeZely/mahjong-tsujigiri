@@ -51,7 +51,7 @@ export default function GameBoard() {
   const isDisabled = phase === "answered";
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto p-4">
+    <div className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto px-2 py-4">
 
       {/* 上部ステータスバー */}
       <div className="w-full flex items-center justify-between bg-gray-900 text-white rounded-xl px-4 py-3">
@@ -132,11 +132,11 @@ export default function GameBoard() {
       </AnimatePresence>
 
       {/* 手牌エリア */}
-      <div className="w-full bg-green-800 rounded-2xl p-4 shadow-xl">
-        <p className="text-center text-green-200 text-sm mb-3 font-medium">
-          捨てる牌をタップ
+      <div className="w-full bg-green-900 rounded-2xl px-2 py-3 shadow-xl border border-green-700">
+        <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
+          ✂️ 切る牌をタップ
         </p>
-        <div className="flex justify-center gap-1 overflow-x-auto pb-1">
+        <div className="flex justify-between w-full">
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
             let wrong = false;
