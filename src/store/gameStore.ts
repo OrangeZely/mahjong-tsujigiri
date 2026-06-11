@@ -4,6 +4,7 @@ import { fetchProblems } from "@/lib/supabase";
 
 export type GamePhase =
   | "idle"        // スタート前
+  | "loading"     // 問題読み込み中
   | "playing"     // プレイ中
   | "answered"    // 1問回答直後（0.5秒表示）
   | "finished";   // 1分終了
@@ -50,11 +51,31 @@ export const useGameStore = create<GameState>((set, get) => ({
   questionTimeLeft: QUESTION_DURATION_MS,
 
   startGame: async () => {
+    // まずローディング状態にする（タイマーはまだ動かさない）
+    set({ phase: "loading" });
+
+    // DBから問題を取得
+    const dbProblems = await fetchProblems();
+
+    // 問題が0件の場合はエラー表示してidleに戻す
+    if (dbProblems.length === 0) {
+      alert("問題が登録されていません。Supabaseに問題を追加してください。");
+      set({ phase: "idle" });
+      return;
+    }
+
+    // DB問題をループしながら200問分用意
+    const repeated: Problem[] = [];
+    while (repeated.length < PROBLEM_POOL_SIZE) {
+      repeated.push(...dbProblems);
+    }
+    const problems = repeated.slice(0, PROBLEM_POOL_SIZE);
+
+    // 問題取得完了後にゲーム開始（タイマーはここから）
     const now = Date.now();
-    // まずローディング状態にする
     set({
       phase: "playing",
-      problems: [],
+      problems,
       currentIndex: 0,
       answers: [],
       lastAnswer: null,
@@ -63,16 +84,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       gameTimeLeft: GAME_DURATION_MS,
       questionTimeLeft: QUESTION_DURATION_MS,
     });
-
-    // DBから問題を取得してループしながら200問分用意
-    const dbProblems = await fetchProblems();
-    const repeated: Problem[] = [];
-    while (repeated.length < PROBLEM_POOL_SIZE) {
-      repeated.push(...dbProblems);
-    }
-    const problems = repeated.slice(0, PROBLEM_POOL_SIZE);
-
-    set({ problems });
   },
 
   submitAnswer: (tile: Tile) => {

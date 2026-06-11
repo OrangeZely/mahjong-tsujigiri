@@ -18,6 +18,15 @@ export default function GamePage() {
     };
   }, []);
 
+  if (phase === "loading") {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex flex-col items-center justify-center gap-6">
+        <div className="text-6xl animate-spin">⚔️</div>
+        <p className="text-white text-xl font-bold">問題を読み込み中...</p>
+      </main>
+    );
+  }
+
   if (phase === "idle") {
     return (
       <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex flex-col items-center justify-center p-4 gap-6">
