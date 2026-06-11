@@ -2,15 +2,7 @@
 
 import React from "react";
 import { Tile as TileType } from "@/types/mahjong";
-
-// Unicode麻雀牌マッピング
-const TILE_UNICODE: Record<string, Record<number, string>> = {
-  m: { 1:"🀇", 2:"🀈", 3:"🀉", 4:"🀊", 5:"🀋", 6:"🀌", 7:"🀍", 8:"🀎", 9:"🀏" },
-  p: { 1:"🀙", 2:"🀚", 3:"🀛", 4:"🀜", 5:"🀝", 6:"🀞", 7:"🀟", 8:"🀠", 9:"🀡" },
-  s: { 1:"🀐", 2:"🀑", 3:"🀒", 4:"🀓", 5:"🀔", 6:"🀕", 7:"🀖", 8:"🀗", 9:"🀘" },
-  z: { 1:"🀀", 2:"🀁", 3:"🀂", 4:"🀃", 5:"🀆", 6:"🀅", 7:"🀄" },
-  // z: 1=東 2=南 3=西 4=北 5=白 6=発 7=中
-};
+import { JIHAI_LABELS, SUIT_LABELS } from "@/lib/mahjong";
 
 interface TileProps {
   tile: TileType;
@@ -29,35 +21,49 @@ export default function Tile({
   wrong,
   size = "md",
 }: TileProps) {
-  const sizeClasses = {
-    sm: "text-lg",
-    md: "text-[20px]",
-    lg: "text-5xl",
+  const suitColors: Record<string, string> = {
+    m: "text-red-600",
+    p: "text-blue-600",
+    s: "text-green-600",
+    z: "text-purple-700",
   };
 
-  const emoji = TILE_UNICODE[tile.suit]?.[tile.num] ?? "🀫";
-  const isClickable = onClick && !disabled;
+  let bgClass = "bg-amber-50 border-amber-200 shadow-sm";
+  if (highlighted) bgClass = "bg-green-100 border-green-500 ring-2 ring-green-400 shadow-md";
+  if (wrong) bgClass = "bg-red-100 border-red-400 ring-2 ring-red-400 shadow-md";
 
-  let filterClass = "";
-  if (highlighted) filterClass = "drop-shadow-[0_0_6px_rgba(34,197,94,1)] scale-110 -translate-y-1";
-  if (wrong) filterClass = "drop-shadow-[0_0_6px_rgba(239,68,68,1)]";
+  const isClickable = onClick && !disabled;
 
   return (
     <button
       onClick={() => onClick?.(tile)}
       disabled={disabled || !onClick}
       className={`
-        ${sizeClasses[size]}
-        ${filterClass}
-        leading-none select-none
+        w-[6.5%] aspect-[2/3]
+        ${bgClass}
+        border-2 rounded
+        flex flex-col items-center justify-center
+        font-bold select-none
         transition-all duration-100
-        ${isClickable ? "cursor-pointer hover:scale-125 hover:-translate-y-2 active:scale-95" : "cursor-default"}
+        ${isClickable ? "cursor-pointer hover:scale-110 hover:-translate-y-2 hover:shadow-lg active:scale-95" : "cursor-default"}
         ${disabled ? "opacity-70" : ""}
-        bg-transparent border-none p-0.5
+        min-w-0
       `}
-      style={{ lineHeight: 1 }}
     >
-      {emoji}
+      {tile.suit === "z" ? (
+        <span className={`${suitColors.z} leading-none text-[min(2.8vw,13px)] font-black`}>
+          {JIHAI_LABELS[tile.num]}
+        </span>
+      ) : (
+        <>
+          <span className={`${suitColors[tile.suit]} leading-none font-black text-[min(3.5vw,16px)]`}>
+            {tile.num}
+          </span>
+          <span className={`${suitColors[tile.suit]} leading-none text-[min(2vw,9px)]`}>
+            {SUIT_LABELS[tile.suit]}
+          </span>
+        </>
+      )}
     </button>
   );
 }

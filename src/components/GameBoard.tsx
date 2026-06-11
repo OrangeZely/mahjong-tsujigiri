@@ -134,9 +134,9 @@ export default function GameBoard() {
       {/* 手牌エリア */}
       <div className="w-full bg-green-900 rounded-2xl px-2 py-3 shadow-xl border border-green-700">
         <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
-          ✂️ 切る牌をタップ
+          切る牌をタップ
         </p>
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full gap-0.5">
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
             let wrong = false;
