@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { useGameStore } from "@/store/gameStore";
+import { tileLabel } from "@/lib/mahjong";
+import Tile from "@/components/Tile";
 
 interface Props {
   result: GameResult;
@@ -16,7 +19,9 @@ export default function ResultModal({ result, onReset }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [myRank, setMyRank] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
+  const problems = useGameStore((s) => s.problems);
 
   const handleSave = async () => {
     if (!playerName.trim()) return;
@@ -116,6 +121,79 @@ export default function ResultModal({ result, onReset }: Props) {
             >
               ランキングを見る 📊
             </button>
+          )}
+
+          {/* 答え合わせ */}
+          <button
+            onClick={() => setShowDetails((v) => !v)}
+            className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
+          >
+            {showDetails ? "答え合わせを閉じる ▲" : "答え合わせを見る ▼"}
+          </button>
+
+          {showDetails && (
+            <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+              {result.answers.map((answer, i) => {
+                const problem = problems.find((p) => p.id === answer.problemId);
+                const isTimeout = answer.discardedTile.id === "timeout";
+                return (
+                  <div
+                    key={i}
+                    className={`rounded-xl p-3 border-2 ${answer.isCorrect ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"}`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-xl font-black ${answer.isCorrect ? "text-green-600" : "text-red-500"}`}>
+                        {answer.isCorrect ? "○" : "✗"}
+                      </span>
+                      <span className="text-sm font-bold text-gray-600">問題 {i + 1}</span>
+                    </div>
+
+                    {/* 手牌 */}
+                    {problem && (
+                      <div className="flex flex-wrap gap-0.5 mb-2">
+                        {problem.tiles.map((tile) => {
+                          const isCorrectTile = problem.correctDiscards.includes(`${tile.suit}${tile.num}`);
+                          const isChosen = !isTimeout && tile.suit === answer.discardedTile.suit && tile.num === answer.discardedTile.num;
+                          return (
+                            <Tile
+                              key={tile.id}
+                              tile={tile}
+                              size="sm"
+                              highlighted={isCorrectTile}
+                              wrong={isChosen && !answer.isCorrect}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    <div className="text-xs space-y-0.5">
+                      <div>
+                        <span className="text-gray-500">正解: </span>
+                        <span className="font-bold text-green-700">
+                          {problem?.correctDiscards.map((cd) => {
+                            const suit = cd[0] as import("@/types/mahjong").Suit;
+                            const num = parseInt(cd[1]);
+                            return tileLabel({ suit, num, id: cd });
+                          }).join(" / ")}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">あなた: </span>
+                        <span className={`font-bold ${answer.isCorrect ? "text-green-700" : "text-red-600"}`}>
+                          {isTimeout ? "時間切れ" : tileLabel(answer.discardedTile)}
+                        </span>
+                      </div>
+                      {problem?.description && (
+                        <div className="mt-1 text-gray-600 bg-white/70 rounded-lg px-2 py-1">
+                          💡 {problem.description}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
 
           {/* もう一度 */}
