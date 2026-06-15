@@ -111,7 +111,7 @@ export default function ResultModal({ result, onReset }: Props) {
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 maxLength={20}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-lg focus:outline-none focus:border-indigo-400"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-lg focus:outline-none focus:border-indigo-400 placeholder-gray-500"
               />
               <button
                 onClick={handleSave}
