@@ -48,7 +48,7 @@ export default function ResultModal({ result, onReset }: Props) {
         initial={{ scale: 0.8, y: 40 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
       >
         {/* ヘッダー */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
