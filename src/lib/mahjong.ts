@@ -202,13 +202,21 @@ export function generateProblemPool(size: number): Problem[] {
 // 例: "1m2m3m4p5p6pz1z1z7z7" → Tile[]
 export function parseTileString(str: string): Tile[] {
   const tiles: Tile[] = [];
-  const regex = /(\d)([mpsz])/g;
+  // z1〜z7形式（z先頭）と1m〜9z形式（数字先頭）の両方に対応
+  const regex = /z(\d)|(\d)([mpsz])/g;
   let match;
   const countMap: Record<string, number> = {};
 
   while ((match = regex.exec(str)) !== null) {
-    const num = parseInt(match[1]);
-    const suit = match[2] as Suit;
+    let num: number;
+    let suit: Suit;
+    if (match[1] !== undefined) {
+      suit = "z";
+      num = parseInt(match[1]);
+    } else {
+      num = parseInt(match[2]);
+      suit = match[3] as Suit;
+    }
     const key = `${suit}${num}`;
     countMap[key] = (countMap[key] || 0) + 1;
     tiles.push(createTile(suit, num, countMap[key] - 1));
