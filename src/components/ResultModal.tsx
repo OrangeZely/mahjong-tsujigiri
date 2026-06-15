@@ -7,6 +7,7 @@ import { saveScore, fetchMyRank } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import { tileLabel } from "@/lib/mahjong";
+import { getRank } from "@/lib/ranks";
 import Tile from "@/components/Tile";
 
 interface Props {
@@ -78,7 +79,7 @@ export default function ResultModal({ result, onReset }: Props) {
             </div>
           </div>
 
-          {/* スコア */}
+          {/* スコア & 格付け */}
           <div className="text-center bg-yellow-50 rounded-xl p-4">
             <div className="text-xs text-gray-500 mb-1">スコア</div>
             <div className="text-5xl font-black text-yellow-600">
@@ -86,6 +87,12 @@ export default function ResultModal({ result, onReset }: Props) {
             </div>
             <div className="text-xs text-gray-400 mt-1">
               正解数×100 + 正答率
+            </div>
+            <div className="mt-3 pt-3 border-t border-yellow-200">
+              <div className="text-xs text-gray-500 mb-1">格付け</div>
+              <div className="text-2xl font-black text-orange-600">
+                {getRank(result.score)}
+              </div>
             </div>
           </div>
 
