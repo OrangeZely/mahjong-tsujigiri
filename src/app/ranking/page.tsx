@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { fetchRanking } from "@/lib/supabase";
 import { RankingEntry } from "@/types/mahjong";
+import { getRank } from "@/lib/ranks";
 
 type Period = "all" | "week";
 
@@ -94,12 +95,14 @@ export default function RankingPage() {
                   </div>
                 </div>
 
-                {/* スコア */}
+                {/* スコア & 格付け */}
                 <div className="text-right">
                   <div className="text-yellow-400 font-black text-xl">
                     {entry.score.toLocaleString()}
                   </div>
-                  <div className="text-gray-500 text-xs">点</div>
+                  <div className="text-orange-400 text-xs font-bold">
+                    {getRank(entry.score)}
+                  </div>
                 </div>
               </motion.div>
             ))}
