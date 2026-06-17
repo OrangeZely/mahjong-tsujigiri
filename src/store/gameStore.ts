@@ -64,10 +64,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
 
-    // DB問題をループしながら200問分用意
+    // DB問題をランダムに並べて200問分用意
     const repeated: Problem[] = [];
     while (repeated.length < PROBLEM_POOL_SIZE) {
-      repeated.push(...dbProblems);
+      const shuffled = [...dbProblems].sort(() => Math.random() - 0.5);
+      repeated.push(...shuffled);
     }
     const problems = repeated.slice(0, PROBLEM_POOL_SIZE);
 
