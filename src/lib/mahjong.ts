@@ -225,6 +225,12 @@ export function parseTileString(str: string): Tile[] {
 }
 
 // Supabaseのレコードから Problem を生成
+// "7z" → "z7"、"1m" → "m1" のように スーツ+数字 形式に正規化
+function normalizeTileKey(s: string): string {
+  if (/^\d[mpsz]$/.test(s)) return s[1] + s[0];
+  return s;
+}
+
 export function rowToProblem(row: {
   id: string;
   tiles_str: string;
@@ -233,7 +239,7 @@ export function rowToProblem(row: {
   description?: string;
 }): Problem {
   const tiles = parseTileString(row.tiles_str);
-  const corrects = row.correct_discards.split(",").map((s) => s.trim());
+  const corrects = row.correct_discards.split(",").map((s) => normalizeTileKey(s.trim()));
   return {
     id: row.id,
     tiles,
