@@ -36,8 +36,8 @@ export default function GamePage() {
           className="text-center"
         >
           <div className="text-6xl mb-4">⚔️</div>
-          <h1 className="text-4xl font-black text-white mb-2">準備はいい？</h1>
-          <p className="text-gray-400 mb-8">ボタンを押したら60秒スタート！</p>
+          <h1 className="text-4xl font-black text-white mb-2">いざ　尋常に</h1>
+          <p className="text-gray-400 mb-8">考えるな、感じろ</p>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
