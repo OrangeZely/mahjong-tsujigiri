@@ -28,17 +28,17 @@ export default function HomePage() {
           1分間で何切る問題を斬りまくれ！
         </p>
         <p className="text-gray-400 text-sm mb-10">
-          1問5秒 • 60秒間 • 正解数と正答率を競う
+          雀士たるもの5秒以内に切るべし
         </p>
 
         <div className="bg-white/10 backdrop-blur rounded-2xl p-5 mb-8 text-left max-w-sm mx-auto space-y-2">
           <div className="flex items-center gap-3 text-white">
             <span className="text-2xl">🀄</span>
-            <span>14枚の手牌が表示される</span>
+            <span>表示された手配から最善手を選択</span>
           </div>
           <div className="flex items-center gap-3 text-white">
             <span className="text-2xl">👆</span>
-            <span>最善の1枚をタップして切る</span>
+            <span>最善の1枚をタップ</span>
           </div>
           <div className="flex items-center gap-3 text-white">
             <span className="text-2xl">⏱️</span>
@@ -61,7 +61,7 @@ export default function HomePage() {
           onClick={() => router.push("/game")}
           className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black text-2xl px-12 py-5 rounded-2xl shadow-2xl transition-colors"
         >
-          ゲームスタート ⚔️
+          推して参る！
         </motion.button>
 
         <div className="mt-6">
