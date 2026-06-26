@@ -67,9 +67,10 @@ export default function Tile({
     >
       <Image
         src={getTileImagePath(tile)}
-        alt={`${tile.suit}${tile.num}`}
+        alt={`${tile.suit}${tile.num}${tile.isRed ? "r" : ""}`}
         fill
         className="object-contain"
+        style={tile.isRed ? { filter: "sepia(1) saturate(8) hue-rotate(300deg) brightness(1.1)" } : undefined}
         unoptimized
       />
     </button>

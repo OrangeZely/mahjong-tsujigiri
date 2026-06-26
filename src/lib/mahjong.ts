@@ -23,8 +23,8 @@ export function tileLabel(tile: Tile): string {
   return `${tile.num}${SUIT_LABELS[tile.suit]}`;
 }
 
-export function createTile(suit: Suit, num: number, index: number): Tile {
-  return { suit, num, id: `${suit}${num}_${index}` };
+export function createTile(suit: Suit, num: number, index: number, isRed = false): Tile {
+  return { suit, num, id: `${suit}${num}_${index}${isRed ? "r" : ""}`, isRed: isRed || undefined };
 }
 
 // フルデッキ生成（各牌4枚）
@@ -203,6 +203,7 @@ export function generateProblemPool(size: number): Problem[] {
 export function parseTileString(str: string): Tile[] {
   const tiles: Tile[] = [];
   // z1〜z7形式（z先頭）と1m〜9z形式（数字先頭）の両方に対応
+  // 0m/0p/0s は赤5として扱う
   const regex = /z(\d)|(\d)([mpsz])/g;
   let match;
   const countMap: Record<string, number> = {};
@@ -210,18 +211,44 @@ export function parseTileString(str: string): Tile[] {
   while ((match = regex.exec(str)) !== null) {
     let num: number;
     let suit: Suit;
+    let isRed = false;
     if (match[1] !== undefined) {
       suit = "z";
       num = parseInt(match[1]);
     } else {
       num = parseInt(match[2]);
       suit = match[3] as Suit;
+      if (num === 0) { num = 5; isRed = true; } // 赤5
     }
     const key = `${suit}${num}`;
     countMap[key] = (countMap[key] || 0) + 1;
-    tiles.push(createTile(suit, num, countMap[key] - 1));
+    tiles.push(createTile(suit, num, countMap[key] - 1, isRed));
   }
   return tiles;
+}
+
+// tiles_strを手牌・副露牌・リーチ状態にパース
+// 形式: "手牌|副露1,副露2|RIICHI"
+// 例: "1m2m3m4m5m6m7m8m9m1p1p|3m4m5m,z7z7z7"
+// 例: "1m2m3m4m5m6m7m8m9m1p1pz1z1z7||RIICHI"
+export function parseProblemStr(str: string): { tiles: Tile[]; openSets: Tile[][]; isRiichi: boolean } {
+  const parts = str.split("|");
+  const tiles = parseTileString(parts[0]);
+  const openSets: Tile[][] = [];
+  let isRiichi = false;
+
+  if (parts[1] !== undefined) {
+    for (const setStr of parts[1].split(",")) {
+      const trimmed = setStr.trim();
+      if (!trimmed) continue;
+      openSets.push(parseTileString(trimmed));
+    }
+  }
+  if (parts[2] !== undefined && parts[2].trim().toUpperCase() === "RIICHI") {
+    isRiichi = true;
+  }
+
+  return { tiles, openSets, isRiichi };
 }
 
 // Supabaseのレコードから Problem を生成
@@ -238,11 +265,13 @@ export function rowToProblem(row: {
   difficulty: number;
   description?: string;
 }): Problem {
-  const tiles = parseTileString(row.tiles_str);
+  const { tiles, openSets, isRiichi } = parseProblemStr(row.tiles_str);
   const corrects = row.correct_discards.split(",").map((s) => normalizeTileKey(s.trim()));
   return {
     id: row.id,
     tiles,
+    openSets: openSets.length > 0 ? openSets : undefined,
+    isRiichi: isRiichi || undefined,
     correctDiscards: corrects,
     difficulty: row.difficulty as 1 | 2 | 3,
     description: row.description,

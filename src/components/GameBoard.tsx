@@ -131,6 +131,31 @@ export default function GameBoard() {
         )}
       </AnimatePresence>
 
+      {/* 副露牌エリア */}
+      {problem.openSets && problem.openSets.length > 0 && (
+        <div className="w-full bg-green-950 rounded-xl px-3 py-2 border border-green-700">
+          <p className="text-center text-yellow-400 text-xs mb-2 font-bold tracking-widest">副 露</p>
+          <div className="flex justify-center gap-3 flex-wrap">
+            {problem.openSets.map((set, i) => (
+              <div key={i} className="flex gap-0.5 bg-green-800 rounded-lg p-1 border border-yellow-600/40">
+                {set.map((tile) => (
+                  <Tile key={tile.id} tile={tile} size="sm" />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* リーチ表示 */}
+      {problem.isRiichi && (
+        <div className="text-center">
+          <span className="bg-red-600 text-white text-sm font-black px-4 py-1 rounded-full tracking-widest shadow-lg">
+            🀄 リーチ
+          </span>
+        </div>
+      )}
+
       {/* 手牌エリア */}
       <div className="w-full bg-green-900 rounded-2xl px-2 py-3 shadow-xl border border-green-700">
         <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
