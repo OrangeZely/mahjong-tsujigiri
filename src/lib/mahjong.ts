@@ -203,8 +203,8 @@ export function generateProblemPool(size: number): Problem[] {
 export function parseTileString(str: string): Tile[] {
   const tiles: Tile[] = [];
   // z1〜z7形式（z先頭）と1m〜9z形式（数字先頭）の両方に対応
-  // 0m/0p/0s は赤5として扱う
-  const regex = /z(\d)|(\d)([mpsz])/g;
+  // rm/rp/rs は赤5として扱う
+  const regex = /z(\d)|r([mps])|(\d)([mpsz])/g;
   let match;
   const countMap: Record<string, number> = {};
 
@@ -213,12 +213,18 @@ export function parseTileString(str: string): Tile[] {
     let suit: Suit;
     let isRed = false;
     if (match[1] !== undefined) {
+      // z{num} 形式
       suit = "z";
       num = parseInt(match[1]);
+    } else if (match[2] !== undefined) {
+      // r{suit} 形式（赤5）
+      suit = match[2] as Suit;
+      num = 5;
+      isRed = true;
     } else {
-      num = parseInt(match[2]);
-      suit = match[3] as Suit;
-      if (num === 0) { num = 5; isRed = true; } // 赤5
+      // {num}{suit} 形式
+      num = parseInt(match[3]);
+      suit = match[4] as Suit;
     }
     const key = `${suit}${num}`;
     countMap[key] = (countMap[key] || 0) + 1;
