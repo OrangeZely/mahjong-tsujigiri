@@ -6,6 +6,10 @@ import { Tile as TileType } from "@/types/mahjong";
 
 // 牌の種類とファイル名のマッピング
 function getTileImagePath(tile: TileType): string {
+  // 赤5は専用画像（p_ms5r_1.gif など）を使用
+  if (tile.isRed && tile.suit === "m") return `/tiles/p_ms5r_1.gif`;
+  if (tile.isRed && tile.suit === "p") return `/tiles/p_ps5r_1.gif`;
+  if (tile.isRed && tile.suit === "s") return `/tiles/p_ss5r_1.gif`;
   if (tile.suit === "m") return `/tiles/p_ms${tile.num}_1.gif`;
   if (tile.suit === "p") return `/tiles/p_ps${tile.num}_1.gif`;
   if (tile.suit === "s") return `/tiles/p_ss${tile.num}_1.gif`;
@@ -70,7 +74,6 @@ export default function Tile({
         alt={`${tile.suit}${tile.num}${tile.isRed ? "r" : ""}`}
         fill
         className="object-contain"
-        style={tile.isRed ? { filter: "sepia(1) saturate(8) hue-rotate(300deg) brightness(1.1)" } : undefined}
         unoptimized
       />
     </button>
