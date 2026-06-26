@@ -161,7 +161,7 @@ export default function GameBoard() {
         <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
           切る牌をタップ
         </p>
-        <div className="flex justify-between w-full gap-0.5">
+        <div className="flex justify-center w-full gap-[2px]">
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
             let wrong = false;
