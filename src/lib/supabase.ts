@@ -58,15 +58,14 @@ export async function fetchMyRank(score: number): Promise<number> {
 }
 
 // 問題一覧を取得（シャッフル済み）
-export async function fetchProblems(): Promise<Problem[]> {
+async function fetchProblemsFromTable(tableName: string): Promise<Problem[]> {
   const { data, error } = await supabase
-    .from("problems")
+    .from(tableName)
     .select("*")
     .order("id");
 
   if (error || !data || data.length === 0) return [];
 
-  // シャッフルして返す
   const shuffled = [...data].sort(() => Math.random() - 0.5);
   return shuffled.map((row) =>
     rowToProblem({
@@ -77,6 +76,14 @@ export async function fetchProblems(): Promise<Problem[]> {
       description: row.description,
     })
   );
+}
+
+export async function fetchProblems(): Promise<Problem[]> {
+  return fetchProblemsFromTable("problems");
+}
+
+export async function fetchCasualProblems(): Promise<Problem[]> {
+  return fetchProblemsFromTable("problems_casual");
 }
 
 function rowToRanking(row: Record<string, unknown>): RankingEntry {

@@ -9,6 +9,7 @@ import { Tile as TileType } from "@/types/mahjong";
 export default function GameBoard() {
   const {
     phase,
+    gameMode,
     problems,
     currentIndex,
     lastAnswer,
@@ -87,27 +88,29 @@ export default function GameBoard() {
         />
       </div>
 
-      {/* 問題タイマー */}
-      <div className="w-full">
-        <div className="flex justify-between text-sm text-gray-500 mb-1">
-          <span>何を切る？</span>
-          <span className={questionSeconds <= 2 ? "text-red-500 font-bold" : ""}>
-            {questionSeconds}秒
-          </span>
+      {/* 問題タイマー（スピードモードのみ） */}
+      {gameMode === "speed" && (
+        <div className="w-full">
+          <div className="flex justify-between text-sm text-gray-500 mb-1">
+            <span>何を切る？</span>
+            <span className={questionSeconds <= 2 ? "text-red-500 font-bold" : ""}>
+              {questionSeconds}秒
+            </span>
+          </div>
+          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-none ${
+                questionSeconds <= 2
+                  ? "bg-red-500"
+                  : questionSeconds <= 3
+                  ? "bg-yellow-500"
+                  : "bg-green-500"
+              }`}
+              style={{ width: `${questionProgress}%` }}
+            />
+          </div>
         </div>
-        <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-none ${
-              questionSeconds <= 2
-                ? "bg-red-500"
-                : questionSeconds <= 3
-                ? "bg-yellow-500"
-                : "bg-green-500"
-            }`}
-            style={{ width: `${questionProgress}%` }}
-          />
-        </div>
-      </div>
+      )}
 
       {/* 正解/不正解オーバーレイ */}
       <AnimatePresence>

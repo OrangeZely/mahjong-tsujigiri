@@ -1,22 +1,21 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { useGameStore } from "@/store/gameStore";
+import { useGameStore, GameMode } from "@/store/gameStore";
 import GameBoard from "@/components/GameBoard";
 import ResultModal from "@/components/ResultModal";
 
-export default function GamePage() {
-  const { phase, startGame, resetGame, getResult } = useGameStore();
+function GameContent() {
+  const { phase, gameMode, startGame, resetGame, getResult } = useGameStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // ページ離脱時にリセット
-  useEffect(() => {
-    return () => {
-      // クリーンアップしない（結果を保持する）
-    };
-  }, []);
+  const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
+
+  const modeLabel = mode === "casual" ? "一分何切るモード" : "スピードモード";
+  const modeColor = mode === "casual" ? "text-green-300" : "text-red-300";
 
   if (phase === "loading") {
     return (
@@ -36,13 +35,16 @@ export default function GamePage() {
           className="text-center"
         >
           <div className="text-6xl mb-4">⚔️</div>
+          <p className={`text-sm font-bold mb-1 ${modeColor}`}>{modeLabel}</p>
           <h1 className="text-4xl font-black text-white mb-2">いざ　尋常に</h1>
-          <p className="text-gray-400 mb-8">考えるな、感じろ</p>
+          <p className="text-gray-400 mb-8">
+            {mode === "casual" ? "じっくり考えて斬れ" : "考えるな、感じろ"}
+          </p>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={startGame}
+            onClick={() => startGame(mode)}
             className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black text-3xl px-16 py-6 rounded-2xl shadow-2xl"
           >
             斬！⚔️
@@ -74,5 +76,17 @@ export default function GamePage() {
         />
       )}
     </main>
+  );
+}
+
+export default function GamePage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex items-center justify-center">
+        <div className="text-6xl animate-spin">⚔️</div>
+      </main>
+    }>
+      <GameContent />
+    </Suspense>
   );
 }

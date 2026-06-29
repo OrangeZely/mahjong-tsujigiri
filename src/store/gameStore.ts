@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import { Problem, GameAnswer, GameResult, Tile } from "@/types/mahjong";
-import { fetchProblems } from "@/lib/supabase";
+import { fetchProblems, fetchCasualProblems } from "@/lib/supabase";
 
 export type GamePhase =
-  | "idle"        // スタート前
-  | "loading"     // 問題読み込み中
-  | "playing"     // プレイ中
-  | "answered"    // 1問回答直後（0.5秒表示）
-  | "finished";   // 1分終了
+  | "idle"
+  | "loading"
+  | "playing"
+  | "answered"
+  | "finished";
+
+export type GameMode = "speed" | "casual";
 
 const GAME_DURATION_MS = 60_000;
 const QUESTION_DURATION_MS = 5_000;
@@ -16,31 +18,30 @@ const PROBLEM_POOL_SIZE = 200;
 
 interface GameState {
   phase: GamePhase;
+  gameMode: GameMode;
   problems: Problem[];
   currentIndex: number;
   answers: GameAnswer[];
   lastAnswer: { isCorrect: boolean; tile: Tile } | null;
 
-  // タイマー
   gameStartedAt: number | null;
   questionStartedAt: number | null;
-  gameTimeLeft: number;   // ms
-  questionTimeLeft: number; // ms
+  gameTimeLeft: number;
+  questionTimeLeft: number;
 
-  // アクション
-  startGame: () => void;
+  startGame: (mode: GameMode) => void;
   submitAnswer: (tile: Tile) => void;
   timeoutQuestion: () => void;
   tickGame: (now: number) => void;
   finishGame: () => void;
   resetGame: () => void;
 
-  // 結果
   getResult: () => GameResult;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
   phase: "idle",
+  gameMode: "speed",
   problems: [],
   currentIndex: 0,
   answers: [],
@@ -50,21 +51,19 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameTimeLeft: GAME_DURATION_MS,
   questionTimeLeft: QUESTION_DURATION_MS,
 
-  startGame: async () => {
-    // まずローディング状態にする（タイマーはまだ動かさない）
-    set({ phase: "loading" });
+  startGame: async (mode: GameMode) => {
+    set({ phase: "loading", gameMode: mode });
 
-    // DBから問題を取得
-    const dbProblems = await fetchProblems();
+    const dbProblems = mode === "casual"
+      ? await fetchCasualProblems()
+      : await fetchProblems();
 
-    // 問題が0件の場合はエラー表示してidleに戻す
     if (dbProblems.length === 0) {
       alert("問題が登録されていません。Supabaseに問題を追加してください。");
       set({ phase: "idle" });
       return;
     }
 
-    // DB問題をランダムに並べて200問分用意
     const repeated: Problem[] = [];
     while (repeated.length < PROBLEM_POOL_SIZE) {
       const shuffled = [...dbProblems].sort(() => Math.random() - 0.5);
@@ -72,7 +71,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
     const problems = repeated.slice(0, PROBLEM_POOL_SIZE);
 
-    // 問題取得完了後にゲーム開始（タイマーはここから）
     const now = Date.now();
     set({
       phase: "playing",
@@ -88,7 +86,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   submitAnswer: (tile: Tile) => {
-    const { problems, currentIndex, questionStartedAt, answers } = get();
+    const { problems, currentIndex, questionStartedAt, answers, gameMode } = get();
     const problem = problems[currentIndex];
     if (!problem) return;
 
@@ -108,7 +106,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       answers: [...answers, answer],
     });
 
-    // 0.5秒後に次の問題へ
     setTimeout(() => {
       const { gameTimeLeft, phase } = get();
       if (phase === "finished") return;
@@ -120,7 +117,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         phase: "playing",
         currentIndex: get().currentIndex + 1,
         questionStartedAt: Date.now(),
-        questionTimeLeft: QUESTION_DURATION_MS,
+        questionTimeLeft: gameMode === "speed" ? QUESTION_DURATION_MS : Infinity,
         lastAnswer: null,
       });
     }, ANSWER_DISPLAY_MS);
@@ -162,20 +159,22 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   tickGame: (now: number) => {
-    const { gameStartedAt, questionStartedAt, phase } = get();
+    const { gameStartedAt, questionStartedAt, phase, gameMode } = get();
     if (phase !== "playing" || !gameStartedAt || !questionStartedAt) return;
 
     const gameElapsed = now - gameStartedAt;
     const questionElapsed = now - questionStartedAt;
     const gameTimeLeft = Math.max(0, GAME_DURATION_MS - gameElapsed);
-    const questionTimeLeft = Math.max(0, QUESTION_DURATION_MS - questionElapsed);
+    const questionTimeLeft = gameMode === "speed"
+      ? Math.max(0, QUESTION_DURATION_MS - questionElapsed)
+      : Infinity;
 
     if (gameTimeLeft === 0) {
       get().finishGame();
       return;
     }
 
-    if (questionTimeLeft === 0) {
+    if (gameMode === "speed" && questionTimeLeft === 0) {
       get().timeoutQuestion();
       return;
     }
