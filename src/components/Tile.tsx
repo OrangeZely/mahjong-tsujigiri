@@ -41,8 +41,8 @@ export default function Tile({
   size = "md",
 }: TileProps) {
   const sizeClasses = {
-    sm: "w-7 h-10",
-    md: "w-[6.5%] aspect-[3/4]",
+    sm: "w-10 h-14",
+    md: "flex-1 min-w-0 aspect-[3/4]",
     lg: "w-14 h-20",
   };
 
@@ -57,7 +57,7 @@ export default function Tile({
       onClick={() => onClick?.(tile)}
       disabled={disabled || !onClick}
       className={`
-        ${size === "md" ? "w-[6.5%] aspect-[3/4]" : sizeClasses[size]}
+        ${sizeClasses[size]}
         relative overflow-hidden rounded
         select-none transition-all duration-100
         ${ringClass}
