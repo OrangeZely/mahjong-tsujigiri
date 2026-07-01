@@ -14,14 +14,14 @@ function GameContent() {
 
   const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
 
-  const modeLabel = mode === "casual" ? "一分何切るモード" : "スピードモード";
+  const modeLabel = mode === "casual" ? "何切るモード" : "スピードモード";
   const modeColor = mode === "casual" ? "text-green-300" : "text-red-300";
 
   if (phase === "loading") {
     return (
       <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex flex-col items-center justify-center gap-6">
         <div className="text-6xl animate-spin">⚔️</div>
-        <p className="text-white text-xl font-bold">問題を読み込み中...</p>
+        <p className="text-white text-xl font-bold">であえ、であえー！...</p>
       </main>
     );
   }
@@ -55,7 +55,7 @@ function GameContent() {
               onClick={() => router.push("/")}
               className="text-gray-500 hover:text-white text-sm underline transition-colors"
             >
-              ← トップに戻る
+              トップに戻る
             </button>
           </div>
         </motion.div>
