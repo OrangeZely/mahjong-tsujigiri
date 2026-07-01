@@ -85,11 +85,6 @@ export default function ResultModal({ result, onReset }: Props) {
             <div className="text-5xl font-black text-yellow-600">
               {result.score.toLocaleString()}
             </div>
-            <div className="text-xs text-gray-400 mt-1">
-              {result.gameMode === "speed"
-                ? "正解×1000 − 不正解×300"
-                : "正解×100 − 不正解×50"}
-            </div>
             <div className="mt-3 pt-3 border-t border-yellow-200">
               <div className="text-xs text-gray-500 mb-1">格付け</div>
               <div className="text-2xl font-black text-orange-600">
@@ -211,6 +206,14 @@ export default function ResultModal({ result, onReset }: Props) {
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
             もう一度プレイ 🔄
+          </button>
+
+          {/* トップに戻る */}
+          <button
+            onClick={() => router.push("/")}
+            className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
+          >
+            トップに戻る 🏠
           </button>
         </div>
       </motion.div>
