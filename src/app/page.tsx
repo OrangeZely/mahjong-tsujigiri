@@ -77,7 +77,7 @@ export default function HomePage() {
             onClick={() => router.push("/ranking")}
             className="text-gray-400 hover:text-white text-sm underline transition-colors"
           >
-            ランキングを見る →
+            ランキングを見る
           </button>
         </div>
       </motion.div>
