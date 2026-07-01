@@ -53,7 +53,7 @@ export default function ResultModal({ result, onReset }: Props) {
         {/* ヘッダー */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
           <div className="text-4xl mb-1">⚔️</div>
-          <h2 className="text-2xl font-black">試合終了！</h2>
+          <h2 className="text-3xl font-black">そこまで！</h2>
         </div>
 
         {/* スコア */}
@@ -128,7 +128,7 @@ export default function ResultModal({ result, onReset }: Props) {
               onClick={() => router.push("/ranking")}
               className="w-full bg-yellow-500 text-white rounded-xl py-3 font-bold text-lg hover:bg-yellow-600 transition-colors"
             >
-              ランキングを見る 📊
+              ランキングを見る
             </button>
           )}
 
