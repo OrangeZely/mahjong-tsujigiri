@@ -29,8 +29,10 @@ export interface GameAnswer {
 export interface GameResult {
   totalAnswered: number;
   correctCount: number;
+  incorrectCount: number;
   accuracy: number; // 0-100
   score: number;
+  gameMode: "speed" | "casual";
   answers: GameAnswer[];
   durationMs: number;
 }

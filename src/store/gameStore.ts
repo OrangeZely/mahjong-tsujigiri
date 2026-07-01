@@ -201,16 +201,22 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getResult: (): GameResult => {
-    const { answers, gameStartedAt } = get();
+    const { answers, gameStartedAt, gameMode } = get();
     const totalAnswered = answers.filter((a) => a.discardedTile.id !== "timeout").length;
     const correctCount = answers.filter((a) => a.isCorrect).length;
+    const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
-    const score = correctCount * 100 + accuracy;
+    const rawScore = gameMode === "speed"
+      ? correctCount * 1000 - incorrectCount * 300
+      : correctCount * 100 - incorrectCount * 50;
+    const score = Math.max(0, rawScore);
     return {
       totalAnswered: answers.length,
       correctCount,
+      incorrectCount,
       accuracy,
       score,
+      gameMode,
       answers,
       durationMs: gameStartedAt ? Date.now() - gameStartedAt : 0,
     };

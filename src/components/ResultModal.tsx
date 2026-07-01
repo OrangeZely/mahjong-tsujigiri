@@ -86,7 +86,9 @@ export default function ResultModal({ result, onReset }: Props) {
               {result.score.toLocaleString()}
             </div>
             <div className="text-xs text-gray-400 mt-1">
-              正解数×100 + 正答率
+              {result.gameMode === "speed"
+                ? "正解×1000 − 不正解×300"
+                : "正解×100 − 不正解×50"}
             </div>
             <div className="mt-3 pt-3 border-t border-yellow-200">
               <div className="text-xs text-gray-500 mb-1">格付け</div>
