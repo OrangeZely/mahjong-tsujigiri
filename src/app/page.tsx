@@ -56,8 +56,8 @@ export default function HomePage() {
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">🧘</span>
             <div>
-              <div className="text-white font-black text-xl">一分何切るモード</div>
-              <div className="text-green-300 text-xs">時間制限なし・じっくり考える</div>
+              <div className="text-white font-black text-xl">何切るモード</div>
+              <div className="text-green-300 text-xs">60秒間で何問正解できるか</div>
             </div>
           </div>
           <div className="text-gray-300 text-sm space-y-1">
