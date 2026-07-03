@@ -270,14 +270,17 @@ export function rowToProblem(row: {
   correct_discards: string;
   difficulty: number;
   description?: string;
+  dora?: string;
 }): Problem {
   const { tiles, openSets, isRiichi } = parseProblemStr(row.tiles_str);
   const corrects = row.correct_discards.split(",").map((s) => normalizeTileKey(s.trim()));
+  const doraTiles = row.dora ? parseTileString(row.dora) : [];
   return {
     id: row.id,
     tiles,
     openSets: openSets.length > 0 ? openSets : undefined,
     isRiichi: isRiichi || undefined,
+    dora: doraTiles.length > 0 ? doraTiles : undefined,
     correctDiscards: corrects,
     difficulty: row.difficulty as 1 | 2 | 3,
     description: row.description,

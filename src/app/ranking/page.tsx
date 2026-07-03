@@ -7,21 +7,32 @@ import { fetchRanking } from "@/lib/supabase";
 import { RankingEntry } from "@/types/mahjong";
 import { getRank } from "@/lib/ranks";
 
-type Period = "all" | "week";
+type RankingTab = "all" | "week" | "speed" | "casual";
+
+const TABS: { key: RankingTab; label: string }[] = [
+  { key: "all", label: "全期間" },
+  { key: "week", label: "今週" },
+  { key: "speed", label: "⚡スピード" },
+  { key: "casual", label: "🧘何切る" },
+];
 
 export default function RankingPage() {
   const router = useRouter();
-  const [period, setPeriod] = useState<Period>("all");
+  const [tab, setTab] = useState<RankingTab>("all");
   const [entries, setEntries] = useState<RankingEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    fetchRanking(period).then((data) => {
+    const promise =
+      tab === "speed" || tab === "casual"
+        ? fetchRanking("all", tab)
+        : fetchRanking(tab);
+    promise.then((data) => {
       setEntries(data);
       setLoading(false);
     });
-  }, [period]);
+  }, [tab]);
 
   const rankEmoji = (i: number) => {
     if (i === 0) return "🥇";
@@ -39,19 +50,19 @@ export default function RankingPage() {
           <p className="text-gray-400 text-sm mt-1">辻斬り剣客たちの記録</p>
         </div>
 
-        {/* 期間切替 */}
-        <div className="flex gap-2 justify-center mb-6">
-          {(["all", "week"] as Period[]).map((p) => (
+        {/* タブ切替 */}
+        <div className="flex gap-2 justify-center mb-6 flex-wrap">
+          {TABS.map((t) => (
             <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={`px-5 py-2 rounded-full font-bold text-sm transition-colors ${
-                period === p
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`px-4 py-2 rounded-full font-bold text-sm transition-colors ${
+                tab === t.key
                   ? "bg-yellow-400 text-gray-900"
                   : "bg-white/10 text-gray-300 hover:bg-white/20"
               }`}
             >
-              {p === "all" ? "全期間" : "今週"}
+              {t.label}
             </button>
           ))}
         </div>
@@ -88,7 +99,10 @@ export default function RankingPage() {
 
                 {/* プレイヤー名 */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-white font-bold truncate">{entry.playerName}</div>
+                  <div className="text-white font-bold truncate">
+                    <span className="mr-1">{entry.gameMode === "casual" ? "🧘" : "⚡"}</span>
+                    {entry.playerName}
+                  </div>
                   <div className="text-gray-400 text-xs">
                     {entry.correctCount}正解 / {entry.totalAnswered}問 •{" "}
                     {entry.accuracy}%

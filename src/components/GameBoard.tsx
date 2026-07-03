@@ -134,6 +134,20 @@ export default function GameBoard() {
         )}
       </AnimatePresence>
 
+      {/* ドラ表示 */}
+      {problem.dora && problem.dora.length > 0 && (
+        <div className="w-full bg-gray-900 rounded-xl px-3 py-2 border border-yellow-600/50">
+          <div className="flex items-center justify-center gap-3">
+            <span className="text-yellow-400 text-xs font-bold tracking-widest">ドラ</span>
+            <div className="flex gap-0.5">
+              {problem.dora.map((tile) => (
+                <Tile key={tile.id} tile={tile} size="sm" />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 副露牌エリア */}
       {problem.openSets && problem.openSets.length > 0 && (
         <div className="w-full bg-green-950 rounded-xl px-3 py-2 border border-green-700">

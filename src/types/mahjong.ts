@@ -13,6 +13,7 @@ export interface Problem {
   tiles: Tile[];              // 手牌（副露後は14枚未満）
   openSets?: Tile[][];        // 副露牌（ポン/チー/カンのセット）
   isRiichi?: boolean;         // リーチ状態
+  dora?: Tile[];              // ドラ表示牌
   correctDiscards: string[];  // 正解牌（suit+num形式）
   difficulty: 1 | 2 | 3;
   description?: string;       // 問題解説
@@ -44,5 +45,6 @@ export interface RankingEntry {
   totalAnswered: number;
   accuracy: number;
   score: number;
+  gameMode: "speed" | "casual";
   createdAt: string;
 }

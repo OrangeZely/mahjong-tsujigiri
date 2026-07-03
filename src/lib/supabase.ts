@@ -20,6 +20,7 @@ export async function saveScore(
       total_answered: result.totalAnswered,
       accuracy: result.accuracy,
       score: result.score,
+      game_mode: result.gameMode,
     })
     .select()
     .single();
@@ -30,7 +31,8 @@ export async function saveScore(
 
 // ランキング取得（上位50件）
 export async function fetchRanking(
-  period: "all" | "week" = "all"
+  period: "all" | "week" = "all",
+  mode?: "speed" | "casual"
 ): Promise<RankingEntry[]> {
   let query = supabase
     .from("scores")
@@ -42,6 +44,10 @@ export async function fetchRanking(
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     query = query.gte("created_at", weekAgo.toISOString());
+  }
+
+  if (mode) {
+    query = query.eq("game_mode", mode);
   }
 
   const { data } = await query;
@@ -74,6 +80,7 @@ async function fetchProblemsFromTable(tableName: string): Promise<Problem[]> {
       correct_discards: row.correct_discards,
       difficulty: row.difficulty,
       description: row.description,
+      dora: row.dora,
     })
   );
 }
@@ -94,6 +101,7 @@ function rowToRanking(row: Record<string, unknown>): RankingEntry {
     totalAnswered: row.total_answered as number,
     accuracy: row.accuracy as number,
     score: row.score as number,
+    gameMode: (row.game_mode as "speed" | "casual") || "speed",
     createdAt: row.created_at as string,
   };
 }
