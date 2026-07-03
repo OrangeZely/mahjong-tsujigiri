@@ -14,6 +14,13 @@ function GameContent() {
 
   const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
 
+  // ブラウザバック等で前回の終了状態が残っていたらリセットして開始画面を出す
+  useEffect(() => {
+    if (useGameStore.getState().phase === "finished") {
+      resetGame();
+    }
+  }, [resetGame]);
+
   const modeLabel = mode === "casual" ? "何切るモード" : "スピードモード";
   const modeColor = mode === "casual" ? "text-green-300" : "text-red-300";
 

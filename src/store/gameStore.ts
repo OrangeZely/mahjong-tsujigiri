@@ -207,8 +207,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
     const rawScore = gameMode === "speed"
-      ? correctCount * 1000 - incorrectCount * 300
-      : correctCount * 100 - incorrectCount * 50;
+      ? correctCount * 1000 - incorrectCount * 300 + accuracy
+      : correctCount * 100 - incorrectCount * 50 + accuracy;
     const score = Math.max(0, rawScore);
     return {
       totalAnswered: answers.length,

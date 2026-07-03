@@ -120,7 +120,10 @@ export default function ResultModal({ result, onReset }: Props) {
             </div>
           ) : (
             <button
-              onClick={() => router.push("/ranking")}
+              onClick={() => {
+                onReset();
+                router.push("/ranking");
+              }}
               className="w-full bg-yellow-500 text-white rounded-xl py-3 font-bold text-lg hover:bg-yellow-600 transition-colors"
             >
               ランキングを見る
@@ -210,7 +213,10 @@ export default function ResultModal({ result, onReset }: Props) {
 
           {/* トップに戻る */}
           <button
-            onClick={() => router.push("/")}
+            onClick={() => {
+              onReset();
+              router.push("/");
+            }}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
             トップに戻る 🏠
