@@ -1,11 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { getBestScore } from "@/lib/history";
+import { getRank } from "@/lib/ranks";
 
 export default function HomePage() {
   const router = useRouter();
+  const [bestScore, setBestScore] = useState(0);
+
+  useEffect(() => {
+    setBestScore(getBestScore());
+  }, []);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 via-green-950 to-gray-900 flex flex-col items-center justify-center p-4">
@@ -21,9 +28,17 @@ export default function HomePage() {
         <h1 className="text-4xl md:text-5xl font-black text-white mb-1 tracking-tight">
           麻雀
         </h1>
-        <h2 className="text-5xl md:text-6xl font-black text-yellow-400 mb-10 tracking-tight">
+        <h2 className="text-5xl md:text-6xl font-black text-yellow-400 mb-6 tracking-tight">
           辻斬る！
         </h2>
+
+        {/* 過去最高段位 */}
+        {bestScore > 0 && (
+          <div className="bg-yellow-500/10 border border-yellow-500/40 rounded-xl px-5 py-2 mb-6 inline-block">
+            <span className="text-yellow-200 text-xs mr-2">最高段位</span>
+            <span className="text-yellow-400 font-black text-lg">{getRank(bestScore)}</span>
+          </div>
+        )}
 
         {/* スピードモード */}
         <motion.div
@@ -72,12 +87,27 @@ export default function HomePage() {
           <span className="font-bold text-yellow-300">正答率</span>
         </div>
 
-        <div>
+        <div className="flex gap-5 justify-center">
           <button
             onClick={() => router.push("/ranking")}
             className="text-gray-400 hover:text-white text-sm underline transition-colors"
           >
-            ランキングを見る
+            ランキング
+          </button>
+          <button
+            onClick={() => router.push("/history")}
+            className="text-gray-400 hover:text-white text-sm underline transition-colors"
+          >
+            プレイ履歴
+          </button>
+        </div>
+
+        <div className="mt-6">
+          <button
+            onClick={() => router.push("/privacy")}
+            className="text-gray-600 hover:text-gray-400 text-xs underline transition-colors"
+          >
+            プライバシーポリシー
           </button>
         </div>
       </motion.div>

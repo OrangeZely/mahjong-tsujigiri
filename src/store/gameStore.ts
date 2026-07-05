@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Problem, GameAnswer, GameResult, Tile } from "@/types/mahjong";
 import { fetchProblems, fetchCasualProblems } from "@/lib/supabase";
+import { saveGameRecord } from "@/lib/history";
 
 export type GamePhase =
   | "idle"
@@ -184,6 +185,9 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   finishGame: () => {
     set({ phase: "finished", gameTimeLeft: 0 });
+    // プレイ履歴を端末に保存
+    const { problems } = get();
+    saveGameRecord(get().getResult(), problems);
   },
 
   resetGame: () => {
@@ -222,3 +226,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     };
   },
 }));
+
+// デバッグ用: ブラウザコンソールから window.__gameStore で状態を確認できる
+if (typeof window !== "undefined") {
+  (window as unknown as Record<string, unknown>).__gameStore = useGameStore;
+}
