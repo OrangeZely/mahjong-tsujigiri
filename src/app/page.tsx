@@ -5,14 +5,30 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { getBestScore } from "@/lib/history";
 import { getRank } from "@/lib/ranks";
+import { getPlayerName, setPlayerName } from "@/lib/profile";
 
 export default function HomePage() {
   const router = useRouter();
   const [bestScore, setBestScore] = useState(0);
+  const [playerName, setPlayerNameState] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [editingName, setEditingName] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setBestScore(getBestScore());
+    setPlayerNameState(getPlayerName());
+    setLoaded(true);
   }, []);
+
+  const handleRegister = () => {
+    const name = nameInput.trim();
+    if (!name) return;
+    setPlayerName(name);
+    setPlayerNameState(name);
+    setEditingName(false);
+    setNameInput("");
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 via-green-950 to-gray-900 flex flex-col items-center justify-center p-4">
@@ -32,13 +48,53 @@ export default function HomePage() {
           辻斬る！
         </h2>
 
-        {/* 過去最高段位 */}
-        {bestScore > 0 && (
-          <div className="bg-yellow-500/10 border border-yellow-500/40 rounded-xl px-5 py-2 mb-6 inline-block">
-            <span className="text-yellow-200 text-xs mr-2">最高段位</span>
-            <span className="text-yellow-400 font-black text-lg">{getRank(bestScore)}</span>
+        {/* プレイヤー名 & 過去最高段位 */}
+        {loaded && (playerName && !editingName ? (
+          <div className="flex items-center justify-center gap-2 mb-6 flex-wrap">
+            <div className="bg-white/10 rounded-xl px-4 py-2">
+              <span className="text-gray-400 text-xs mr-2">雀士</span>
+              <span className="text-white font-black">{playerName}</span>
+              <button
+                onClick={() => { setNameInput(playerName); setEditingName(true); }}
+                className="ml-2 text-gray-500 hover:text-gray-300 text-xs underline"
+              >
+                変更
+              </button>
+            </div>
+            {bestScore > 0 && (
+              <div className="bg-yellow-500/10 border border-yellow-500/40 rounded-xl px-4 py-2">
+                <span className="text-yellow-200 text-xs mr-2">最高段位</span>
+                <span className="text-yellow-400 font-black">{getRank(bestScore)}</span>
+              </div>
+            )}
           </div>
-        )}
+        ) : (
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-4 mb-6">
+            <p className="text-white text-sm font-bold mb-3">
+              {playerName ? "プレイヤー名を変更" : "⚔️ プレイヤー名を登録して参戦！"}
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="プレイヤー名"
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                maxLength={20}
+                className="flex-1 min-w-0 bg-white/90 rounded-xl px-3 py-2 text-center text-gray-900 font-bold focus:outline-none placeholder-gray-400"
+              />
+              <button
+                onClick={handleRegister}
+                disabled={!nameInput.trim()}
+                className="bg-yellow-400 text-gray-900 font-black px-4 py-2 rounded-xl hover:bg-yellow-300 disabled:opacity-40 transition-colors"
+              >
+                登録
+              </button>
+            </div>
+            <p className="text-gray-400 text-xs mt-2">
+              ランキングにはこの名前で自動登録されます
+            </p>
+          </div>
+        ))}
 
         {/* スピードモード */}
         <motion.div

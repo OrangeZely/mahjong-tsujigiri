@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useGameStore } from "@/store/gameStore";
 import { tileLabel } from "@/lib/mahjong";
 import { getRank } from "@/lib/ranks";
+import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
 import Tile from "@/components/Tile";
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 
 export default function ResultModal({ result, onReset }: Props) {
   const [playerName, setPlayerName] = useState("");
+  const [editingName, setEditingName] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [myRank, setMyRank] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
@@ -24,8 +26,19 @@ export default function ResultModal({ result, onReset }: Props) {
   const router = useRouter();
   const problems = useGameStore((s) => s.problems);
 
+  // 登録済みのプレイヤー名を読み込む
+  useEffect(() => {
+    const saved = getPlayerName();
+    if (saved) {
+      setPlayerName(saved);
+    } else {
+      setEditingName(true); // 未登録なら入力欄を表示
+    }
+  }, []);
+
   const handleSave = async () => {
     if (!playerName.trim()) return;
+    savePlayerName(playerName); // 次回から自動で使う
     setSaving(true);
     const [{ error }, rank] = await Promise.all([
       saveScore(playerName.trim(), result),
@@ -35,6 +48,7 @@ export default function ResultModal({ result, onReset }: Props) {
     if (!error) {
       setMyRank(rank);
       setSubmitted(true);
+      setEditingName(false);
     }
   };
 
@@ -102,14 +116,26 @@ export default function ResultModal({ result, onReset }: Props) {
           {/* 名前入力 & 登録 */}
           {!submitted ? (
             <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="プレイヤー名を入力"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                maxLength={20}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-lg focus:outline-none focus:border-indigo-400 placeholder-gray-500"
-              />
+              {editingName ? (
+                <input
+                  type="text"
+                  placeholder="プレイヤー名を入力"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  maxLength={20}
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-lg focus:outline-none focus:border-indigo-400 placeholder-gray-500"
+                />
+              ) : (
+                <div className="text-center text-sm text-gray-500">
+                  <span className="font-bold text-gray-700">{playerName}</span> として登録
+                  <button
+                    onClick={() => setEditingName(true)}
+                    className="ml-2 text-indigo-500 underline"
+                  >
+                    名前を変更
+                  </button>
+                </div>
+              )}
               <button
                 onClick={handleSave}
                 disabled={!playerName.trim() || saving}
