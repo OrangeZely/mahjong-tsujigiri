@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// 署名情報は android/key.properties から読む（gitにはコミットしない）
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "com.orangezely.mahjongtsujigiru"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -18,10 +25,12 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("mahjong-release.jks")
-            storePassword "mahjong2026"
-            keyAlias "mahjong-key"
-            keyPassword "mahjong2026"
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
     buildTypes {
