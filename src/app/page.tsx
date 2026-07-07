@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { getBestScore } from "@/lib/history";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName } from "@/lib/profile";
+import { PLAYER_NAME_EVENT } from "@/lib/liff";
 
 export default function HomePage() {
   const router = useRouter();
@@ -19,6 +20,13 @@ export default function HomePage() {
     setBestScore(getBestScore());
     setPlayerNameState(getPlayerName());
     setLoaded(true);
+
+    // LIFF（LINEミニアプリ）がプロフィール名を設定したら反映する
+    const onLiffName = (e: Event) => {
+      setPlayerNameState((e as CustomEvent<string>).detail);
+    };
+    window.addEventListener(PLAYER_NAME_EVENT, onLiffName);
+    return () => window.removeEventListener(PLAYER_NAME_EVENT, onLiffName);
   }, []);
 
   const handleRegister = () => {
