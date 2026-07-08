@@ -17,6 +17,7 @@ const QUESTION_DURATION_MS = 5_000;
 const ANSWER_DISPLAY_MS = 500;
 const PROBLEM_POOL_SIZE = 200;
 const ONI_BASE_GAIN = 1000; // 鬼モード: 正解1問目の獲得点（連続正解で倍々）
+const ONI_MAX_GAIN = ONI_BASE_GAIN * 8; // 鬼モード: 獲得点の上限（8倍まで）
 
 interface GameState {
   phase: GamePhase;
@@ -220,13 +221,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (gameMode === "casual") {
       rawScore = correctCount * 100 - incorrectCount * 50 + accuracy;
     } else if (oniMode) {
-      // 鬼モード: 連続正解で獲得点が倍々(1000→2000→4000...)、不正解・時間切れで1000に戻る
+      // 鬼モード: 連続正解で獲得点が倍々(1000→2000→4000→8000で頭打ち)、不正解・時間切れで1000に戻る
       let gain = ONI_BASE_GAIN;
       let earned = 0;
       for (const a of answers) {
         if (a.isCorrect) {
           earned += gain;
-          gain *= 2;
+          gain = Math.min(gain * 2, ONI_MAX_GAIN);
         } else {
           gain = ONI_BASE_GAIN;
         }

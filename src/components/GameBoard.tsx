@@ -55,7 +55,7 @@ export default function GameBoard() {
     if (answers[i].isCorrect) combo++;
     else break;
   }
-  const nextGain = 1000 * Math.pow(2, combo);
+  const nextGain = Math.min(1000 * Math.pow(2, combo), 8000); // 8倍で頭打ち
 
   const isDisabled = phase === "answered";
 
