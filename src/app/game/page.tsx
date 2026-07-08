@@ -62,7 +62,7 @@ function GameContent() {
               className="w-5 h-5 accent-red-600 cursor-pointer"
             />
             <span className={`font-bold ${oni ? "text-red-400" : "text-gray-300"}`}>
-              👹 鬼斬りモード
+              {mode === "casual" ? "👺" : "👹"} 鬼斬りモード
             </span>
           </label>
           {oni && (

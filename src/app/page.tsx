@@ -125,7 +125,7 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        {/* カジュアルモード */}
+        {/* カジュアルモード（何切る） */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -142,7 +142,7 @@ export default function HomePage() {
           <div className="text-gray-300 text-sm space-y-1">
             <div>・1問ごとの制限時間は<span className="text-yellow-300 font-bold">なし</span></div>
             <div>・60秒間で解いた問題数を競う</div>
-            <div>・<span className="text-yellow-300 font-bold">👹鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
+            <div>・<span className="text-yellow-300 font-bold">👺鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
 

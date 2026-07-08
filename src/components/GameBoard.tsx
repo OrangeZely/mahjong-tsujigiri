@@ -103,7 +103,7 @@ export default function GameBoard() {
         <div className="w-full">
           <div className="flex justify-between text-sm text-gray-500 mb-1">
             <span>
-              👹 次の正解{" "}
+              {gameMode === "casual" ? "👺" : "👹"} 次の正解{" "}
               <span className={`font-bold ${combo > 0 ? "text-red-400" : "text-gray-400"}`}>
                 +{nextGain.toLocaleString()}点
               </span>
