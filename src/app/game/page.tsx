@@ -66,13 +66,11 @@ function GameContent() {
             </span>
           </label>
           {oni && (
-            <div className="bg-red-950/60 border border-red-600 rounded-xl px-4 py-3 mb-5 text-left text-sm text-red-200 max-w-xs mx-auto">
-              <div>・1問<span className="font-bold text-yellow-300">5秒</span>以内に回答（時間切れは不正解）</div>
-              <div>
-                ・連続正解で獲得点が<span className="font-bold text-yellow-300">倍々</span>
-                {mode === "casual" ? "（100→200→400→最大800）" : "（1000→2000→4000→最大8000）"}
+            <div className="bg-red-950/60 border-2 border-red-500 rounded-xl px-5 py-3 mb-5 text-center max-w-xs mx-auto">
+              <div className="text-red-100 font-black text-lg">
+                1問<span className="text-yellow-300 text-2xl">5秒</span>以内に回答！
               </div>
-              <div>・不正解で獲得点は{mode === "casual" ? "100" : "1000"}に戻る</div>
+              <div className="text-red-300 text-xs mt-1">（時間切れは不正解）</div>
             </div>
           )}
 
