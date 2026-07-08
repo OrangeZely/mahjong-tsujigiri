@@ -115,7 +115,7 @@ export default function PrivacyPage() {
               本ポリシーに関するお問い合わせは、以下までお願いいたします。
             </p>
             <p className="mt-2 font-mono text-sm bg-white/5 rounded-lg px-4 py-2 inline-block">
-              shintaroorange@gmail.com
+              mahjong.tsujigiri@gmail.com
             </p>
           </section>
         </div>

@@ -151,19 +151,23 @@ export default function HomePage() {
           <span className="font-bold text-yellow-300">正答率</span>
         </div>
 
-        <div className="flex gap-5 justify-center">
-          <button
+        <div className="flex gap-3 justify-center">
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => router.push("/ranking")}
-            className="text-gray-400 hover:text-white text-sm underline transition-colors"
+            className="flex-1 bg-white/10 border-2 border-yellow-500/60 text-white font-bold py-3 rounded-xl hover:bg-yellow-500/20 transition-colors"
           >
-            ランキング
-          </button>
-          <button
+            🏆 ランキング
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => router.push("/history")}
-            className="text-gray-400 hover:text-white text-sm underline transition-colors"
+            className="flex-1 bg-white/10 border-2 border-blue-400/60 text-white font-bold py-3 rounded-xl hover:bg-blue-400/20 transition-colors"
           >
-            プレイ履歴
-          </button>
+            📜 プレイ履歴
+          </motion.button>
         </div>
 
         <div className="mt-6">
