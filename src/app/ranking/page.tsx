@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { fetchRanking } from "@/lib/supabase";
@@ -21,6 +21,33 @@ export default function RankingPage() {
   const [tab, setTab] = useState<RankingTab>("all");
   const [entries, setEntries] = useState<RankingEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  // スワイプ/タブ切替時のスライド方向（1: 右のタブへ, -1: 左のタブへ）
+  const [direction, setDirection] = useState(0);
+
+  const tabIndex = TABS.findIndex((t) => t.key === tab);
+
+  const goToTab = (index: number) => {
+    if (index < 0 || index >= TABS.length || index === tabIndex) return;
+    setDirection(index > tabIndex ? 1 : -1);
+    setTab(TABS[index].key);
+  };
+
+  // 横スワイプでタブ切替（縦スクロールと区別するため横成分が明確に大きい時だけ反応）
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const dx = e.changedTouches[0].clientX - touchStart.current.x;
+    const dy = e.changedTouches[0].clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      goToTab(dx < 0 ? tabIndex + 1 : tabIndex - 1);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -52,10 +79,10 @@ export default function RankingPage() {
 
         {/* タブ切替 */}
         <div className="flex gap-2 justify-center mb-6 flex-wrap">
-          {TABS.map((t) => (
+          {TABS.map((t, i) => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key)}
+              onClick={() => goToTab(i)}
               className={`px-4 py-2 rounded-full font-bold text-sm transition-colors ${
                 tab === t.key
                   ? "bg-yellow-400 text-gray-900"
@@ -67,7 +94,15 @@ export default function RankingPage() {
           ))}
         </div>
 
-        {/* ランキングテーブル */}
+        {/* ランキングテーブル（横スワイプでタブ切替） */}
+        <motion.div
+          key={tab}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          initial={{ x: direction * 60, opacity: direction === 0 ? 1 : 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="min-h-[300px]"
+        >
         {loading ? (
           <div className="text-center text-gray-400 py-12">読み込み中...</div>
         ) : entries.length === 0 ? (
@@ -122,6 +157,7 @@ export default function RankingPage() {
             ))}
           </div>
         )}
+        </motion.div>
 
         {/* ボタン */}
         <div className="mt-8 flex gap-3 justify-center">
