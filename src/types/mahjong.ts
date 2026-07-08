@@ -34,7 +34,7 @@ export interface GameResult {
   accuracy: number; // 0-100
   score: number;
   gameMode: "speed" | "casual";
-  oniMode?: boolean; // 清一色モードの鬼モード（1問5秒＋連続正解で獲得点倍々）
+  oniMode?: boolean; // 鬼斬りモード（1問5秒＋連続正解で獲得点倍々、両モード共通）
   answers: GameAnswer[];
   durationMs: number;
 }

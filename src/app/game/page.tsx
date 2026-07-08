@@ -13,7 +13,7 @@ function GameContent() {
   const searchParams = useSearchParams();
 
   const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
-  const [oni, setOni] = useState(false); // 鬼モード（清一色モードのみ）
+  const [oni, setOni] = useState(false); // 鬼斬りモード（両モード共通）
 
   // ブラウザバック等で前回の終了状態が残っていたらリセットして開始画面を出す
   useEffect(() => {
@@ -46,32 +46,33 @@ function GameContent() {
           <p className={`text-sm font-bold mb-1 ${modeColor}`}>{modeLabel}</p>
           <h1 className="text-4xl font-black text-white mb-2">いざ　尋常に</h1>
           <p className="text-gray-400 mb-8">
-            {mode === "casual"
-              ? "じっくり考えて斬れ"
-              : oni
+            {oni
               ? "考えるな、感じろ"
+              : mode === "casual"
+              ? "じっくり考えて斬れ"
               : "染め手を見極めて斬れ"}
           </p>
 
-          {/* 鬼モード切替（清一色モードのみ） */}
-          {mode === "speed" && (
-            <label className="flex items-center justify-center gap-2 mb-5 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={oni}
-                onChange={(e) => setOni(e.target.checked)}
-                className="w-5 h-5 accent-red-600 cursor-pointer"
-              />
-              <span className={`font-bold ${oni ? "text-red-400" : "text-gray-300"}`}>
-                👹 鬼モード
-              </span>
-            </label>
-          )}
-          {mode === "speed" && oni && (
+          {/* 鬼斬りモード切替 */}
+          <label className="flex items-center justify-center gap-2 mb-5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={oni}
+              onChange={(e) => setOni(e.target.checked)}
+              className="w-5 h-5 accent-red-600 cursor-pointer"
+            />
+            <span className={`font-bold ${oni ? "text-red-400" : "text-gray-300"}`}>
+              👹 鬼斬りモード
+            </span>
+          </label>
+          {oni && (
             <div className="bg-red-950/60 border border-red-600 rounded-xl px-4 py-3 mb-5 text-left text-sm text-red-200 max-w-xs mx-auto">
               <div>・1問<span className="font-bold text-yellow-300">5秒</span>以内に回答（時間切れは不正解）</div>
-              <div>・連続正解で獲得点が<span className="font-bold text-yellow-300">倍々</span>（1000→2000→4000→最大8000）</div>
-              <div>・不正解で獲得点は1000に戻る</div>
+              <div>
+                ・連続正解で獲得点が<span className="font-bold text-yellow-300">倍々</span>
+                {mode === "casual" ? "（100→200→400→最大800）" : "（1000→2000→4000→最大8000）"}
+              </div>
+              <div>・不正解で獲得点は{mode === "casual" ? "100" : "1000"}に戻る</div>
             </div>
           )}
 

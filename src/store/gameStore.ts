@@ -16,13 +16,12 @@ const GAME_DURATION_MS = 60_000;
 const QUESTION_DURATION_MS = 5_000;
 const ANSWER_DISPLAY_MS = 500;
 const PROBLEM_POOL_SIZE = 200;
-const ONI_BASE_GAIN = 1000; // 鬼モード: 正解1問目の獲得点（連続正解で倍々）
-const ONI_MAX_GAIN = ONI_BASE_GAIN * 8; // 鬼モード: 獲得点の上限（8倍まで）
+const ONI_MAX_MULTIPLIER = 8; // 鬼斬りモード: 獲得点の上限倍率（素点の8倍まで）
 
 interface GameState {
   phase: GamePhase;
   gameMode: GameMode;
-  oniMode: boolean; // 清一色モードのみ: 1問5秒制限＋連続正解で獲得点倍々
+  oniMode: boolean; // 鬼斬りモード: 1問5秒制限＋連続正解で獲得点倍々（両モードで使用可）
   problems: Problem[];
   currentIndex: number;
   answers: GameAnswer[];
@@ -57,7 +56,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   questionTimeLeft: QUESTION_DURATION_MS,
 
   startGame: async (mode: GameMode, oni: boolean = false) => {
-    const oniMode = mode === "speed" && oni;
+    const oniMode = oni;
     set({ phase: "loading", gameMode: mode, oniMode });
 
     const dbProblems = mode === "casual"
@@ -217,24 +216,26 @@ export const useGameStore = create<GameState>((set, get) => ({
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
 
+    // 素点と減点はモードごと（清一色: 1000/−300、何切る: 100/−50）
+    const base = gameMode === "casual" ? 100 : 1000;
+    const penalty = gameMode === "casual" ? 50 : 300;
+
     let rawScore: number;
-    if (gameMode === "casual") {
-      rawScore = correctCount * 100 - incorrectCount * 50 + accuracy;
-    } else if (oniMode) {
-      // 鬼モード: 連続正解で獲得点が倍々(1000→2000→4000→8000で頭打ち)、不正解・時間切れで1000に戻る
-      let gain = ONI_BASE_GAIN;
+    if (oniMode) {
+      // 鬼斬りモード: 連続正解で獲得点が倍々（素点の8倍で頭打ち）、不正解・時間切れで素点に戻る
+      let gain = base;
       let earned = 0;
       for (const a of answers) {
         if (a.isCorrect) {
           earned += gain;
-          gain = Math.min(gain * 2, ONI_MAX_GAIN);
+          gain = Math.min(gain * 2, base * ONI_MAX_MULTIPLIER);
         } else {
-          gain = ONI_BASE_GAIN;
+          gain = base;
         }
       }
-      rawScore = earned - incorrectCount * 300 + accuracy;
+      rawScore = earned - incorrectCount * penalty + accuracy;
     } else {
-      rawScore = correctCount * 1000 - incorrectCount * 300 + accuracy;
+      rawScore = correctCount * base - incorrectCount * penalty + accuracy;
     }
     const score = Math.max(0, rawScore);
     return {

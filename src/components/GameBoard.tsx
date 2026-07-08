@@ -9,6 +9,7 @@ import { Tile as TileType } from "@/types/mahjong";
 export default function GameBoard() {
   const {
     phase,
+    gameMode,
     oniMode,
     problems,
     currentIndex,
@@ -49,13 +50,14 @@ export default function GameBoard() {
   const correctCount = answers.filter((a) => a.isCorrect).length;
   const totalAnswered = answers.length;
 
-  // 鬼モード: 現在の連続正解数（直近の不正解以降）と次の正解で得られる点
+  // 鬼斬りモード: 現在の連続正解数（直近の不正解以降）と次の正解で得られる点
   let combo = 0;
   for (let i = answers.length - 1; i >= 0; i--) {
     if (answers[i].isCorrect) combo++;
     else break;
   }
-  const nextGain = Math.min(1000 * Math.pow(2, combo), 8000); // 8倍で頭打ち
+  const oniBase = gameMode === "casual" ? 100 : 1000;
+  const nextGain = Math.min(oniBase * Math.pow(2, combo), oniBase * 8); // 素点の8倍で頭打ち
 
   const isDisabled = phase === "answered";
 
@@ -96,7 +98,7 @@ export default function GameBoard() {
         />
       </div>
 
-      {/* 問題タイマー＆コンボ（鬼モードのみ） */}
+      {/* 問題タイマー＆コンボ（鬼斬りモードのみ） */}
       {oniMode && (
         <div className="w-full">
           <div className="flex justify-between text-sm text-gray-500 mb-1">

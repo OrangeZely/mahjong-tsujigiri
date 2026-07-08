@@ -121,7 +121,7 @@ export default function HomePage() {
           <div className="text-gray-300 text-sm space-y-1">
             <div>・清一色の何切る問題に挑戦</div>
             <div>・60秒間で何問正解できるか</div>
-            <div>・<span className="text-yellow-300 font-bold">👹鬼モード</span>は1問5秒＆連続正解で獲得点倍々</div>
+            <div>・<span className="text-yellow-300 font-bold">👹鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
 
@@ -142,7 +142,7 @@ export default function HomePage() {
           <div className="text-gray-300 text-sm space-y-1">
             <div>・1問ごとの制限時間は<span className="text-yellow-300 font-bold">なし</span></div>
             <div>・60秒間で解いた問題数を競う</div>
-            <div>・じっくり考えて正解を狙え</div>
+            <div>・<span className="text-yellow-300 font-bold">👹鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
 
