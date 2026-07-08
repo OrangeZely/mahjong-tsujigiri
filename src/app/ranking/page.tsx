@@ -12,7 +12,7 @@ type RankingTab = "all" | "week" | "speed" | "casual";
 const TABS: { key: RankingTab; label: string }[] = [
   { key: "all", label: "全期間" },
   { key: "week", label: "今週" },
-  { key: "speed", label: "⚡スピード" },
+  { key: "speed", label: "⚡清一色" },
   { key: "casual", label: "🧘何切る" },
 ];
 

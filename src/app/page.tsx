@@ -104,7 +104,7 @@ export default function HomePage() {
           </div>
         ))}
 
-        {/* スピードモード */}
+        {/* 清一色モード */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -114,14 +114,14 @@ export default function HomePage() {
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">⚡</span>
             <div>
-              <div className="text-white font-black text-xl">スピードモード</div>
-              <div className="text-red-300 text-xs">1問5秒・高難易度</div>
+              <div className="text-white font-black text-xl">清一色モード</div>
+              <div className="text-red-300 text-xs">染め手特訓・高難易度</div>
             </div>
           </div>
           <div className="text-gray-300 text-sm space-y-1">
-            <div>・1問につき<span className="text-yellow-300 font-bold">5秒以内</span>に回答</div>
-            <div>・タイムオーバーは不正解</div>
+            <div>・清一色の何切る問題に挑戦</div>
             <div>・60秒間で何問正解できるか</div>
+            <div>・<span className="text-yellow-300 font-bold">👹鬼モード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
 

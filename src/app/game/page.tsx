@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGameStore, GameMode } from "@/store/gameStore";
@@ -13,6 +13,7 @@ function GameContent() {
   const searchParams = useSearchParams();
 
   const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
+  const [oni, setOni] = useState(false); // 鬼モード（清一色モードのみ）
 
   // ブラウザバック等で前回の終了状態が残っていたらリセットして開始画面を出す
   useEffect(() => {
@@ -21,7 +22,7 @@ function GameContent() {
     }
   }, [resetGame]);
 
-  const modeLabel = mode === "casual" ? "何切るモード" : "スピードモード";
+  const modeLabel = mode === "casual" ? "何切るモード" : "清一色モード";
   const modeColor = mode === "casual" ? "text-green-300" : "text-red-300";
 
   if (phase === "loading") {
@@ -45,13 +46,39 @@ function GameContent() {
           <p className={`text-sm font-bold mb-1 ${modeColor}`}>{modeLabel}</p>
           <h1 className="text-4xl font-black text-white mb-2">いざ　尋常に</h1>
           <p className="text-gray-400 mb-8">
-            {mode === "casual" ? "じっくり考えて斬れ" : "考えるな、感じろ"}
+            {mode === "casual"
+              ? "じっくり考えて斬れ"
+              : oni
+              ? "考えるな、感じろ"
+              : "染め手を見極めて斬れ"}
           </p>
+
+          {/* 鬼モード切替（清一色モードのみ） */}
+          {mode === "speed" && (
+            <label className="flex items-center justify-center gap-2 mb-5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={oni}
+                onChange={(e) => setOni(e.target.checked)}
+                className="w-5 h-5 accent-red-600 cursor-pointer"
+              />
+              <span className={`font-bold ${oni ? "text-red-400" : "text-gray-300"}`}>
+                👹 鬼モード
+              </span>
+            </label>
+          )}
+          {mode === "speed" && oni && (
+            <div className="bg-red-950/60 border border-red-600 rounded-xl px-4 py-3 mb-5 text-left text-sm text-red-200 max-w-xs mx-auto">
+              <div>・1問<span className="font-bold text-yellow-300">5秒</span>以内に回答（時間切れは不正解）</div>
+              <div>・連続正解で獲得点が<span className="font-bold text-yellow-300">倍々</span>（1000→2000→4000…）</div>
+              <div>・不正解で獲得点は1000に戻る</div>
+            </div>
+          )}
 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => startGame(mode)}
+            onClick={() => startGame(mode, oni)}
             className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black text-3xl px-16 py-6 rounded-2xl shadow-2xl"
           >
             斬！⚔️

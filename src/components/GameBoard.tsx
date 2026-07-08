@@ -9,7 +9,7 @@ import { Tile as TileType } from "@/types/mahjong";
 export default function GameBoard() {
   const {
     phase,
-    gameMode,
+    oniMode,
     problems,
     currentIndex,
     lastAnswer,
@@ -48,6 +48,14 @@ export default function GameBoard() {
   const gameProgress = (gameTimeLeft / 60000) * 100;
   const correctCount = answers.filter((a) => a.isCorrect).length;
   const totalAnswered = answers.length;
+
+  // 鬼モード: 現在の連続正解数（直近の不正解以降）と次の正解で得られる点
+  let combo = 0;
+  for (let i = answers.length - 1; i >= 0; i--) {
+    if (answers[i].isCorrect) combo++;
+    else break;
+  }
+  const nextGain = 1000 * Math.pow(2, combo);
 
   const isDisabled = phase === "answered";
 
@@ -88,11 +96,19 @@ export default function GameBoard() {
         />
       </div>
 
-      {/* 問題タイマー（スピードモードのみ） */}
-      {gameMode === "speed" && (
+      {/* 問題タイマー＆コンボ（鬼モードのみ） */}
+      {oniMode && (
         <div className="w-full">
           <div className="flex justify-between text-sm text-gray-500 mb-1">
-            <span>何を切る？</span>
+            <span>
+              👹 次の正解{" "}
+              <span className={`font-bold ${combo > 0 ? "text-red-400" : "text-gray-400"}`}>
+                +{nextGain.toLocaleString()}点
+              </span>
+              {combo > 0 && (
+                <span className="ml-1 text-yellow-400 font-bold">({combo}連斬中!)</span>
+              )}
+            </span>
             <span className={questionSeconds <= 2 ? "text-red-500 font-bold" : ""}>
               {questionSeconds}秒
             </span>

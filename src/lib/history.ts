@@ -17,6 +17,7 @@ export interface GameRecord {
   id: string;
   playedAt: string; // ISO日時
   gameMode: "speed" | "casual";
+  oniMode?: boolean;
   correctCount: number;
   totalAnswered: number;
   accuracy: number;
@@ -41,6 +42,7 @@ export function saveGameRecord(result: GameResult, problems: Problem[]): void {
     id: `game_${Date.now()}`,
     playedAt: new Date().toISOString(),
     gameMode: result.gameMode,
+    oniMode: result.oniMode,
     correctCount: result.correctCount,
     totalAnswered: result.totalAnswered,
     accuracy: result.accuracy,

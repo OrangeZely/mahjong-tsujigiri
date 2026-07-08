@@ -16,10 +16,12 @@ const GAME_DURATION_MS = 60_000;
 const QUESTION_DURATION_MS = 5_000;
 const ANSWER_DISPLAY_MS = 500;
 const PROBLEM_POOL_SIZE = 200;
+const ONI_BASE_GAIN = 1000; // 鬼モード: 正解1問目の獲得点（連続正解で倍々）
 
 interface GameState {
   phase: GamePhase;
   gameMode: GameMode;
+  oniMode: boolean; // 清一色モードのみ: 1問5秒制限＋連続正解で獲得点倍々
   problems: Problem[];
   currentIndex: number;
   answers: GameAnswer[];
@@ -30,7 +32,7 @@ interface GameState {
   gameTimeLeft: number;
   questionTimeLeft: number;
 
-  startGame: (mode: GameMode) => void;
+  startGame: (mode: GameMode, oni?: boolean) => void;
   submitAnswer: (tile: Tile) => void;
   timeoutQuestion: () => void;
   tickGame: (now: number) => void;
@@ -43,6 +45,7 @@ interface GameState {
 export const useGameStore = create<GameState>((set, get) => ({
   phase: "idle",
   gameMode: "speed",
+  oniMode: false,
   problems: [],
   currentIndex: 0,
   answers: [],
@@ -52,8 +55,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameTimeLeft: GAME_DURATION_MS,
   questionTimeLeft: QUESTION_DURATION_MS,
 
-  startGame: async (mode: GameMode) => {
-    set({ phase: "loading", gameMode: mode });
+  startGame: async (mode: GameMode, oni: boolean = false) => {
+    const oniMode = mode === "speed" && oni;
+    set({ phase: "loading", gameMode: mode, oniMode });
 
     const dbProblems = mode === "casual"
       ? await fetchCasualProblems()
@@ -82,12 +86,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       gameStartedAt: now,
       questionStartedAt: now,
       gameTimeLeft: GAME_DURATION_MS,
-      questionTimeLeft: QUESTION_DURATION_MS,
+      questionTimeLeft: oniMode ? QUESTION_DURATION_MS : Infinity,
     });
   },
 
   submitAnswer: (tile: Tile) => {
-    const { problems, currentIndex, questionStartedAt, answers, gameMode } = get();
+    const { problems, currentIndex, questionStartedAt, answers, oniMode } = get();
     const problem = problems[currentIndex];
     if (!problem) return;
 
@@ -118,7 +122,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         phase: "playing",
         currentIndex: get().currentIndex + 1,
         questionStartedAt: Date.now(),
-        questionTimeLeft: gameMode === "speed" ? QUESTION_DURATION_MS : Infinity,
+        questionTimeLeft: oniMode ? QUESTION_DURATION_MS : Infinity,
         lastAnswer: null,
       });
     }, ANSWER_DISPLAY_MS);
@@ -160,13 +164,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   tickGame: (now: number) => {
-    const { gameStartedAt, questionStartedAt, phase, gameMode } = get();
+    const { gameStartedAt, questionStartedAt, phase, oniMode } = get();
     if (phase !== "playing" || !gameStartedAt || !questionStartedAt) return;
 
     const gameElapsed = now - gameStartedAt;
     const questionElapsed = now - questionStartedAt;
     const gameTimeLeft = Math.max(0, GAME_DURATION_MS - gameElapsed);
-    const questionTimeLeft = gameMode === "speed"
+    const questionTimeLeft = oniMode
       ? Math.max(0, QUESTION_DURATION_MS - questionElapsed)
       : Infinity;
 
@@ -175,7 +179,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
 
-    if (gameMode === "speed" && questionTimeLeft === 0) {
+    if (oniMode && questionTimeLeft === 0) {
       get().timeoutQuestion();
       return;
     }
@@ -193,6 +197,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   resetGame: () => {
     set({
       phase: "idle",
+      oniMode: false,
       problems: [],
       currentIndex: 0,
       answers: [],
@@ -205,14 +210,31 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getResult: (): GameResult => {
-    const { answers, gameStartedAt, gameMode } = get();
+    const { answers, gameStartedAt, gameMode, oniMode } = get();
     const totalAnswered = answers.filter((a) => a.discardedTile.id !== "timeout").length;
     const correctCount = answers.filter((a) => a.isCorrect).length;
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
-    const rawScore = gameMode === "speed"
-      ? correctCount * 1000 - incorrectCount * 300 + accuracy
-      : correctCount * 100 - incorrectCount * 50 + accuracy;
+
+    let rawScore: number;
+    if (gameMode === "casual") {
+      rawScore = correctCount * 100 - incorrectCount * 50 + accuracy;
+    } else if (oniMode) {
+      // 鬼モード: 連続正解で獲得点が倍々(1000→2000→4000...)、不正解・時間切れで1000に戻る
+      let gain = ONI_BASE_GAIN;
+      let earned = 0;
+      for (const a of answers) {
+        if (a.isCorrect) {
+          earned += gain;
+          gain *= 2;
+        } else {
+          gain = ONI_BASE_GAIN;
+        }
+      }
+      rawScore = earned - incorrectCount * 300 + accuracy;
+    } else {
+      rawScore = correctCount * 1000 - incorrectCount * 300 + accuracy;
+    }
     const score = Math.max(0, rawScore);
     return {
       totalAnswered: answers.length,
@@ -221,6 +243,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       accuracy,
       score,
       gameMode,
+      oniMode,
       answers,
       durationMs: gameStartedAt ? Date.now() - gameStartedAt : 0,
     };

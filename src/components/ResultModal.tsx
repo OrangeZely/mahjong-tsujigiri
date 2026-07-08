@@ -68,6 +68,11 @@ export default function ResultModal({ result, onReset }: Props) {
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
           <div className="text-4xl mb-1">⚔️</div>
           <h2 className="text-3xl font-black">そこまで！</h2>
+          {result.oniMode && (
+            <div className="mt-1 inline-block bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full">
+              👹 鬼モード
+            </div>
+          )}
         </div>
 
         {/* スコア */}

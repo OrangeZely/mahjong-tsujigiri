@@ -76,7 +76,7 @@ export default function HistoryPage() {
                   onClick={() => setOpenId(openId === rec.id ? null : rec.id)}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors"
                 >
-                  <span className="text-2xl">{rec.gameMode === "casual" ? "🧘" : "⚡"}</span>
+                  <span className="text-2xl">{rec.gameMode === "casual" ? "🧘" : rec.oniMode ? "👹" : "⚡"}</span>
                   <div className="flex-1 min-w-0">
                     <div className="text-white font-bold">
                       {rec.correctCount}正解 / {rec.totalAnswered}問 • {rec.accuracy}%
