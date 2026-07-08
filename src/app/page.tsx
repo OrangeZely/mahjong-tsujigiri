@@ -146,11 +146,6 @@ export default function HomePage() {
           </div>
         </motion.div>
 
-        <div className="bg-yellow-500/20 rounded-xl px-5 py-3 mb-6 text-yellow-200 text-sm">
-          スコア = <span className="font-bold text-yellow-300">正解数 × 100</span> +{" "}
-          <span className="font-bold text-yellow-300">正答率</span>
-        </div>
-
         <div className="flex gap-3 justify-center">
           <motion.button
             whileHover={{ scale: 1.03 }}
