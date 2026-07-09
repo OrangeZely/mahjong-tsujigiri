@@ -46,8 +46,15 @@ export default function HomePage() {
         transition={{ duration: 0.6 }}
         className="text-center w-full max-w-sm mx-auto"
       >
-        <div className="mb-2">
-          <span className="text-6xl">⚔️</span>
+        <div className="mb-3 flex justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-panda.jpg"
+            alt="麻雀 辻斬る！"
+            width={220}
+            height={220}
+            className="w-48 h-48 md:w-56 md:h-56 rounded-2xl shadow-2xl ring-1 ring-white/10"
+          />
         </div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-1 tracking-tight">
           麻雀
