@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ローカル専用のバックアップスクリプト（Driveパスを含むため非公開）
+*.command
