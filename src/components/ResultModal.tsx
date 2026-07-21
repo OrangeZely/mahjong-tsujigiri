@@ -223,7 +223,7 @@ export default function ResultModal({ result, onReset }: Props) {
                         </span>
                       </div>
                       {problem?.description && (
-                        <div className="mt-1 text-gray-600 bg-white/70 rounded-lg px-2 py-1">
+                        <div className="mt-2 text-base leading-relaxed text-gray-700 bg-white/70 rounded-lg px-3 py-2">
                           💡 {problem.description}
                         </div>
                       )}

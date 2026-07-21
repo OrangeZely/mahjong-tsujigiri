@@ -154,7 +154,7 @@ export default function HistoryPage() {
                               </span>
                             </div>
                             {d.problem?.description && (
-                              <div className="mt-1 text-gray-300 bg-white/10 rounded-lg px-2 py-1">
+                              <div className="mt-2 text-base leading-relaxed text-gray-200 bg-white/10 rounded-lg px-3 py-2">
                                 💡 {d.problem.description}
                               </div>
                             )}
