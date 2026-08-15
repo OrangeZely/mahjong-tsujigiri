@@ -70,6 +70,16 @@
 - ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
 - ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
 
+## iOS / App Store対応 2026-08-15 着手
+
+- `npx cap add ios` でiOSプロジェクト生成済み（`ios/App`、Capacitor 8.5・**SPM構成**でPods不使用）。Bundle ID `com.orangezely.mahjongtsujigiru`、表示名「麻雀辻斬る」、v1.0
+- アイコン設定済み（`ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png`＝1024・不透明・パンダ緑）
+- RevenueCat iOS SDK(5.83.0)もSPMで統合され、依存解決は成功
+- **ブロッカー**: Xcodeに**iOSプラットフォーム(シミュレータランタイム)が未導入**のため実ビルド不可。`xcodebuild -downloadPlatform iOS` または Xcode > Settings > Components から導入が必要
+- シミュレータMCPツールは `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`（要パスワード）を求める。CocoaPodsはbrewで導入済みだがSPM構成のため不要だった
+- 残タスク: Xcodeで署名チーム設定 → アーカイブ → App Store Connectでアプリ作成・アップロード・審査。RevenueCat iOSは別途 `appl_` キーが必要（RevenueCatにiOSアプリ登録）
+- Apple Developer Program: 登録済み
+
 ## 課金（RevenueCat）2026-08-15 導入
 
 - SDK `@revenuecat/purchases-capacitor@13.4.0` をインストール済み（Capacitor 8対応）
