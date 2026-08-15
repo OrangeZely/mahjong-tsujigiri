@@ -70,6 +70,34 @@
 - ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
 - ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
 
+## iOSビルド＆App Storeアップロード手順（2026-08-15 確立・重要）
+
+**Xcode GUIのArchiveは使えない**（このチームは実機デバイス未登録のため、自動署名が開発用プロファイルを作れず失敗する）。以下のCLI手順を使うこと:
+
+```bash
+cd ~/mahjong-tsujigiri && npm run build && npx cap sync ios
+cd ios/App
+# 1) 署名なしでアーカイブ
+xcodebuild archive -project App.xcodeproj -scheme App -configuration Release \
+  -destination 'generic/platform=iOS' -archivePath ~/mahjong-tsujigiri/build/App.xcarchive \
+  -derivedDataPath ./build-archive \
+  CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+# 2) APIキーで自動署名して .ipa 書き出し（ExportOptions.plistは method=app-store-connect / teamID=UDQUL243D2 / signingStyle=automatic）
+cd ~/mahjong-tsujigiri
+xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build/export \
+  -exportOptionsPlist ExportOptions.plist -allowProvisioningUpdates \
+  -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_856294GLP4.p8 \
+  -authenticationKeyID 856294GLP4 -authenticationKeyIssuerID 37ea8707-9d58-436d-9557-ca12bdfd7b8d
+# 3) アップロード
+xcrun altool --upload-app -f build/export/App.ipa -t ios \
+  --apiKey 856294GLP4 --apiIssuer 37ea8707-9d58-436d-9557-ca12bdfd7b8d
+```
+
+- App Store Connect APIキー(.p8)は `~/.appstoreconnect/private_keys/` に配置済み（chmod 600、gitには入れない）
+- `project.pbxproj` の `CODE_SIGN_IDENTITY` はCapacitorが `"iPhone Developer"` を書き込むため、`cap add ios` をやり直したら Release=`Apple Distribution` / Debug=`Apple Development` に直すこと
+- 再アップロード時は `CURRENT_PROJECT_VERSION`（ビルド番号）を上げる必要あり
+- **2026-08-15: v1.0(build 1) のアップロード成功**（Delivery UUID 1a93926d-9def-4840-a8f6-84e0826e2877）
+
 ## iOS / App Store対応 2026-08-15 着手
 
 - `npx cap add ios` でiOSプロジェクト生成済み（`ios/App`、Capacitor 8.5・**SPM構成**でPods不使用）。Bundle ID `com.orangezely.mahjongtsujigiru`、表示名「麻雀辻斬る」、v1.0
