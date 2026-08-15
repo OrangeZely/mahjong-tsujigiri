@@ -70,6 +70,14 @@
 - ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
 - ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
 
+## 課金（RevenueCat）2026-08-15 導入
+
+- SDK `@revenuecat/purchases-capacitor@13.4.0` をインストール済み（Capacitor 8対応）
+- 初期化: `src/lib/revenuecat.ts` の `initRevenueCat()` を `src/components/RevenueCatInit.tsx` 経由で `layout.tsx` から起動時に呼ぶ。**ネイティブAndroidのみ動作**（Web版/LINEミニアプリは自動スキップ）
+- **要対応**: RevenueCatダッシュボードで取得する公開キー(`goog_...`)を `.env.local` の `NEXT_PUBLIC_REVENUECAT_ANDROID_KEY` に設定 → `npm run build && npx cap sync android` で反映。未設定の間は初期化スキップ（起動はする）
+- ダッシュボード側（プロジェクト/アプリ/商品/エンタイトルメント/Offering作成）は未着手。RevenueCat MCPは要認証（非対話セッションでは不可）
+- 次のステップ候補: paywall表示・購入フロー・エンタイトルメントによる機能ゲート
+
 ## 既知の注意点・宿題
 
 - **Supabase無料プランは1週間アクセスなしで自動停止** → リリース初期は注意
