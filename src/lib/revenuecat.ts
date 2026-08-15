@@ -1,8 +1,9 @@
 import { Capacitor } from "@capacitor/core";
 
-// RevenueCatのAndroid用「公開」APIキー（goog_... で始まる。クライアントに埋め込んで安全）。
+// RevenueCatの「公開」APIキー（クライアントに埋め込んで安全）。
 // ビルド時に環境変数から読み込む。未設定なら初期化をスキップする。
 const ANDROID_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_ANDROID_KEY ?? "";
+const IOS_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_IOS_KEY ?? "";
 
 let configured = false;
 
@@ -15,11 +16,14 @@ export async function initRevenueCat(): Promise<void> {
   // Web / LINEミニアプリではRevenueCatは使えないのでスキップ
   if (!Capacitor.isNativePlatform()) return;
 
-  if (!ANDROID_API_KEY) {
+  const platform = Capacitor.getPlatform();
+  const apiKey = platform === "ios" ? IOS_API_KEY : ANDROID_API_KEY;
+
+  if (!apiKey) {
     console.warn(
-      "[RevenueCat] APIキーが未設定のため初期化をスキップしました。" +
-        "RevenueCatダッシュボードで取得した公開キー(goog_...)を " +
-        ".env.local の NEXT_PUBLIC_REVENUECAT_ANDROID_KEY に設定してください。"
+      `[RevenueCat] ${platform}用のAPIキーが未設定のため初期化をスキップしました。` +
+        "RevenueCatダッシュボードで取得した公開キーを " +
+        `.env.local の ${platform === "ios" ? "NEXT_PUBLIC_REVENUECAT_IOS_KEY" : "NEXT_PUBLIC_REVENUECAT_ANDROID_KEY"} に設定してください。`
     );
     return;
   }
@@ -29,7 +33,7 @@ export async function initRevenueCat(): Promise<void> {
     const { Purchases, LOG_LEVEL } = await import("@revenuecat/purchases-capacitor");
     // 統合中はデバッグログを有効化（リリース時はINFO等に下げてよい）
     await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
-    await Purchases.configure({ apiKey: ANDROID_API_KEY });
+    await Purchases.configure({ apiKey });
     configured = true;
     console.log("[RevenueCat] 初期化完了");
   } catch (e) {
