@@ -70,6 +70,18 @@
 - ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
 - ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
 
+## 広告（AdMob）＋広告除去課金 2026-08-17 実装
+
+- `@capacitor-community/admob@8.1.0`。実装は `src/lib/ads.ts`（バナー＋結果画面の全画面広告、3回に1回）・`src/lib/purchases.ts`（購入/復元）・`src/store/premiumStore.ts`（購入状態）・`src/components/AdBanner.tsx` / `RemoveAdsSection.tsx`
+- バナーはホーム・ランキング・履歴のみ（ゲーム画面には出さない）。Web/LINE版は全て無効
+- RevenueCat: 商品 `remove_ads`(non_consumable) / エンタイトルメント `no_ads` / default offering の `$rc_lifetime`
+- **ハマりどころ①**: RevenueCatの `getCustomerInfo` / `getOfferings` が応答を返さないことがあり、購入状態が確定せず広告が永久に出なかった。→ `withTimeout` で必ず打ち切り、`loaded` を必ず立てる実装にしてある。**このタイムアウトを外さないこと**
+- **ハマりどころ②**: `AdMob.requestTrackingAuthorization()`(ATT) を呼ぶとプラグインのネイティブ処理が詰まり、以降の `showBanner` が実行されず広告が出なくなる。→ **ATTは呼んでいない**。トラッキングなし＝パーソナライズなし広告。入れる場合は実機で要検証
+- **ハマりどころ③**: SwiftPMのキャッシュに壊れた残骸があると `Could not resolve package dependencies` で失敗する。→ `~/Library/Caches/org.swift.swiftpm/artifacts/` の該当ディレクトリを削除して再ビルド
+- **未完了（本番前に必須）**: AdMobアカウント未作成のため**Google公式のテスト広告IDを使用中**。本番の広告ユニットIDを `.env.local` の `NEXT_PUBLIC_ADMOB_IOS_BANNER` / `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL`（Android版も同様）に設定し、`ios/App/App/Info.plist` の `GADApplicationIdentifier` と `android/app/src/main/AndroidManifest.xml` の `com.google.android.gms.ads.APPLICATION_ID` を本番アプリIDに差し替えること。**テストIDのままでは収益ゼロ**
+- **未完了**: App Store Connectで課金商品 `remove_ads`（非消耗型・¥300）の作成。作成前は `getOfferings` がエラーになり購入ボタンは表示されない（現状そうなっている）
+- 課金を入れたバージョンは v1.1 として別途審査が必要。プライバシー申告も「広告」関連の更新が必要（識別子・使用状況データを広告目的で第三者=Googleが収集）
+
 ## iOSビルド＆App Storeアップロード手順（2026-08-15 確立・重要）
 
 **Xcode GUIのArchiveは使えない**（このチームは実機デバイス未登録のため、自動署名が開発用プロファイルを作れず失敗する）。以下のCLI手順を使うこと:
