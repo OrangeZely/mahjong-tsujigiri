@@ -70,6 +70,21 @@
 - ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
 - ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
 
+## 課金モデル（2026-08-17 決定・実装済み）
+
+| 商品 | 種別 | 価格 | 解放される権利 |
+|---|---|---|---|
+| `remove_ads` | 非消耗型（買い切り） | ¥300 | `no_ads` |
+| `premium_monthly` | 自動更新サブスク | ¥380/月 | `no_ads` + `premium` |
+| `premium_annual` | 自動更新サブスク | ¥2,800/年 | `no_ads` + `premium` |
+
+- `no_ads` = 広告非表示 / `premium` = プレイ無制限＋毎月の新問題
+- **無料は1日10回まで**（`src/lib/playLimit.ts`、localStorageで日付管理・翌0時リセット）。Web/LINE版にも同じ制限を適用
+- RevenueCat側の商品・エンタイトルメント・パッケージ（`$rc_lifetime`/`$rc_monthly`/`$rc_annual`）は設定済み
+- **App Store Connect側の課金商品はまだ未作成**。上表の製品IDと価格で作ること。作るまで `getOfferings` がエラーになり購入UIは表示されない
+- サブスクには7日間の無料トライアル（導入価格）を付ける想定
+- 「毎月問題を追加する」ことがサブスクの価値なので、Supabaseの`problems`/`problems_casual`へ定期的に追加が必要（現在 清一色50問・何切る99問）
+
 ## 広告（AdMob）＋広告除去課金 2026-08-17 実装
 
 - `@capacitor-community/admob@8.1.0`。実装は `src/lib/ads.ts`（バナー＋結果画面の全画面広告、3回に1回）・`src/lib/purchases.ts`（購入/復元）・`src/store/premiumStore.ts`（購入状態）・`src/components/AdBanner.tsx` / `RemoveAdsSection.tsx`
