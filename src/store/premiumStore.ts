@@ -1,22 +1,27 @@
 import { create } from "zustand";
 import {
-  hasNoAds,
-  getRemoveAdsPrice,
-  purchaseRemoveAds,
+  getEntitlements,
+  getPrices,
+  purchasePlan,
   restorePurchases,
   withTimeout,
+  PlanId,
   PurchaseOutcome,
 } from "@/lib/purchases";
 import { hideBanner, showBanner } from "@/lib/ads";
+import { getRemainingPlays, DAILY_FREE_PLAYS } from "@/lib/playLimit";
 
 interface PremiumState {
-  noAds: boolean; // 広告除去を購入済みか
+  noAds: boolean; // 広告非表示（買い切り or サブスク）
+  premium: boolean; // 無制限プレイ（サブスクのみ）
   loaded: boolean; // 購入状態の確認が済んだか（確認前は広告を出さない）
-  price: string | null; // 表示用の価格（例: "¥300"）
-  purchasing: boolean;
+  prices: Partial<Record<PlanId, string>>;
+  purchasing: PlanId | null;
+  remainingPlays: number; // 今日の残りプレイ回数（無料ユーザー用）
 
   load: () => Promise<void>;
-  purchase: () => Promise<PurchaseOutcome>;
+  refreshRemaining: () => void;
+  purchase: (plan: PlanId) => Promise<PurchaseOutcome>;
   restore: () => Promise<boolean>;
   // 広告を出してよい画面で呼ぶ。購入済みなら何もしない。
   syncBanner: (visible: boolean) => Promise<void>;
@@ -24,44 +29,55 @@ interface PremiumState {
 
 export const usePremiumStore = create<PremiumState>((set, get) => ({
   noAds: false,
+  premium: false,
   loaded: false,
-  price: null,
-  purchasing: false,
+  prices: {},
+  purchasing: null,
+  // 初期値は満タン。クライアントで refreshRemaining() を呼んで実際の値にする
+  // （ビルド時に localStorage は読めないため）
+  remainingPlays: DAILY_FREE_PLAYS,
 
   load: async () => {
     // まず購入済みかどうかだけを確定させる（ここで広告の出し分けが決まる）。
     // RevenueCatの応答が返らないことがあるため全体にもタイムアウトをかけ、
     // 確認できなくても必ず loaded を立てる（広告表示が永久に止まらないように）。
-    const noAds = await withTimeout(hasNoAds(), 6000, false);
-    set({ noAds, loaded: true });
-    if (noAds) {
-      await hideBanner();
-      return;
-    }
+    const ent = await withTimeout(getEntitlements(), 6000, {
+      noAds: false,
+      premium: false,
+    });
+    set({ noAds: ent.noAds, premium: ent.premium, loaded: true });
+    get().refreshRemaining();
+    if (ent.noAds) await hideBanner();
+
     // 価格は購入ボタンの表示にしか使わないので、取得が遅くても広告表示は待たせない
-    const price = await getRemoveAdsPrice();
-    set({ price });
+    const prices = await getPrices();
+    set({ prices });
   },
 
-  purchase: async () => {
+  refreshRemaining: () => {
+    set({ remainingPlays: getRemainingPlays() });
+  },
+
+  purchase: async (plan) => {
     if (get().purchasing) return "cancelled";
-    set({ purchasing: true });
-    const outcome = await purchaseRemoveAds();
+    set({ purchasing: plan });
+    const { outcome, entitlements } = await purchasePlan(plan);
     if (outcome === "purchased") {
-      set({ noAds: true, price: null });
-      await hideBanner();
+      set({ noAds: entitlements.noAds, premium: entitlements.premium });
+      if (entitlements.noAds) await hideBanner();
     }
-    set({ purchasing: false });
+    set({ purchasing: null });
     return outcome;
   },
 
   restore: async () => {
-    const restored = await restorePurchases();
-    if (restored) {
-      set({ noAds: true, price: null });
-      await hideBanner();
+    const ent = await restorePurchases();
+    if (ent.noAds || ent.premium) {
+      set({ noAds: ent.noAds, premium: ent.premium });
+      if (ent.noAds) await hideBanner();
+      return true;
     }
-    return restored;
+    return false;
   },
 
   syncBanner: async (visible) => {

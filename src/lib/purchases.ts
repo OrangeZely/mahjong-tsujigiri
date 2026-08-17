@@ -1,9 +1,23 @@
 import { Capacitor } from "@capacitor/core";
 
-// 広告非表示エンタイトルメントの識別子（RevenueCatダッシュボードと一致させること）
-export const NO_ADS_ENTITLEMENT = "no_ads";
-// 広告除去パッケージの識別子（default offering 内）
-const REMOVE_ADS_PACKAGE = "$rc_lifetime";
+// エンタイトルメント（RevenueCatダッシュボードと一致させること）
+export const NO_ADS_ENTITLEMENT = "no_ads"; // 広告非表示（買い切り・サブスクどちらでも付与）
+export const PREMIUM_ENTITLEMENT = "premium"; // 無制限プレイ＋新問題（サブスクのみ）
+
+// 購入プランと、default offering 内のパッケージ識別子の対応
+export type PlanId = "remove_ads" | "monthly" | "annual";
+const PACKAGE_BY_PLAN: Record<PlanId, string> = {
+  remove_ads: "$rc_lifetime",
+  monthly: "$rc_monthly",
+  annual: "$rc_annual",
+};
+
+export interface Entitlements {
+  noAds: boolean;
+  premium: boolean;
+}
+
+const NONE: Entitlements = { noAds: false, premium: false };
 
 // RevenueCatのプラグインはネイティブでのみ必要なので動的に読み込む
 async function loadPurchases() {
@@ -20,77 +34,92 @@ export function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Pr
   ]);
 }
 
-// 広告非表示を購入済みかどうか。Web/LINEミニアプリでは常にfalse（広告自体を出さない）
-export async function hasNoAds(): Promise<boolean> {
-  if (!Capacitor.isNativePlatform()) return false;
+type CustomerInfoResult = Awaited<
+  ReturnType<Awaited<ReturnType<typeof loadPurchases>>["getCustomerInfo"]>
+>;
+
+function toEntitlements(info: CustomerInfoResult | null): Entitlements {
+  if (!info) return NONE;
+  const active = info.customerInfo.entitlements.active;
+  return {
+    noAds: NO_ADS_ENTITLEMENT in active,
+    premium: PREMIUM_ENTITLEMENT in active,
+  };
+}
+
+// 現在の購入状態。Web/LINEミニアプリでは購入手段が無いので常に未購入扱い。
+export async function getEntitlements(): Promise<Entitlements> {
+  if (!Capacitor.isNativePlatform()) return NONE;
   try {
     const Purchases = await loadPurchases();
     const info = await withTimeout(Purchases.getCustomerInfo(), 8000, null);
-    if (!info) {
-      console.warn("[Purchases] 購入状態の取得がタイムアウトしました");
-      return false;
-    }
-    return NO_ADS_ENTITLEMENT in info.customerInfo.entitlements.active;
+    if (!info) console.warn("[Purchases] 購入状態の取得がタイムアウトしました");
+    return toEntitlements(info);
   } catch (e) {
     console.error("[Purchases] 購入状態の取得に失敗", e);
-    return false;
+    return NONE;
   }
 }
 
-// 広告除去の価格を表示用に取得する（例: "¥300"）。取得できなければnull
-export async function getRemoveAdsPrice(): Promise<string | null> {
-  if (!Capacitor.isNativePlatform()) return null;
+// 各プランの表示用価格（例: "¥380"）。取得できなかったものは含まれない。
+export async function getPrices(): Promise<Partial<Record<PlanId, string>>> {
+  if (!Capacitor.isNativePlatform()) return {};
   try {
     const Purchases = await loadPurchases();
     const offerings = await withTimeout(Purchases.getOfferings(), 8000, null);
-    const pkg = offerings?.current?.availablePackages.find(
-      (p) => p.identifier === REMOVE_ADS_PACKAGE
-    );
-    return pkg?.product.priceString ?? null;
+    const packages = offerings?.current?.availablePackages ?? [];
+    const prices: Partial<Record<PlanId, string>> = {};
+    (Object.keys(PACKAGE_BY_PLAN) as PlanId[]).forEach((plan) => {
+      const pkg = packages.find((p) => p.identifier === PACKAGE_BY_PLAN[plan]);
+      if (pkg) prices[plan] = pkg.product.priceString;
+    });
+    return prices;
   } catch (e) {
     console.error("[Purchases] 価格の取得に失敗", e);
-    return null;
+    return {};
   }
 }
 
 export type PurchaseOutcome = "purchased" | "cancelled" | "error";
 
-// 広告除去を購入する。ユーザーがキャンセルした場合は "cancelled" を返す
-export async function purchaseRemoveAds(): Promise<PurchaseOutcome> {
-  if (!Capacitor.isNativePlatform()) return "error";
+export async function purchasePlan(
+  plan: PlanId
+): Promise<{ outcome: PurchaseOutcome; entitlements: Entitlements }> {
+  if (!Capacitor.isNativePlatform()) {
+    return { outcome: "error", entitlements: NONE };
+  }
   try {
     const Purchases = await loadPurchases();
     const { current } = await Purchases.getOfferings();
     const aPackage = current?.availablePackages.find(
-      (p) => p.identifier === REMOVE_ADS_PACKAGE
+      (p) => p.identifier === PACKAGE_BY_PLAN[plan]
     );
     if (!aPackage) {
-      console.error("[Purchases] 広告除去パッケージが見つかりません");
-      return "error";
+      console.error("[Purchases] パッケージが見つかりません:", plan);
+      return { outcome: "error", entitlements: NONE };
     }
-    const { customerInfo } = await Purchases.purchasePackage({ aPackage });
-    return NO_ADS_ENTITLEMENT in customerInfo.entitlements.active
-      ? "purchased"
-      : "error";
+    const result = await Purchases.purchasePackage({ aPackage });
+    return { outcome: "purchased", entitlements: toEntitlements(result) };
   } catch (e) {
     // ユーザーによるキャンセルはエラー扱いしない
-    if ((e as { code?: string }).code === "1" || (e as { userCancelled?: boolean }).userCancelled) {
-      return "cancelled";
+    const err = e as { code?: string; userCancelled?: boolean };
+    if (err.userCancelled || err.code === "1") {
+      return { outcome: "cancelled", entitlements: NONE };
     }
     console.error("[Purchases] 購入に失敗", e);
-    return "error";
+    return { outcome: "error", entitlements: NONE };
   }
 }
 
 // 購入の復元（機種変更・再インストール時にApp Storeが必須としている機能）
-export async function restorePurchases(): Promise<boolean> {
-  if (!Capacitor.isNativePlatform()) return false;
+export async function restorePurchases(): Promise<Entitlements> {
+  if (!Capacitor.isNativePlatform()) return NONE;
   try {
     const Purchases = await loadPurchases();
-    const { customerInfo } = await Purchases.restorePurchases();
-    return NO_ADS_ENTITLEMENT in customerInfo.entitlements.active;
+    const result = await withTimeout(Purchases.restorePurchases(), 15000, null);
+    return toEntitlements(result);
   } catch (e) {
     console.error("[Purchases] 復元に失敗", e);
-    return false;
+    return NONE;
   }
 }

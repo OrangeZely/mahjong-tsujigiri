@@ -7,8 +7,9 @@ import { getBestScore } from "@/lib/history";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName } from "@/lib/profile";
 import { PLAYER_NAME_EVENT } from "@/lib/liff";
-import RemoveAdsSection from "@/components/RemoveAdsSection";
+import PurchaseSection from "@/components/PurchaseSection";
 import AdBanner from "@/components/AdBanner";
+import PlaysLeft from "@/components/PlaysLeft";
 
 export default function HomePage() {
   const router = useRouter();
@@ -155,6 +156,8 @@ export default function HomePage() {
           </div>
         </motion.div>
 
+        <PlaysLeft />
+
         <div className="flex gap-3 justify-center">
           <motion.button
             whileHover={{ scale: 1.03 }}
@@ -174,7 +177,7 @@ export default function HomePage() {
           </motion.button>
         </div>
 
-        <RemoveAdsSection />
+        <PurchaseSection />
 
         <div className="mt-6">
           <button

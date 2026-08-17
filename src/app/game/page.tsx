@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { useGameStore, GameMode } from "@/store/gameStore";
 import GameBoard from "@/components/GameBoard";
 import ResultModal from "@/components/ResultModal";
+import { usePremiumStore } from "@/store/premiumStore";
+import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
 
 function GameContent() {
   const { phase, gameMode, startGame, resetGame, getResult } = useGameStore();
@@ -15,12 +17,33 @@ function GameContent() {
   const mode = (searchParams.get("mode") === "casual" ? "casual" : "speed") as GameMode;
   const [oni, setOni] = useState(false); // 鬼斬りモード（両モード共通）
 
+  const premium = usePremiumStore((s) => s.premium);
+  const remainingPlays = usePremiumStore((s) => s.remainingPlays);
+  const refreshRemaining = usePremiumStore((s) => s.refreshRemaining);
+
   // ブラウザバック等で前回の終了状態が残っていたらリセットして開始画面を出す
   useEffect(() => {
     if (useGameStore.getState().phase === "finished") {
       resetGame();
     }
   }, [resetGame]);
+
+  // 無料プランの1日あたりのプレイ回数制限
+  useEffect(() => {
+    refreshRemaining();
+  }, [refreshRemaining]);
+
+  const outOfPlays = !premium && remainingPlays <= 0;
+
+  const handleStart = () => {
+    if (!canPlay(premium)) {
+      refreshRemaining();
+      return;
+    }
+    consumePlay(premium);
+    refreshRemaining();
+    startGame(mode, oni);
+  };
 
   const modeLabel = mode === "casual" ? "何切るモード" : "清一色モード";
   const modeColor = mode === "casual" ? "text-green-300" : "text-red-300";
@@ -74,14 +97,38 @@ function GameContent() {
             </div>
           )}
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => startGame(mode, oni)}
-            className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black text-3xl px-16 py-6 rounded-2xl shadow-2xl"
-          >
-            斬！⚔️
-          </motion.button>
+          {outOfPlays ? (
+            // 無料プランの1日の回数を使い切った場合
+            <div className="bg-white/5 border-2 border-red-500/50 rounded-2xl px-6 py-5 max-w-sm mx-auto">
+              <div className="text-red-300 font-bold">
+                本日のプレイ回数を使い切りました
+              </div>
+              <div className="text-gray-400 text-sm mt-1">
+                明日0時に{DAILY_FREE_PLAYS}回に回復します
+              </div>
+              <button
+                onClick={() => router.push("/")}
+                className="mt-4 text-yellow-300 hover:text-yellow-200 text-sm underline"
+              >
+                プレミアムで無制限にする
+              </button>
+            </div>
+          ) : (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleStart}
+              className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black text-3xl px-16 py-6 rounded-2xl shadow-2xl"
+            >
+              斬！⚔️
+            </motion.button>
+          )}
+
+          {!premium && !outOfPlays && (
+            <p className="mt-4 text-gray-400 text-xs">
+              本日の残りプレイ回数 {remainingPlays} / {DAILY_FREE_PLAYS}
+            </p>
+          )}
 
           <div className="mt-6">
             <button
