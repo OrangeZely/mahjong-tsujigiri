@@ -44,3 +44,5 @@ next-env.d.ts
 *.command
 build/
 AuthKey_*.p8
+ios/App/build-archive/
+ios/App/build-sim/

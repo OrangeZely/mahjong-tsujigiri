@@ -10,6 +10,8 @@ import { tileLabel } from "@/lib/mahjong";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
 import Tile from "@/components/Tile";
+import { usePremiumStore } from "@/store/premiumStore";
+import { maybeShowInterstitial } from "@/lib/ads";
 
 interface Props {
   result: GameResult;
@@ -34,6 +36,12 @@ export default function ResultModal({ result, onReset }: Props) {
     } else {
       setEditingName(true); // 未登録なら入力欄を表示
     }
+  }, []);
+
+  // ゲーム終了時、数回に1回だけ全画面広告を出す（購入済みなら出さない）
+  useEffect(() => {
+    const { noAds, loaded } = usePremiumStore.getState();
+    if (loaded && !noAds) maybeShowInterstitial();
   }, []);
 
   const handleSave = async () => {

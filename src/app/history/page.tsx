@@ -8,6 +8,7 @@ import { getRank } from "@/lib/ranks";
 import { tileLabel } from "@/lib/mahjong";
 import { Suit } from "@/types/mahjong";
 import Tile from "@/components/Tile";
+import AdBanner from "@/components/AdBanner";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -187,6 +188,8 @@ export default function HistoryPage() {
           )}
         </div>
       </div>
+
+      <AdBanner />
     </main>
   );
 }

@@ -7,6 +7,8 @@ import { getBestScore } from "@/lib/history";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName } from "@/lib/profile";
 import { PLAYER_NAME_EVENT } from "@/lib/liff";
+import RemoveAdsSection from "@/components/RemoveAdsSection";
+import AdBanner from "@/components/AdBanner";
 
 export default function HomePage() {
   const router = useRouter();
@@ -172,6 +174,8 @@ export default function HomePage() {
           </motion.button>
         </div>
 
+        <RemoveAdsSection />
+
         <div className="mt-6">
           <button
             onClick={() => router.push("/privacy")}
@@ -181,6 +185,8 @@ export default function HomePage() {
           </button>
         </div>
       </motion.div>
+
+      <AdBanner />
     </main>
   );
 }

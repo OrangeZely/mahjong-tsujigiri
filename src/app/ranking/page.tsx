@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { fetchRanking } from "@/lib/supabase";
 import { RankingEntry } from "@/types/mahjong";
 import { getRank } from "@/lib/ranks";
+import AdBanner from "@/components/AdBanner";
 
 type RankingTab = "all" | "week" | "speed" | "casual";
 
@@ -175,6 +176,8 @@ export default function RankingPage() {
           </button>
         </div>
       </div>
+
+      <AdBanner />
     </main>
   );
 }
