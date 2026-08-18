@@ -6,9 +6,9 @@
 	<string>$(CAPACITOR_DEBUG)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<!-- AdMobのアプリID。現在はGoogle公式のテスト用ID。本番のAdMobアプリIDに差し替えること -->
+	<!-- AdMobのアプリID（本番） -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-7882004435623034~1861467844</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
