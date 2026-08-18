@@ -102,7 +102,40 @@
 - **未完了**: App Store Connectで課金商品 `remove_ads`（非消耗型・¥300）の作成。作成前は `getOfferings` がエラーになり購入ボタンは表示されない（現状そうなっている）
 - 課金を入れたバージョンは v1.1 として別途審査が必要。プライバシー申告も「広告」関連の更新が必要（識別子・使用状況データを広告目的で第三者=Googleが収集）
 
-## iOSビルド＆App Storeアップロード手順（2026-08-15 確立・重要）
+## iOSビルド手順（2026-08-18 更新・**こちらが最新**）
+
+AdMob導入でバイナリのフレームワークが増えたため、**旧手順（署名なしarchive→export時に署名）は使えない**。
+Appleに「does not satisfy its designated Requirement」で弾かれる。**アーカイブ時点から署名する**こと。
+
+前提（構築済み）:
+- 配布用証明書 `Apple Distribution: shintaro yamashita` をAPI経由で作成（id 6S8VVQMF93、期限2027-08-18）
+- 配布用プロファイル `Tsujigiri App Store Manual`（App Store用・手動管理）を作成し `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` に配置
+- **専用キーチェーン `tsujigiri-signing.keychain`（パスワード `tsujigiri-build-kc`）** に証明書を入れてある。
+  ログインキーチェーンだと `errSecInternalComponent` で署名に失敗する（partition list設定にMacのログインパスワードが必要なため）
+- `project.pbxproj` の App ターゲット **Release のみ** `CODE_SIGN_STYLE = Manual` + `PROVISIONING_PROFILE_SPECIFIER = "Tsujigiri App Store Manual"`。
+  CLIで `PROVISIONING_PROFILE_SPECIFIER` を渡すとSPMパッケージにも適用され失敗するので、必ずプロジェクト設定側で指定する
+- **自動署名(-allowProvisioningUpdates)はCLIでは常に開発用を選ぶため使えない**
+
+```bash
+cd ~/mahjong-tsujigiri && npm run build && npx cap sync ios
+# バージョンを上げる（project.pbxproj の MARKETING_VERSION / CURRENT_PROJECT_VERSION）
+security unlock-keychain -p "tsujigiri-build-kc" tsujigiri-signing.keychain
+cd ios/App
+xcodebuild archive -project App.xcodeproj -scheme App -configuration Release \
+  -destination 'generic/platform=iOS' -archivePath ~/mahjong-tsujigiri/build/App.xcarchive \
+  -derivedDataPath ./build-archive
+cd ~/mahjong-tsujigiri
+xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build/export \
+  -exportOptionsPlist ExportOptions.plist   # signingStyle=manual に設定済み
+# アップロード前に必ず検証（フレームワークの署名崩れを早期に検出）
+codesign --verify --deep --verbose=2 build/export/../export/Payload/App.app 2>&1 | head
+xcrun altool --upload-app -f build/export/App.ipa -t ios \
+  --apiKey 856294GLP4 --apiIssuer 37ea8707-9d58-436d-9557-ca12bdfd7b8d
+```
+
+- **2026-08-18: v1.1 (build 2) アップロード成功**（Delivery UUID 3dd7f7b8-2bc3-41ec-8453-74646f984007）。広告＋課金入り
+
+## iOSビルド＆App Storeアップロード手順（2026-08-15 確立・旧手順／参考）
 
 **Xcode GUIのArchiveは使えない**（このチームは実機デバイス未登録のため、自動署名が開発用プロファイルを作れず失敗する）。以下のCLI手順を使うこと:
 
