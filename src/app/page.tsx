@@ -10,6 +10,7 @@ import { PLAYER_NAME_EVENT } from "@/lib/liff";
 import PurchaseSection from "@/components/PurchaseSection";
 import AdBanner from "@/components/AdBanner";
 import PlaysLeft from "@/components/PlaysLeft";
+import AppPromoBanner from "@/components/AppPromoBanner";
 
 export default function HomePage() {
   const router = useRouter();
@@ -155,6 +156,8 @@ export default function HomePage() {
             <div>・<span className="text-yellow-300 font-bold">👺鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
+
+        <AppPromoBanner />
 
         <PlaysLeft />
 
