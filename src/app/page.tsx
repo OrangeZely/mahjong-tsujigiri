@@ -182,7 +182,13 @@ export default function HomePage() {
 
         <PurchaseSection />
 
-        <div className="mt-6">
+        <div className="mt-6 flex gap-4 justify-center">
+          <button
+            onClick={() => router.push("/guide")}
+            className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+          >
+            何切るガイド・用語集
+          </button>
           <button
             onClick={() => router.push("/privacy")}
             className="text-gray-600 hover:text-gray-400 text-xs underline transition-colors"
