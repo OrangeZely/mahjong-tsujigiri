@@ -98,7 +98,15 @@
 - **ハマりどころ①**: RevenueCatの `getCustomerInfo` / `getOfferings` が応答を返さないことがあり、購入状態が確定せず広告が永久に出なかった。→ `withTimeout` で必ず打ち切り、`loaded` を必ず立てる実装にしてある。**このタイムアウトを外さないこと**
 - **ハマりどころ②**: `AdMob.requestTrackingAuthorization()`(ATT) を呼ぶとプラグインのネイティブ処理が詰まり、以降の `showBanner` が実行されず広告が出なくなる。→ **ATTは呼んでいない**。トラッキングなし＝パーソナライズなし広告。入れる場合は実機で要検証
 - **ハマりどころ③**: SwiftPMのキャッシュに壊れた残骸があると `Could not resolve package dependencies` で失敗する。→ `~/Library/Caches/org.swift.swiftpm/artifacts/` の該当ディレクトリを削除して再ビルド
-- **未完了（本番前に必須）**: AdMobアカウント未作成のため**Google公式のテスト広告IDを使用中**。本番の広告ユニットIDを `.env.local` の `NEXT_PUBLIC_ADMOB_IOS_BANNER` / `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL`（Android版も同様）に設定し、`ios/App/App/Info.plist` の `GADApplicationIdentifier` と `android/app/src/main/AndroidManifest.xml` の `com.google.android.gms.ads.APPLICATION_ID` を本番アプリIDに差し替えること。**テストIDのままでは収益ゼロ**
+### AdMob運用メモ（2026-08-19時点）
+
+- **iOSの本番広告IDは設定済み**（`.env.local` と `ios/App/App/Info.plist` の `GADApplicationIdentifier`）。パブリッシャーID `pub-7882004435623034`
+- **`public/app-ads.txt` を設置済み**（`https://mahjong-tsujigiri.vercel.app/app-ads.txt` で配信中）。AdMobはApp Store掲載ページの開発者サイトURLからこれを探すため、**App Store Connectの「マーケティングURL」に `https://mahjong-tsujigiri.vercel.app` を設定する必要がある**
+- **GDPR（EU）の同意画面は未実装**。日本語のみのアプリでEU圏ユーザーが少ないため後回しと判断（2026-08-19）。**英語対応を行うタイミングで必ず入れること**（AdMobのプライバシーメッセージ設定＋UMPの実装）。無いとEU圏では広告がほぼ配信されない
+- Androidは未対応（AdMobにAndroidアプリ未作成・テストIDのまま）。Google Play公開時に対応
+- アプリがApp Storeで公開されるまでは広告がほとんど配信されないのが正常。公開後にAdMob側でストアのアプリとリンクすると本格配信が始まる
+
+- **旧メモ（対応済み）**: AdMobアカウント未作成のため**Google公式のテスト広告IDを使用中**。本番の広告ユニットIDを `.env.local` の `NEXT_PUBLIC_ADMOB_IOS_BANNER` / `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL`（Android版も同様）に設定し、`ios/App/App/Info.plist` の `GADApplicationIdentifier` と `android/app/src/main/AndroidManifest.xml` の `com.google.android.gms.ads.APPLICATION_ID` を本番アプリIDに差し替えること。**テストIDのままでは収益ゼロ**
 - **未完了**: App Store Connectで課金商品 `remove_ads`（非消耗型・¥300）の作成。作成前は `getOfferings` がエラーになり購入ボタンは表示されない（現状そうなっている）
 - 課金を入れたバージョンは v1.1 として別途審査が必要。プライバシー申告も「広告」関連の更新が必要（識別子・使用状況データを広告目的で第三者=Googleが収集）
 
