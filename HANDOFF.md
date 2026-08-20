@@ -98,6 +98,14 @@
 - **ハマりどころ①**: RevenueCatの `getCustomerInfo` / `getOfferings` が応答を返さないことがあり、購入状態が確定せず広告が永久に出なかった。→ `withTimeout` で必ず打ち切り、`loaded` を必ず立てる実装にしてある。**このタイムアウトを外さないこと**
 - **ハマりどころ②**: `AdMob.requestTrackingAuthorization()`(ATT) を呼ぶとプラグインのネイティブ処理が詰まり、以降の `showBanner` が実行されず広告が出なくなる。→ **ATTは呼んでいない**。トラッキングなし＝パーソナライズなし広告。入れる場合は実機で要検証
 - **ハマりどころ③**: SwiftPMのキャッシュに壊れた残骸があると `Could not resolve package dependencies` で失敗する。→ `~/Library/Caches/org.swift.swiftpm/artifacts/` の該当ディレクトリを削除して再ビルド
+### Web版・LINEミニアプリの収益化方針（2026-08-19決定）
+
+- **AdMobをWebに使ってはいけない**（アプリ専用。違反するとアカウント停止＝アプリ側の広告収益も失う）
+- Web版に広告を出すなら **AdSense** だが、①`*.vercel.app`のような借りドメインでは審査に通らない ②SPAは「価値の低いコンテンツ」で落ちやすい、という壁がある
+- **LINEミニアプリはAdSense不可**（アプリ内WebViewへのAdSense表示は規約違反）。Web版とサイトを共有しているため、AdSenseを入れると自動的に違反状態になる
+- → **当面はWeb/LINE版に広告を出さず、iOSアプリ版への誘導で収益化する**。`src/components/AppPromoBanner.tsx` を実装済み。`NEXT_PUBLIC_IOS_APP_URL` を設定すると表示される（App Store公開後に有効化すること）
+- 将来AdSenseをやる場合: 独自ドメイン取得 → Vercelに設定 → `public/ads.txt` 設置（app-ads.txtとは別物）→ コンテンツページを追加して審査申請、の順
+
 ### AdMob運用メモ（2026-08-19時点）
 
 - **iOSの本番広告IDは設定済み**（`.env.local` と `ios/App/App/Info.plist` の `GADApplicationIdentifier`）。パブリッシャーID `pub-7882004435623034`
