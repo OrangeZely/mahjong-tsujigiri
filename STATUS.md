@@ -1,4 +1,4 @@
-# 麻雀 辻斬る！ 現況まとめ（2026-08-21）
+# 麻雀 辻斬る！ 現況まとめ（2026-08-26 更新）
 
 > App Store公開完了 〜 機能強化フェーズへ。Notionに貼り付けて使えます。
 
@@ -6,13 +6,16 @@
 
 - **iOS v1.0：App Storeで公開中**（`READY_FOR_SALE`）。App Store ID `6801788392`
   - https://apps.apple.com/jp/app/id6801788392
-- **v1.1（広告＋課金入り・build 2）：アップロード済みだが、まだ審査に提出していない**
+- **v1.1（広告＋課金入り・build 2）：バージョン作成済み・提出準備が整った状態（未提出）**
+  - 課金商品3つとも `READY_TO_SUBMIT` ／ マーケティングURL・リリースノート設定済み
+  - 残るはプライバシー申告（広告）の更新と、審査提出の操作
 - Web版・LINEミニアプリ：Vercelで稼働中（https://mahjong-tsujigiri.vercel.app）
 - 問題数：清一色50問 ／ 何切る99問（Supabase管理）
 
 ## ✅ 完了していること
 
-- App Store公開（掲載情報・スクショ・年齢4+・プライバシー申告すべて完了）
+- App Store公開（掲載情報・スクショ・年齢レーティング・プライバシー申告すべて完了）
+  - 年齢レーティングは実際には **12+**（`TWELVE_PLUS`）。以前「4+」と書いていたのは誤り
 - iOSビルド署名の仕組みを構築（専用キーチェーン＋手動署名。手順は `HANDOFF.md`）
 - AdMob広告の実装（バナー＋結果画面の全画面広告・3回に1回）＋本番広告ID設定済み
 - 課金実装
@@ -20,16 +23,32 @@
   - サブスク 月額 ¥380 ／ 年額 ¥3,800（無制限＋広告なし＋毎月新問題）
   - 無料は1日10回のプレイ制限（Web/LINE版にも適用）
 - App Store Connectの課金商品3つ作成済み（7日間無料トライアル設定済み）
+  - **2026-08-26 修正**：サブスク2つは長らく `MISSING_METADATA` で提出できない状態だった。
+    名前・説明・175地域の価格・レビュー用スクショ・トライアルは全部埋まっていたが、
+    **「配信地域（availability）」レコードだけが未作成**だったのが原因。
+    App Store Connect API で全175地域＋`availableInNewTerritories=true` を作成し、
+    3商品すべて `READY_TO_SUBMIT` になった
 - `app-ads.txt` 設置、コンテンツページ4本追加（`/guide` 何切る・牌効率・清一色・用語集）
 - Web/LINE版にアプリ誘導バナーを実装・有効化
   - ※AdSenseは独自ドメイン必須かつアプリ内WebViewでは規約違反のため、Web/LINE版は広告ではなくアプリ誘導で収益化する方針
 
 ## 🔥 すぐやるべきこと
 
-- [ ] Vercelに誘導バナーのデプロイが反映されたか確認（GitHubにはpush済み・commit `f30a49a`）
-- [ ] App Store Connectの「マーケティングURL」に `https://mahjong-tsujigiri.vercel.app` を設定（app-ads.txtの認証に必要。公開後は編集可能）
+- [x] `app-ads.txt` が本番配信されているか確認 → HTTP 200 で配信中（2026-08-26 確認）
+- [x] サブスク2つの `MISSING_METADATA` を解消 → 3商品とも `READY_TO_SUBMIT`（2026-08-26）
+- [x] **v1.1 のバージョンレコードを作成**（2026-08-26）。versionId `d3ede6fd-9426-42ee-b332-0a468e7eacb9`、
+      `PREPARE_FOR_SUBMISSION`。build 2 を紐づけ済み、リリースノート記入済み
+- [x] 「マーケティングURL」に `https://mahjong-tsujigiri.vercel.app` を設定（2026-08-26）。
+      **公開中バージョンでは編集不可**だったため v1.1 を作ってから設定した（詳細は `HANDOFF.md` ハマりどころ⑤）
+- [x] RevenueCat の App Store Server Notifications URL を設定（2026-08-26 完了）。
+      本番・Sandbox 両方に **V2** で設定済み。これで更新・解約・課金失敗が RevenueCat に届く
 - [ ] AdMobでアプリをApp Storeのアプリとリンク（広告の本格配信が始まる）
-- [ ] v1.1（広告＋課金）を審査提出。**プライバシー申告に「広告」関連の更新が必要**
+- [ ] **プライバシー申告に「広告」関連の更新**（App Store Connect API では扱えないため Web UI で手動）。
+      識別子・使用状況データを広告目的で第三者（Google）が収集する旨の申告が必要
+- [ ] v1.1 の **IDFA（広告識別子）の申告**を確認。バージョンの `usesIdfa` が `null` のまま。
+      AdMob を積んでいるので提出時に聞かれる。ATTは未実装＝トラッキングなしなので、
+      「アプリ内広告の表示」のみに該当するはず（Web UIで確認して回答すること）
+- [ ] v1.1（広告＋課金）を審査提出。課金商品3つも同時に提出すること
 - [ ] 可能なら先にTestFlightで課金の実機テスト（Sandboxテスター作成が必要）
 - [ ] 独自ドメイン `orangezely.com` をCloudflareで取得（未着手・空き確認済み）
 

@@ -86,7 +86,8 @@
 - `no_ads` = 広告非表示 / `premium` = プレイ無制限＋毎月の新問題
 - **無料は1日10回まで**（`src/lib/playLimit.ts`、localStorageで日付管理・翌0時リセット）。Web/LINE版にも同じ制限を適用
 - RevenueCat側の商品・エンタイトルメント・パッケージ（`$rc_lifetime`/`$rc_monthly`/`$rc_annual`）は設定済み
-- **App Store Connect側の課金商品はまだ未作成**。上表の製品IDと価格で作ること。作るまで `getOfferings` がエラーになり購入UIは表示されない
+- ~~App Store Connect側の課金商品はまだ未作成~~ → **2026-08-26 時点で3商品とも作成済み・`READY_TO_SUBMIT`**。
+  JPY価格も確認済み（月額¥380／取り分¥294、年額¥3,800／取り分¥2,936）
 - サブスクには7日間の無料トライアル（導入価格）を付ける想定
 - 「毎月問題を追加する」ことがサブスクの価値なので、Supabaseの`problems`/`problems_casual`へ定期的に追加が必要（現在 清一色50問・何切る99問）
 
@@ -115,8 +116,75 @@
 - アプリがApp Storeで公開されるまでは広告がほとんど配信されないのが正常。公開後にAdMob側でストアのアプリとリンクすると本格配信が始まる
 
 - **旧メモ（対応済み）**: AdMobアカウント未作成のため**Google公式のテスト広告IDを使用中**。本番の広告ユニットIDを `.env.local` の `NEXT_PUBLIC_ADMOB_IOS_BANNER` / `NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL`（Android版も同様）に設定し、`ios/App/App/Info.plist` の `GADApplicationIdentifier` と `android/app/src/main/AndroidManifest.xml` の `com.google.android.gms.ads.APPLICATION_ID` を本番アプリIDに差し替えること。**テストIDのままでは収益ゼロ**
-- **未完了**: App Store Connectで課金商品 `remove_ads`（非消耗型・¥300）の作成。作成前は `getOfferings` がエラーになり購入ボタンは表示されない（現状そうなっている）
+- ~~未完了: App Store Connectで課金商品 `remove_ads`（非消耗型・¥300）の作成~~ → **作成済み（2026-08-26 に `READY_TO_SUBMIT` を確認）**
 - 課金を入れたバージョンは v1.1 として別途審査が必要。プライバシー申告も「広告」関連の更新が必要（識別子・使用状況データを広告目的で第三者=Googleが収集）
+
+## App Store Connect API での確認・操作（2026-08-26 確立）
+
+App Store Connect は**API経由で状態確認と設定変更ができる**。画面をポチポチする前にAPIで見ると原因が早く分かる。
+
+- 認証: `~/.appstoreconnect/private_keys/AuthKey_856294GLP4.p8`（keyId `856294GLP4` / issuerId `37ea8707-9d58-436d-9557-ca12bdfd7b8d`）
+- JWTは ES256。Nodeの `crypto.sign("sha256", ..., { dsaEncoding: "ieee-p1363" })` で作れる（pyjwt等の外部ライブラリ不要）
+- 主要ID: app `6801788392` / v1.0バージョン `ada76520-1e52-4740-9620-f9eba3b534d1` /
+  ja ローカライズ `26143aea-f4ff-4bcf-ba03-67a980afd674` / サブスクグループ `22316416` /
+  `remove_ads` `6802484330` / `premium_monthly` `6802493039` / `premium_annual` `6802496114`
+
+### ハマりどころ④: サブスクが `MISSING_METADATA` から抜けられない（2026-08-26 解決）
+
+名前・説明・グループ表示名・175地域の価格・レビュー用スクショ・7日間トライアルを**全部埋めても**
+`MISSING_METADATA` のままだった。原因は **「配信地域（availability）」レコードが未作成**だったこと。
+
+- `GET /v1/subscriptions/{id}/subscriptionAvailability` が **404** なら未設定
+- 価格が175地域に入っていても availability とは**別物**。価格があるからOK、ではない
+- 非消耗型（`remove_ads`）は availability が無くても `READY_TO_SUBMIT` になるので、
+  サブスクだけ引っかかって原因に気づきにくい
+
+```
+POST /v1/subscriptionAvailabilities
+{"data":{"type":"subscriptionAvailabilities",
+  "attributes":{"availableInNewTerritories":true},
+  "relationships":{
+    "subscription":{"data":{"type":"subscriptions","id":"<subId>"}},
+    "availableTerritories":{"data":[{"type":"territories","id":"JPN"}, ...全175地域]}}}}
+```
+
+地域一覧は `GET /v1/territories?limit=200` で取得（全175件）。実行後すぐ `READY_TO_SUBMIT` に変わる。
+
+### ハマりどころ⑤: マーケティングURLが編集できない
+
+`PATCH /v1/appStoreVersionLocalizations/{id}` に `marketingUrl` を投げると
+`409 STATE_ERROR: Attribute 'marketingUrl' cannot be edited at this time` になる。
+
+- マーケティングURLは**バージョンページ固有**の項目。App情報ページ（`appInfoLocalizations`）には
+  `privacyPolicyUrl` などしか無く、マーケティングURLは存在しない
+- 公開中（`READY_FOR_SALE`）のバージョンはロックされているため、
+  **編集可能な新バージョン（v1.1）を作ってからでないと設定できない**
+- AdMobは App Store 掲載ページのURLから `app-ads.txt` を探すので、これを設定しないと広告在庫が認証されない
+
+### App Store Server Notifications（RevenueCat連携）2026-08-26 設定済み
+
+サブスクの更新・解約・課金失敗をRevenueCatに届けるための設定。**未設定だと解約者が課金済み扱いのまま残る**。
+
+- RevenueCatダッシュボードでの場所: プロジェクト → **Apps** → iOSアプリ →
+  **「Apple Server to Server notification settings」** → 「Apple Server Notification URL」
+  （※アカウント設定ページには無い。プロジェクト内のアプリ設定）
+- 「Apply in App Store Connect」ボタンがあれば自動設定できるが、**このアカウントでは表示されなかった**ためAPIで設定した
+- **V2を選ぶこと**。AppleはV1を非推奨化しており、V2でないと価格変更の自動検知や返金の高速検知が効かない
+- 本番・Sandbox の**両方**に同じURLを入れる（Appleは各1つずつしか持てない）
+
+```
+PATCH /v1/apps/6801788392
+{"data":{"type":"apps","id":"6801788392","attributes":{
+  "subscriptionStatusUrl":"<RevenueCatのURL>","subscriptionStatusUrlVersion":"V2",
+  "subscriptionStatusUrlForSandbox":"<同じURL>","subscriptionStatusUrlVersionForSandbox":"V2"}}}
+```
+
+URL自体はシークレット相当なので**このファイルには書かない**（App Store Connect と RevenueCat の画面で確認できる）。
+
+### APIで扱えないもの
+
+- **プライバシー申告（栄養ラベル）**は App Store Connect API に存在しない → Web UI で手動
+- AdMob 側のアプリリンクも API 無し → AdMob コンソールで手動
 
 ## iOSビルド手順（2026-08-18 更新・**こちらが最新**）
 
