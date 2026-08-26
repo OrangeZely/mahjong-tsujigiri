@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Capacitor } from "@capacitor/core";
 
-// App Storeのアプリページ。未公開のうちは未設定にしておき、バナーを表示しない。
-const APP_URL = process.env.NEXT_PUBLIC_IOS_APP_URL ?? "";
+// App Storeのアプリページ（2026-08-21 公開済み）
+const APP_URL = "https://apps.apple.com/jp/app/id6801788392";
 
 // Web版・LINEミニアプリで、iOSアプリ版への誘導を出す。
 // ネイティブアプリ内では当然不要なので表示しない。
