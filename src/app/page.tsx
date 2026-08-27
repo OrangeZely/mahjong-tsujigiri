@@ -190,6 +190,12 @@ export default function HomePage() {
             何切るガイド・用語集
           </button>
           <button
+            onClick={() => router.push("/terms")}
+            className="text-gray-600 hover:text-gray-400 text-xs underline transition-colors"
+          >
+            利用規約
+          </button>
+          <button
             onClick={() => router.push("/privacy")}
             className="text-gray-600 hover:text-gray-400 text-xs underline transition-colors"
           >

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePremiumStore } from "@/store/premiumStore";
 import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
@@ -55,6 +56,14 @@ export default function PurchaseSection() {
             （無料プランは1日{DAILY_FREE_PLAYS}回まで）
           </p>
 
+          {/* App Store ガイドライン 3.1.2 で必須の開示事項 */}
+          <p className="text-[11px] text-gray-500 leading-relaxed mb-3">
+            プレミアムは自動更新される定期購読です。年額プランは1年ごと、月額プランは1ヶ月ごとに、
+            上記の内容をご利用いただけます。期間終了の24時間前までに解約されない限り自動更新され、
+            更新料金はApple IDに請求されます。解約はiOSの「設定」→「サブスクリプション」から
+            いつでも行えます。
+          </p>
+
           <div className="flex flex-col gap-2">
             {prices.annual && (
               <motion.button
@@ -65,7 +74,7 @@ export default function PurchaseSection() {
               >
                 {purchasing === "annual"
                   ? "処理中…"
-                  : `年額 ${prices.annual}　🏅 いちばんお得`}
+                  : `${prices.annual} / 1年（自動更新）　🏅 いちばんお得`}
               </motion.button>
             )}
 
@@ -76,7 +85,9 @@ export default function PurchaseSection() {
                 disabled={purchasing !== null}
                 className="w-full bg-white/10 border-2 border-white/30 text-white font-bold py-3 rounded-xl hover:bg-white/20 transition-colors disabled:opacity-50"
               >
-                {purchasing === "monthly" ? "処理中…" : `月額 ${prices.monthly}`}
+                {purchasing === "monthly"
+                  ? "処理中…"
+                  : `${prices.monthly} / 1ヶ月（自動更新）`}
               </motion.button>
             )}
           </div>
@@ -97,13 +108,26 @@ export default function PurchaseSection() {
         </motion.button>
       )}
 
-      <div className="mt-3 text-center">
+      <div className="mt-3 flex gap-4 justify-center">
         <button
           onClick={handleRestore}
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
           購入を復元
         </button>
+        {/* App Store ガイドライン 3.1.2 で必須の規約リンク */}
+        <Link
+          href="/terms"
+          className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+        >
+          利用規約
+        </Link>
+        <Link
+          href="/privacy"
+          className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+        >
+          プライバシーポリシー
+        </Link>
       </div>
 
       {message && (

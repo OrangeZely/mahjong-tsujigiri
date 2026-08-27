@@ -80,7 +80,84 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-2">7. 規約の変更</h2>
+            <h2 className="text-xl font-bold text-white mb-2">
+              7. 有料プランについて
+            </h2>
+            <p className="mb-3">
+              本アプリでは、以下の有料プランを提供しています。価格は日本国内のものであり、
+              地域により異なる場合があります。実際の価格はApp Storeの購入画面に表示されます。
+            </p>
+
+            <div className="overflow-x-auto mb-3">
+              <table className="w-full text-sm border border-white/10">
+                <thead className="bg-white/10">
+                  <tr>
+                    <th className="text-left p-2 text-white">プラン</th>
+                    <th className="text-left p-2 text-white">期間</th>
+                    <th className="text-left p-2 text-white">価格</th>
+                    <th className="text-left p-2 text-white">内容</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  <tr>
+                    <td className="p-2">プレミアム（月額）</td>
+                    <td className="p-2">1ヶ月</td>
+                    <td className="p-2">¥380</td>
+                    <td className="p-2">
+                      プレイ回数無制限・広告非表示・毎月の新規問題追加
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-2">プレミアム（年額）</td>
+                    <td className="p-2">1年</td>
+                    <td className="p-2">¥3,800</td>
+                    <td className="p-2">同上</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2">広告を消す</td>
+                    <td className="p-2">買い切り（期限なし）</td>
+                    <td className="p-2">¥300</td>
+                    <td className="p-2">広告非表示のみ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="mb-2">
+              <span className="font-bold text-white">無料プラン</span>では、1日あたり10回までプレイできます。
+              回数は毎日0時（端末のローカル時刻）にリセットされます。
+            </p>
+
+            <h3 className="font-bold text-white mt-4 mb-1">自動更新について</h3>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                プレミアムは<span className="font-bold text-white">自動更新される定期購読</span>です。
+                現在の期間が終了する24時間前までに解約しない限り、自動的に更新されます。
+              </li>
+              <li>
+                更新料金は、期間終了前の24時間以内にApple IDのアカウントに請求されます。
+              </li>
+              <li>
+                無料トライアル期間が提供される場合、期間終了前に解約しなければ有料プランへ自動的に移行します。
+                無料トライアルの未使用分は、有料プランを購入した時点で失効します。
+              </li>
+            </ul>
+
+            <h3 className="font-bold text-white mt-4 mb-1">解約方法</h3>
+            <p>
+              解約は、iOSの「設定」アプリ →「ユーザー名」→「サブスクリプション」からいつでも行えます。
+              解約後も、購入済みの期間が終了するまではプレミアム機能をご利用いただけます。
+              なお、購入済み期間の途中解約による返金は行っておりません。
+            </p>
+
+            <h3 className="font-bold text-white mt-4 mb-1">購入の復元</h3>
+            <p>
+              機種変更や再インストールを行った場合は、アプリ内の「購入を復元」から購入内容を復元できます。
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-2">8. 規約の変更</h2>
             <p>
               本規約の内容は、必要に応じて変更されることがあります。
               重要な変更がある場合は、本ページにて告知します。変更後も本アプリの利用を継続した場合、変更後の規約に同意したものとみなされます。
@@ -88,12 +165,12 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-2">8. 準拠法</h2>
+            <h2 className="text-xl font-bold text-white mb-2">9. 準拠法</h2>
             <p>本規約は日本法に準拠し、日本法に従って解釈されます。</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-2">9. お問い合わせ</h2>
+            <h2 className="text-xl font-bold text-white mb-2">10. お問い合わせ</h2>
             <p>本規約に関するお問い合わせは、以下までお願いいたします。</p>
             <p className="mt-2 font-mono text-sm bg-white/5 rounded-lg px-4 py-2 inline-block">
               mahjong.tsujigiri@gmail.com
