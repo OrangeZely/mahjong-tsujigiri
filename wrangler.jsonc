@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers（静的アセット配信）の設定。
+  // next build の出力（out/）をそのまま配信するだけで、サーバー側のコードは持たない。
+  "name": "mahjong-tsujigiri",
+  "compatibility_date": "2026-08-27",
+  "assets": {
+    "directory": "./out",
+    // next.config.ts の trailingSlash: true に合わせる。
+    // out/game/index.html を /game/ で配信し、/game へのアクセスはリダイレクトする。
+    "html_handling": "force-trailing-slash",
+    // 静的な複数ページ構成なので SPA フォールバックは使わず、out/404.html を返す。
+    "not_found_handling": "404-page"
+  }
+}
