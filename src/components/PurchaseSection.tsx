@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Capacitor } from "@capacitor/core";
 import { usePremiumStore } from "@/store/premiumStore";
 import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
 
@@ -13,15 +14,22 @@ export default function PurchaseSection() {
     usePremiumStore();
   const [message, setMessage] = useState<string | null>(null);
 
-  if (!loaded) return null;
+  // ネイティブ判定はマウント後に行う。ビルド時のプリレンダリングでは
+  // 常に false になるため、直接呼ぶとハイドレーションがずれる。
+  const [isNative, setIsNative] = useState(false);
+  useEffect(() => {
+    setIsNative(Capacitor.isNativePlatform());
+  }, []);
 
-  // 価格が1つも取れない＝Web版、または課金商品が未作成
   const hasAnyPrice = Boolean(prices.monthly || prices.annual || prices.remove_ads);
-  if (!hasAnyPrice) {
-    return premium ? (
-      <p className="mt-6 text-xs text-emerald-400">✓ プレミアム会員</p>
-    ) : null;
-  }
+
+  // Web版・LINEミニアプリには購入手段が無いので、課金UIごと出さない。
+  if (!isNative) return null;
+
+  // ネイティブでは、価格が取れていなくても定期購読の開示事項と規約リンクを必ず出す。
+  // App Store ガイドライン 3.1.2(c) はこれらがアプリ内に存在することを要求しており、
+  // 価格取得の成否に連動して消えると審査でリジェクトされる。
+  if (!loaded) return null;
 
   const handle = async (plan: "monthly" | "annual" | "remove_ads") => {
     setMessage(null);
@@ -91,6 +99,16 @@ export default function PurchaseSection() {
               </motion.button>
             )}
           </div>
+
+          {/* 価格取得に失敗した場合。無言で消えると購入手段が無いように見えるため、
+              状況を明示する。 */}
+          {!hasAnyPrice && (
+            <p className="text-center text-xs text-gray-400 mt-1">
+              購入プランを読み込めませんでした。
+              <br />
+              通信環境をご確認のうえ、アプリを再起動してください。
+            </p>
+          )}
         </>
       )}
 
