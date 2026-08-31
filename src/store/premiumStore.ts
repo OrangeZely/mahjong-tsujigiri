@@ -19,7 +19,11 @@ interface PremiumState {
   purchasing: PlanId | null;
   remainingPlays: number; // 今日の残りプレイ回数（無料ユーザー用）
 
+  pricesLoading: boolean; // 価格の取得中かどうか（購入画面のローディング表示用）
+
   load: () => Promise<void>;
+  // 価格の再取得。通信不良などで取れなかったときに手動でやり直せるようにする。
+  reloadPrices: () => Promise<void>;
   refreshRemaining: () => void;
   purchase: (plan: PlanId) => Promise<PurchaseOutcome>;
   restore: () => Promise<boolean>;
@@ -33,6 +37,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
   loaded: false,
   prices: {},
   purchasing: null,
+  pricesLoading: false,
   // 初期値は満タン。クライアントで refreshRemaining() を呼んで実際の値にする
   // （ビルド時に localStorage は読めないため）
   remainingPlays: DAILY_FREE_PLAYS,
@@ -50,8 +55,15 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
     if (ent.noAds) await hideBanner();
 
     // 価格は購入ボタンの表示にしか使わないので、取得が遅くても広告表示は待たせない
+    await get().reloadPrices();
+  },
+
+  reloadPrices: async () => {
+    set({ pricesLoading: true });
     const prices = await getPrices();
-    set({ prices });
+    // 取得できなかった場合に既存の価格を消さない（一度出た購入ボタンが消えるのを防ぐ）
+    if (Object.keys(prices).length > 0) set({ prices });
+    set({ pricesLoading: false });
   },
 
   refreshRemaining: () => {

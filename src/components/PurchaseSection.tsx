@@ -10,8 +10,17 @@ import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
 // 課金プランの一覧（サブスク2種＋広告除去の買い切り）と購入の復元。
 // ネイティブアプリでのみ表示する（Web版は購入手段が無いため）。
 export default function PurchaseSection() {
-  const { noAds, premium, loaded, prices, purchasing, purchase, restore } =
-    usePremiumStore();
+  const {
+    noAds,
+    premium,
+    loaded,
+    prices,
+    pricesLoading,
+    purchasing,
+    purchase,
+    restore,
+    reloadPrices,
+  } = usePremiumStore();
   const [message, setMessage] = useState<string | null>(null);
 
   // ネイティブ判定はマウント後に行う。ビルド時のプリレンダリングでは
@@ -100,14 +109,28 @@ export default function PurchaseSection() {
             )}
           </div>
 
-          {/* 価格取得に失敗した場合。無言で消えると購入手段が無いように見えるため、
-              状況を明示する。 */}
+          {/* 価格取得中・失敗時。無言で消えると購入手段が無いように見えるため、
+              必ず状況を出し、その場でやり直せるようにする。 */}
           {!hasAnyPrice && (
-            <p className="text-center text-xs text-gray-400 mt-1">
-              購入プランを読み込めませんでした。
-              <br />
-              通信環境をご確認のうえ、アプリを再起動してください。
-            </p>
+            <div className="text-center mt-1">
+              {pricesLoading ? (
+                <p className="text-xs text-gray-400">購入プランを読み込み中…</p>
+              ) : (
+                <>
+                  <p className="text-xs text-gray-400 mb-2">
+                    購入プランを読み込めませんでした。
+                    <br />
+                    通信環境をご確認のうえ、もう一度お試しください。
+                  </p>
+                  <button
+                    onClick={() => reloadPrices()}
+                    className="bg-white/10 border border-white/30 text-white text-sm px-6 py-2 rounded-xl hover:bg-white/20 transition-colors"
+                  >
+                    再読み込み
+                  </button>
+                </>
+              )}
+            </div>
           )}
         </>
       )}
@@ -126,19 +149,29 @@ export default function PurchaseSection() {
         </motion.button>
       )}
 
-      <div className="mt-3 flex gap-4 justify-center">
+      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 justify-center">
         <button
           onClick={handleRestore}
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
           購入を復元
         </button>
-        {/* App Store ガイドライン 3.1.2 で必須の規約リンク */}
+        {/* App Store ガイドライン 3.1.2(c) が要求する EULA へのリンク。
+            App Store Connect では Apple の標準EULAを使うと申告しているため、
+            アプリ内からもその標準EULAに到達できるようにする。 */}
+        <a
+          href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+        >
+          利用規約（EULA）
+        </a>
         <Link
           href="/terms"
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
-          利用規約
+          アプリ利用規約
         </Link>
         <Link
           href="/privacy"

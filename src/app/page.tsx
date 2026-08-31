@@ -161,6 +161,15 @@ export default function HomePage() {
 
         <PlaysLeft />
 
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => router.push("/premium")}
+          className="mt-3 w-full bg-white/10 border-2 border-yellow-500/60 text-white font-bold py-3 rounded-xl hover:bg-yellow-500/20 transition-colors"
+        >
+          ⭐ プレミアム（プレイ無制限・広告なし）
+        </motion.button>
+
         <div className="flex gap-3 justify-center">
           <motion.button
             whileHover={{ scale: 1.03 }}

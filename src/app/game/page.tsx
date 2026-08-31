@@ -107,8 +107,8 @@ function GameContent() {
                 明日0時に{DAILY_FREE_PLAYS}回に回復します
               </div>
               <button
-                onClick={() => router.push("/")}
-                className="mt-4 text-yellow-300 hover:text-yellow-200 text-sm underline"
+                onClick={() => router.push("/premium")}
+                className="mt-4 inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-6 py-2.5 rounded-xl transition-colors"
               >
                 プレミアムで無制限にする
               </button>
