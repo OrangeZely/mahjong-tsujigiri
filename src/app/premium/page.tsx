@@ -6,12 +6,19 @@ import { motion } from "framer-motion";
 import PurchaseSection from "@/components/PurchaseSection";
 import PurchaseDebugPanel from "@/components/PurchaseDebugPanel";
 import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
+import { usePremiumStore } from "@/store/premiumStore";
 
 // 課金プランの専用ページ。
 // ゲーム画面の「プレミアムで無制限にする」やホームのボタンからここに来る。
 // 購入手段の入口を1か所にまとめ、どの画面からでも必ず辿り着けるようにしている。
 export default function PremiumPage() {
   const router = useRouter();
+  // 価格が取得できていないときは診断を自動表示する（原因調査中の暫定措置）
+  const loaded = usePremiumStore((s) => s.loaded);
+  const pricesLoading = usePremiumStore((s) => s.pricesLoading);
+  const prices = usePremiumStore((s) => s.prices);
+  const priceMissing =
+    loaded && !pricesLoading && Object.keys(prices).length === 0;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 p-4">
@@ -57,7 +64,7 @@ export default function PremiumPage() {
         {/* 価格・購入ボタン・自動更新の開示・規約リンク・購入の復元はすべてここに含まれる */}
         <PurchaseSection />
 
-        <PurchaseDebugPanel />
+        <PurchaseDebugPanel autoShow={priceMissing} />
 
         <div className="mt-8 text-center">
           <button
