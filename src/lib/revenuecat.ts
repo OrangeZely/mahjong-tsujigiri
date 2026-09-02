@@ -6,13 +6,49 @@ const ANDROID_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_ANDROID_KEY ?? "";
 const IOS_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_IOS_KEY ?? "";
 
 let configured = false;
+// 初期化の実行中プロミス。複数箇所から呼ばれても1回だけ走らせ、
+// 呼び出し側は「初期化が終わってから」課金APIを使えるようにする。
+let initPromise: Promise<void> | null = null;
+
+// 初期化が完了しているか（診断表示にも使う）
+export function isRevenueCatConfigured(): boolean {
+  return configured;
+}
+
+// APIキーの状態を確認する（値そのものは伏せる）
+export function getApiKeyInfo(): { platform: string; masked: string } {
+  const platform = Capacitor.getPlatform();
+  const key = platform === "ios" ? IOS_API_KEY : ANDROID_API_KEY;
+  return {
+    platform,
+    masked: key ? `${key.slice(0, 12)}…(${key.length}文字)` : "(未設定)",
+  };
+}
+
+// 初期化が終わるまで待つ。既に終わっていれば即座に返る。
+export async function ensureRevenueCatReady(timeoutMs = 15000): Promise<boolean> {
+  if (configured) return true;
+  if (!Capacitor.isNativePlatform()) return false;
+  const p = initPromise ?? initRevenueCat();
+  await Promise.race([
+    p,
+    new Promise((resolve) => setTimeout(resolve, timeoutMs)),
+  ]);
+  return configured;
+}
 
 // RevenueCatを初期化する。
 // ネイティブ(Capacitor Android)アプリでのみ動作し、Web版(Vercel)・LINEミニアプリでは
 // 課金機能が無いので何もしない。アプリ起動時に一度だけ呼ぶ。
 export async function initRevenueCat(): Promise<void> {
   if (configured) return;
+  // 同時に複数回呼ばれても初期化は1回だけにする
+  if (initPromise) return initPromise;
+  initPromise = doInit();
+  return initPromise;
+}
 
+async function doInit(): Promise<void> {
   // Web / LINEミニアプリではRevenueCatは使えないのでスキップ
   if (!Capacitor.isNativePlatform()) return;
 

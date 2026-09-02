@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import PurchaseSection from "@/components/PurchaseSection";
+import PurchaseDebugPanel from "@/components/PurchaseDebugPanel";
 import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
 
 // 課金プランの専用ページ。
@@ -55,6 +56,8 @@ export default function PremiumPage() {
 
         {/* 価格・購入ボタン・自動更新の開示・規約リンク・購入の復元はすべてここに含まれる */}
         <PurchaseSection />
+
+        <PurchaseDebugPanel />
 
         <div className="mt-8 text-center">
           <button
