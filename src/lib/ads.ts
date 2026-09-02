@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core";
+import * as AdMobPlugin from "@capacitor-community/admob";
 
 // AdMobの広告ユニットID。
 // 本番IDは環境変数で渡す。未設定ならGoogle公式の「テスト広告」IDを使う。
@@ -40,8 +41,9 @@ let initialized = false;
 let finishCount = 0;
 let bannerVisible = false;
 
+// RevenueCatと同じ理由で静的importにしている（実機で動的importが完了しないため）
 async function loadAdMob() {
-  return await import("@capacitor-community/admob");
+  return AdMobPlugin;
 }
 
 // 広告SDKを初期化する。Web/LINEミニアプリでは何もしない。

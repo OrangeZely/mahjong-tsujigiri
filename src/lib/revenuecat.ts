@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core";
+import { Purchases, LOG_LEVEL } from "@revenuecat/purchases-capacitor";
 
 // RevenueCatの「公開」APIキー（クライアントに埋め込んで安全）。
 // ビルド時に環境変数から読み込む。未設定なら初期化をスキップする。
@@ -65,8 +66,6 @@ async function doInit(): Promise<void> {
   }
 
   try {
-    // プラグインはネイティブでのみ必要なので動的に読み込む（Webのバンドルを軽く保つ）
-    const { Purchases, LOG_LEVEL } = await import("@revenuecat/purchases-capacitor");
     // 統合中はデバッグログを有効化（リリース時はINFO等に下げてよい）
     await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG });
     await Purchases.configure({ apiKey });

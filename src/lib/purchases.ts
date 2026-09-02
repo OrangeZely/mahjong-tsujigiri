@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core";
+import { Purchases as PurchasesPlugin } from "@revenuecat/purchases-capacitor";
 import { ensureRevenueCatReady, getApiKeyInfo } from "@/lib/revenuecat";
 
 // エンタイトルメント（RevenueCatダッシュボードと一致させること）
@@ -20,17 +21,13 @@ export interface Entitlements {
 
 const NONE: Entitlements = { noAds: false, premium: false };
 
-// RevenueCatのプラグインはネイティブでのみ必要なので動的に読み込む
-async function loadPurchases() {
-  const mod = await import("@revenuecat/purchases-capacitor");
-  return mod.Purchases;
-}
-
-// 動的読み込み自体が返ってこないケースがあるため、必ずタイムアウトを掛けて呼ぶ。
-// これを怠ると呼び出し側が永久に待ち続け、「読み込み中」から進まなくなる。
-async function loadPurchasesSafe() {
-  return withTimeout(loadPurchases(), 8000, null);
-}
+// ⚠️ 重要: Capacitorのプラグインは「どのプロパティにアクセスしても関数を返すProxy」であり、
+// `.then` を持つように見えるためJavaScriptからは Promise（thenable）と誤認される。
+// そのため async 関数から `return PurchasesPlugin` すると、JSがそれを待とうとして
+// ネイティブ側へ then という存在しないメソッド呼び出しが飛び、永久に返ってこなくなる。
+// （これが「購入プランを読み込み中」から進まなくなっていた真因）
+// 対策として async でラップせず、そのまま同期的に参照する。
+const Purchases = PurchasesPlugin;
 
 // RevenueCatの応答が返らないケースがあるため、必ずタイムアウトを設けて呼ぶ。
 // これが無いと購入状態が確定せず、広告表示など後続の処理が止まってしまう。
@@ -41,9 +38,7 @@ export function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Pr
   ]);
 }
 
-type CustomerInfoResult = Awaited<
-  ReturnType<Awaited<ReturnType<typeof loadPurchases>>["getCustomerInfo"]>
->;
+type CustomerInfoResult = Awaited<ReturnType<typeof Purchases.getCustomerInfo>>;
 
 function toEntitlements(info: CustomerInfoResult | null): Entitlements {
   if (!info) return NONE;
@@ -63,11 +58,6 @@ export async function getEntitlements(): Promise<Entitlements> {
     return NONE;
   }
   try {
-    const Purchases = await loadPurchasesSafe();
-    if (!Purchases) {
-      console.warn("[Purchases] プラグインの読み込みがタイムアウトしました");
-      return NONE;
-    }
     const info = await withTimeout(Purchases.getCustomerInfo(), 8000, null);
     if (!info) console.warn("[Purchases] 購入状態の取得がタイムアウトしました");
     return toEntitlements(info);
@@ -85,11 +75,6 @@ export async function getPrices(): Promise<Partial<Record<PlanId, string>>> {
     return {};
   }
   try {
-    const Purchases = await loadPurchasesSafe();
-    if (!Purchases) {
-      console.warn("[Purchases] プラグインの読み込みがタイムアウトしました");
-      return {};
-    }
     const offerings = await withTimeout(Purchases.getOfferings(), 8000, null);
     const packages = offerings?.current?.availablePackages ?? [];
     const prices: Partial<Record<PlanId, string>> = {};
@@ -116,8 +101,6 @@ export async function purchasePlan(
     return { outcome: "error", entitlements: NONE };
   }
   try {
-    const Purchases = await loadPurchasesSafe();
-    if (!Purchases) return { outcome: "error", entitlements: NONE };
     const { current } = await Purchases.getOfferings();
     const aPackage = current?.availablePackages.find(
       (p) => p.identifier === PACKAGE_BY_PLAN[plan]
@@ -144,8 +127,6 @@ export async function restorePurchases(): Promise<Entitlements> {
   if (!Capacitor.isNativePlatform()) return NONE;
   if (!(await ensureRevenueCatReady())) return NONE;
   try {
-    const Purchases = await loadPurchasesSafe();
-    if (!Purchases) return NONE;
     const result = await withTimeout(Purchases.restorePurchases(), 15000, null);
     return toEntitlements(result);
   } catch (e) {
@@ -170,10 +151,8 @@ export async function diagnosePurchases(): Promise<string[]> {
     return out;
   }
 
-  // プラグインの読み込み
-  const t0 = Date.now();
-  const Purchases = await loadPurchasesSafe();
-  push(`3. プラグイン読込: ${Purchases ? "OK" : "タイムアウト(NG)"} (${Date.now() - t0}ms)`);
+  // プラグインの参照（同期。Proxyをawaitしないこと）
+  push(`3. プラグイン参照: ${Purchases ? "OK" : "取得できず(NG)"}`);
   if (!Purchases) return out;
 
   // 初期化
