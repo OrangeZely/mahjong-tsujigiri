@@ -1,16 +1,32 @@
-# 麻雀 辻斬る！ 現況まとめ（2026-08-26 更新）
+# 麻雀 辻斬る！ 現況まとめ（2026-09-03 更新）
 
-> App Store公開完了 〜 機能強化フェーズへ。Notionに貼り付けて使えます。
+> App Store公開済み。v1.1（広告＋課金）の審査対応中。
 
-## 🎉 現状サマリー
+## 🚨 今すぐやること（最優先）
 
-- **iOS v1.0：App Storeで公開中**（`READY_FOR_SALE`）。App Store ID `6801788392`
-  - https://apps.apple.com/jp/app/id6801788392
-- **v1.1（広告＋課金入り・build 2）：2026-08-26 に審査提出済み（`WAITING_FOR_REVIEW`）**
-  - アプリ本体＋課金商品3つ＋サブスクグループの合計5項目を一括提出
-  - 審査には最大48時間（Apple側の目安）
-- Web版・LINEミニアプリ：Vercelで稼働中（https://mahjong-tsujigiri.vercel.app）
-- 問題数：清一色50問 ／ 何切る99問（Supabase管理）
+- [ ] **v1.1 が古い build 2 のまま審査待ち（WAITING_FOR_REVIEW）になっている。**
+      build 2 には「購入プランを読み込み中で止まる」バグが入っているので、
+      **このまま審査されると同じ理由で3回目のリジェクトになる**。
+      → 審査提出を取り下げ → ビルドを **build 6** に差し替え → 再提出
+      （reviewSubmission id: 5c3bf1d9-d7e7-44e4-8e2e-26937cedcc07）
+- [ ] 実機(TestFlight)で **build 6** の価格表示を確認（¥3,800 / ¥380 / ¥300）＋画面録画
+- [ ] Appleへ返信（購入場所の説明＋修正内容）。返信文は作成済み
+- [ ] 提出後: AdMobでApp Storeのアプリとリンク（v1.1公開後24時間待って再実行）
+- [ ] 独自ドメイン orangezely.com をCloudflareで取得（未着手）
+
+## ✅ 2026-09-02〜03 に解決した最重要バグ
+
+**課金商品が読み込めなかった真因は、Apple側でもRevenueCat側でもなくアプリのコードだった。**
+
+Capacitorのプラグインは「どのプロパティにアクセスしても関数を返すProxy」なので
+`.then` を持つように見え、JSからthenable(Promise)と誤認される。
+`async function f(){ return PurchasesPlugin }` と書くとJSがawaitしようとして、
+ネイティブへ存在しない `then` 呼び出しが飛び**永久に返ってこない**。
+
+→ プラグインは静的importして**同期的に参照**するよう修正。シミュレータで価格取得を確認済み。
+→ AdMobが無事だったのは、プラグイン本体ではなくモジュール全体を返していたため。
+
+**この知見はスキル `capacitor-ios-release` に記録済み**（~/.claude/skills/）。
 
 ## ✅ 完了していること
 
