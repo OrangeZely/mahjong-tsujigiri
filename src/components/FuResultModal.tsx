@@ -9,8 +9,6 @@ import { FuRound } from "@/store/fuGameStore";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
 import { FuHand, FuBreakdown } from "@/components/FuHandDisplay";
-import { usePremiumStore } from "@/store/premiumStore";
-import { maybeShowInterstitial } from "@/lib/ads";
 
 interface Props {
   result: GameResult;
@@ -34,11 +32,6 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
     } else {
       setEditingName(true);
     }
-  }, []);
-
-  useEffect(() => {
-    const { noAds, loaded } = usePremiumStore.getState();
-    if (loaded && !noAds) maybeShowInterstitial();
   }, []);
 
   const handleSave = async () => {

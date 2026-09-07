@@ -8,6 +8,7 @@ import FuGameBoard from "@/components/FuGameBoard";
 import FuResultModal from "@/components/FuResultModal";
 import { usePremiumStore } from "@/store/premiumStore";
 import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
+import { useResultGate } from "@/lib/useResultGate";
 
 export default function FuGamePage() {
   const { phase, rounds, startGame, resetGame, getResult } = useFuGameStore();
@@ -29,6 +30,7 @@ export default function FuGamePage() {
   }, [refreshRemaining]);
 
   const outOfPlays = !premium && remainingPlays <= 0;
+  const resultReady = useResultGate(phase === "finished");
 
   const handleStart = () => {
     if (!canPlay(premium)) {
@@ -133,13 +135,19 @@ export default function FuGamePage() {
       <FuGameBoard />
 
       {phase === "finished" && (
-        <FuResultModal
-          result={getResult()}
-          rounds={rounds}
-          onReset={() => {
-            resetGame();
-          }}
-        />
+        resultReady ? (
+          <FuResultModal
+            result={getResult()}
+            rounds={rounds}
+            onReset={() => {
+              resetGame();
+            }}
+          />
+        ) : (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="text-6xl animate-spin">🧮</div>
+          </div>
+        )
       )}
     </main>
   );

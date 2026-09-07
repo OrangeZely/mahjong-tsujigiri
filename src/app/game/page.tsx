@@ -8,6 +8,7 @@ import GameBoard from "@/components/GameBoard";
 import ResultModal from "@/components/ResultModal";
 import { usePremiumStore } from "@/store/premiumStore";
 import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
+import { useResultGate } from "@/lib/useResultGate";
 
 function GameContent() {
   const { phase, gameMode, startGame, resetGame, getResult } = useGameStore();
@@ -34,6 +35,7 @@ function GameContent() {
   }, [refreshRemaining]);
 
   const outOfPlays = !premium && remainingPlays <= 0;
+  const resultReady = useResultGate(phase === "finished");
 
   const handleStart = () => {
     if (!canPlay(premium)) {
@@ -148,12 +150,18 @@ function GameContent() {
       <GameBoard />
 
       {phase === "finished" && (
-        <ResultModal
-          result={getResult()}
-          onReset={() => {
-            resetGame();
-          }}
-        />
+        resultReady ? (
+          <ResultModal
+            result={getResult()}
+            onReset={() => {
+              resetGame();
+            }}
+          />
+        ) : (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="text-6xl animate-spin">⚔️</div>
+          </div>
+        )
       )}
     </main>
   );
