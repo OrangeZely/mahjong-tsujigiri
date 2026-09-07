@@ -137,6 +137,17 @@ export default function GuidePage() {
                   シャンテン・リャンメン・フリテンなど、頻出用語をまとめて確認
                 </span>
               </Link>
+              <Link
+                href="/guide/fu-calculation"
+                className="block bg-white/5 border border-purple-400/40 rounded-xl p-4 hover:bg-purple-400/10 transition-colors"
+              >
+                <span className="block text-white font-bold">
+                  符計算の覚え方（クイズ付き）
+                </span>
+                <span className="block text-gray-400 text-sm mt-1">
+                  符の早見表と、完成した手牌で実際に計算して覚える練習クイズ
+                </span>
+              </Link>
             </div>
           </section>
 
