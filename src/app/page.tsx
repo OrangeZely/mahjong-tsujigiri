@@ -20,6 +20,7 @@ export default function HomePage() {
   const [editingName, setEditingName] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- 端末保存値はハイドレーション後に読む */
   useEffect(() => {
     setBestScore(getBestScore());
     setPlayerNameState(getPlayerName());
@@ -32,6 +33,7 @@ export default function HomePage() {
     window.addEventListener(PLAYER_NAME_EVENT, onLiffName);
     return () => window.removeEventListener(PLAYER_NAME_EVENT, onLiffName);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleRegister = () => {
     const name = nameInput.trim();

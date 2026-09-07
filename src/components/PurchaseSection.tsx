@@ -26,9 +26,11 @@ export default function PurchaseSection() {
   // ネイティブ判定はマウント後に行う。ビルド時のプリレンダリングでは
   // 常に false になるため、直接呼ぶとハイドレーションがずれる。
   const [isNative, setIsNative] = useState(false);
+  /* eslint-disable react-hooks/set-state-in-effect -- ネイティブ判定はハイドレーション後に行う */
   useEffect(() => {
     setIsNative(Capacitor.isNativePlatform());
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const hasAnyPrice = Boolean(prices.monthly || prices.annual || prices.remove_ads);
 

@@ -4,7 +4,6 @@ import {
   getPrices,
   purchasePlan,
   restorePurchases,
-  withTimeout,
   PlanId,
   PurchaseOutcome,
 } from "@/lib/purchases";
@@ -44,12 +43,10 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
 
   load: async () => {
     // まず購入済みかどうかだけを確定させる（ここで広告の出し分けが決まる）。
-    // RevenueCatの応答が返らないことがあるため全体にもタイムアウトをかけ、
-    // 確認できなくても必ず loaded を立てる（広告表示が永久に止まらないように）。
-    const ent = await withTimeout(getEntitlements(), 6000, {
-      noAds: false,
-      premium: false,
-    });
+    // getEntitlements 側で初期化・通信それぞれにタイムアウトを設けている。
+    // ここでさらに短いタイムアウトを重ねると、購入状態の応答が後から返る
+    // 有料ユーザーを無料扱いしてしまうため、最終結果まで待つ。
+    const ent = await getEntitlements();
     set({ noAds: ent.noAds, premium: ent.premium, loaded: true });
     get().refreshRemaining();
     if (ent.noAds) await hideBanner();

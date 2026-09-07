@@ -31,11 +31,13 @@ export default function HistoryPage() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- localStorage はハイドレーション後に読む */
   useEffect(() => {
     setRecords(loadHistory());
     setBestScore(getBestScore());
     setLoaded(true);
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleClear = () => {
     if (!confirm("プレイ履歴と最高記録を全て削除します。よろしいですか？")) return;

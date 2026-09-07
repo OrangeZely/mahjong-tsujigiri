@@ -411,7 +411,12 @@ export function generateFuProblem(id: string): FuProblem {
     for (let i = 0; i < 4; i++) {
       if (i === waitGroupIndex) {
         const kind = winType === "tsumo" ? "ankou" : "minkou";
-        mentsuList.push(buildTripletOrKan(usage, kind) ?? buildShuntsu(usage) ?? fallbackShuntsu());
+        const waitMentsu =
+          buildTripletOrKan(usage, kind) ?? buildShuntsu(usage) ?? fallbackShuntsu();
+        mentsuList.push({
+          ...waitMentsu,
+          winningTileLocalIndex: waitMentsu.tiles.length - 1,
+        });
       } else {
         mentsuList.push(buildFillerMentsu(usage, { isMenzen }));
       }

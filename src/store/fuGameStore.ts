@@ -209,7 +209,8 @@ export const useFuGameStore = create<FuGameState>((set, get) => ({
 
   getResult: (): GameResult => {
     const { answers, gameStartedAt, oniMode } = get();
-    const totalAnswered = answers.filter((a) => !a.timedOut).length;
+    // 時間切れも回答機会1回として正答率の分母に含める。
+    const totalAnswered = answers.length;
     const correctCount = answers.filter((a) => a.isCorrect).length;
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;

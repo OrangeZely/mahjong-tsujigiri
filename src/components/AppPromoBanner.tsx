@@ -13,9 +13,11 @@ export default function AppPromoBanner() {
   // 静的ビルド時にはCapacitorの判定ができないため、マウント後に判断する
   const [show, setShow] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- ネイティブ判定はハイドレーション後に行う */
   useEffect(() => {
     setShow(Boolean(APP_URL) && !Capacitor.isNativePlatform());
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (!show) return null;
 

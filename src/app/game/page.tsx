@@ -11,7 +11,7 @@ import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
 import { useResultGate } from "@/lib/useResultGate";
 
 function GameContent() {
-  const { phase, gameMode, startGame, resetGame, getResult } = useGameStore();
+  const { phase, startGame, resetGame, getResult } = useGameStore();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -37,14 +37,17 @@ function GameContent() {
   const outOfPlays = !premium && remainingPlays <= 0;
   const resultReady = useResultGate(phase === "finished");
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (!canPlay(premium)) {
       refreshRemaining();
       return;
     }
-    consumePlay(premium);
-    refreshRemaining();
-    startGame(mode, oni);
+    const started = await startGame(mode, oni);
+    // 問題取得に失敗した場合は無料プレイ回数を消費しない。
+    if (started) {
+      consumePlay(premium);
+      refreshRemaining();
+    }
   };
 
   const modeLabel = mode === "casual" ? "何切るモード" : "清一色モード";

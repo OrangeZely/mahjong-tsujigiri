@@ -1,6 +1,6 @@
 # 麻雀 辻斬る！ 開発引き継ぎドキュメント
 
-最終更新: 2026-07-06
+最終更新: 2026-09-07
 開発者: jelly (OrangeZely) — 非プログラマー。説明は平易な日本語で。コード変更後は必ず commit & push（Vercelが自動デプロイ）。
 
 ## プロジェクト概要
@@ -220,7 +220,7 @@ Appleに「does not satisfy its designated Requirement」で弾かれる。**ア
 前提（構築済み）:
 - 配布用証明書 `Apple Distribution: shintaro yamashita` をAPI経由で作成（id 6S8VVQMF93、期限2027-08-18）
 - 配布用プロファイル `Tsujigiri App Store Manual`（App Store用・手動管理）を作成し `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` に配置
-- **専用キーチェーン `tsujigiri-signing.keychain`（パスワード `tsujigiri-build-kc`）** に証明書を入れてある。
+- **専用キーチェーン `tsujigiri-signing.keychain`** に証明書を入れてある。パスワードはリポジトリ外で管理し、この文書やGitには記載しない。
   ログインキーチェーンだと `errSecInternalComponent` で署名に失敗する（partition list設定にMacのログインパスワードが必要なため）
 - `project.pbxproj` の App ターゲット **Release のみ** `CODE_SIGN_STYLE = Manual` + `PROVISIONING_PROFILE_SPECIFIER = "Tsujigiri App Store Manual"`。
   CLIで `PROVISIONING_PROFILE_SPECIFIER` を渡すとSPMパッケージにも適用され失敗するので、必ずプロジェクト設定側で指定する
@@ -229,7 +229,8 @@ Appleに「does not satisfy its designated Requirement」で弾かれる。**ア
 ```bash
 cd ~/mahjong-tsujigiri && npm run build && npx cap sync ios
 # バージョンを上げる（project.pbxproj の MARKETING_VERSION / CURRENT_PROJECT_VERSION）
-security unlock-keychain -p "tsujigiri-build-kc" tsujigiri-signing.keychain
+# 対話入力またはリポジトリ外の安全な保管先からパスワードを渡して解除する
+security unlock-keychain tsujigiri-signing.keychain
 cd ios/App
 xcodebuild archive -project App.xcodeproj -scheme App -configuration Release \
   -destination 'generic/platform=iOS' -archivePath ~/mahjong-tsujigiri/build/App.xcarchive \
@@ -242,6 +243,13 @@ codesign --verify --deep --verbose=2 build/export/../export/Payload/App.app 2>&1
 xcrun altool --upload-app -f build/export/App.ipa -t ios \
   --apiKey 856294GLP4 --apiIssuer 37ea8707-9d58-436d-9557-ca12bdfd7b8d
 ```
+
+### リリースの追跡ルール
+
+- Archive前に `git status --short` を確認し、リリース対象を1つのコミットとして確定する。
+- `npm run build` の後に必ず `npx cap sync ios` を実行し、WebソースとiOS内蔵ファイルを一致させる。
+- App Storeへ提出したバージョンとビルド番号を `STATUS.md` に記録し、同じコミットへ注釈付きGitタグ（例: `ios-v1.2.0-build8`）を付ける。
+- 未コミットの作業ツリーからArchiveしない。これにより、公開バイナリのソースを後から再現できる状態を保つ。
 
 - **2026-08-18: v1.1 (build 2) アップロード成功**（Delivery UUID 3dd7f7b8-2bc3-41ec-8453-74646f984007）。広告＋課金入り
 

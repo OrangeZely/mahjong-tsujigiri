@@ -25,6 +25,7 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
   const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
 
+  /* eslint-disable react-hooks/set-state-in-effect -- 端末保存名はモーダル表示後に読む */
   useEffect(() => {
     const saved = getPlayerName();
     if (saved) {
@@ -33,6 +34,7 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
       setEditingName(true);
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async () => {
     if (!playerName.trim()) return;

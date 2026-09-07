@@ -52,8 +52,13 @@ export function PairGroup({
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="flex gap-0.5">
-        {pair.map((t) => (
-          <TileView key={t.id} tile={t} size="sm" highlighted={isWaitGroup} />
+        {pair.map((t, i) => (
+          <TileView
+            key={t.id}
+            tile={t}
+            size="sm"
+            highlighted={isWaitGroup && i === pair.length - 1}
+          />
         ))}
       </div>
       <span

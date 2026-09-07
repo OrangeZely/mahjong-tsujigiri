@@ -37,6 +37,7 @@ export default function RankingPage() {
   const goToTab = (index: number) => {
     if (index < 0 || index >= TABS.length || index === tabIndex) return;
     setDirection(index > tabIndex ? 1 : -1);
+    setLoading(true);
     setTab(TABS[index].key);
   };
 
@@ -58,7 +59,6 @@ export default function RankingPage() {
   };
 
   useEffect(() => {
-    setLoading(true);
     const promise =
       tab === "speed" || tab === "casual" || tab === "fu"
         ? fetchRanking("all", tab)

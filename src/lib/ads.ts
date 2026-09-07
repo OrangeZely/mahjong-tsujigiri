@@ -41,6 +41,27 @@ let initialized = false;
 let finishCount = 0;
 let bannerVisible = false;
 
+// 実機で計測されたバナーの実際の高さ（px）。
+// アダプティブバナーは端末幅によって高さが変わるため、固定値だとボタンと重なることがある。
+// bannerAdSizeChanged イベントで実測値に更新する。広告が無い/消えた場合は0が飛んでくる。
+let bannerHeight = 0;
+type BannerHeightListener = (height: number) => void;
+const bannerHeightListeners = new Set<BannerHeightListener>();
+
+function setBannerHeight(height: number) {
+  bannerHeight = height;
+  bannerHeightListeners.forEach((fn) => fn(height));
+}
+
+export function getBannerHeight(): number {
+  return bannerHeight;
+}
+
+export function subscribeBannerHeight(listener: BannerHeightListener): () => void {
+  bannerHeightListeners.add(listener);
+  return () => bannerHeightListeners.delete(listener);
+}
+
 // RevenueCatと同じ理由で静的importにしている（実機で動的importが完了しないため）
 async function loadAdMob() {
   return AdMobPlugin;
@@ -58,7 +79,10 @@ export async function initAds(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return;
 
   try {
-    const { AdMob } = await loadAdMob();
+    const { AdMob, BannerAdPluginEvents } = await loadAdMob();
+    await AdMob.addListener(BannerAdPluginEvents.SizeChanged, (info) => {
+      setBannerHeight(info.height);
+    });
     await AdMob.initialize({
       initializeForTesting: adIds().isTesting,
     });
@@ -97,6 +121,7 @@ export async function hideBanner(): Promise<void> {
     const { AdMob } = await loadAdMob();
     await AdMob.removeBanner();
     bannerVisible = false;
+    setBannerHeight(0);
   } catch (e) {
     console.error("[Ads] バナー削除に失敗", e);
   }

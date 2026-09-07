@@ -32,7 +32,7 @@ interface GameState {
   gameTimeLeft: number;
   questionTimeLeft: number;
 
-  startGame: (mode: GameMode, oni?: boolean) => void;
+  startGame: (mode: GameMode, oni?: boolean) => Promise<boolean>;
   submitAnswer: (tile: Tile) => void;
   timeoutQuestion: () => void;
   tickGame: (now: number) => void;
@@ -59,14 +59,22 @@ export const useGameStore = create<GameState>((set, get) => ({
     const oniMode = oni;
     set({ phase: "loading", gameMode: mode, oniMode });
 
-    const dbProblems = mode === "casual"
-      ? await fetchCasualProblems()
-      : await fetchProblems();
+    let dbProblems: Problem[];
+    try {
+      dbProblems = mode === "casual"
+        ? await fetchCasualProblems()
+        : await fetchProblems();
+    } catch (error) {
+      console.error("[Game] 問題の取得に失敗", error);
+      alert("問題を読み込めませんでした。通信状況を確認して、もう一度お試しください。");
+      set({ phase: "idle" });
+      return false;
+    }
 
     if (dbProblems.length === 0) {
       alert("問題が登録されていません。Supabaseに問題を追加してください。");
       set({ phase: "idle" });
-      return;
+      return false;
     }
 
     const repeated: Problem[] = [];
@@ -88,6 +96,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       gameTimeLeft: GAME_DURATION_MS,
       questionTimeLeft: oniMode ? QUESTION_DURATION_MS : Infinity,
     });
+    return true;
   },
 
   submitAnswer: (tile: Tile) => {
@@ -211,7 +220,8 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   getResult: (): GameResult => {
     const { answers, gameStartedAt, gameMode, oniMode } = get();
-    const totalAnswered = answers.filter((a) => a.discardedTile?.id !== "timeout").length;
+    // 時間切れも回答機会1回として正答率の分母に含める。
+    const totalAnswered = answers.length;
     const correctCount = answers.filter((a) => a.isCorrect).length;
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;

@@ -27,6 +27,7 @@ export default function ResultModal({ result, onReset }: Props) {
   const problems = useGameStore((s) => s.problems);
 
   // 登録済みのプレイヤー名を読み込む
+  /* eslint-disable react-hooks/set-state-in-effect -- 端末保存名はモーダル表示後に読む */
   useEffect(() => {
     const saved = getPlayerName();
     if (saved) {
@@ -35,6 +36,7 @@ export default function ResultModal({ result, onReset }: Props) {
       setEditingName(true); // 未登録なら入力欄を表示
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSave = async () => {
     if (!playerName.trim()) return;
