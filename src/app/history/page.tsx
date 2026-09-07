@@ -6,9 +6,18 @@ import { motion } from "framer-motion";
 import { GameRecord, loadHistory, clearHistory, getBestScore } from "@/lib/history";
 import { getRank } from "@/lib/ranks";
 import { tileLabel } from "@/lib/mahjong";
-import { Suit } from "@/types/mahjong";
+import { Suit, Problem } from "@/types/mahjong";
+import { FuProblem, FuResult } from "@/types/fu";
+import { computeFu } from "@/lib/fu";
+import { FuHand, FuBreakdown } from "@/components/FuHandDisplay";
 import Tile from "@/components/Tile";
 import AdBanner from "@/components/AdBanner";
+
+const MODE_EMOJI: Record<"speed" | "casual" | "fu", string> = {
+  speed: "⚡",
+  casual: "🧘",
+  fu: "🧮",
+};
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -77,7 +86,13 @@ export default function HistoryPage() {
                   onClick={() => setOpenId(openId === rec.id ? null : rec.id)}
                   className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors"
                 >
-                  <span className="text-2xl">{rec.oniMode ? (rec.gameMode === "casual" ? "👺" : "👹") : rec.gameMode === "casual" ? "🧘" : "⚡"}</span>
+                  <span className="text-2xl">
+                    {rec.oniMode
+                      ? rec.gameMode === "casual"
+                        ? "👺"
+                        : "👹"
+                      : MODE_EMOJI[rec.gameMode] ?? "⚡"}
+                  </span>
                   <div className="flex-1 min-w-0">
                     <div className="text-white font-bold">
                       {rec.correctCount}正解 / {rec.totalAnswered}問 • {rec.accuracy}%
@@ -96,73 +111,124 @@ export default function HistoryPage() {
                 {/* 振り返り（答え合わせ） */}
                 {openId === rec.id && (
                   <div className="px-4 pb-4 space-y-3 max-h-96 overflow-y-auto">
-                    {rec.details.map((d, j) => {
-                      const isTimeout = d.answer.discardedTile.id === "timeout";
-                      return (
-                        <div
-                          key={j}
-                          className={`rounded-xl p-3 border ${
-                            d.answer.isCorrect
-                              ? "border-green-500/40 bg-green-500/10"
-                              : "border-red-500/40 bg-red-500/10"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className={`text-lg font-black ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
-                              {d.answer.isCorrect ? "○" : "✗"}
-                            </span>
-                            <span className="text-sm font-bold text-gray-300">問題 {j + 1}</span>
-                          </div>
-
-                          {d.problem && (
-                            <div className="flex flex-wrap gap-0.5 mb-2">
-                              {d.problem.tiles.map((tile) => {
-                                const isCorrectTile = d.problem!.correctDiscards.includes(`${tile.suit}${tile.num}`);
-                                const isChosen =
-                                  !isTimeout &&
-                                  tile.suit === d.answer.discardedTile.suit &&
-                                  tile.num === d.answer.discardedTile.num;
-                                return (
-                                  <Tile
-                                    key={tile.id}
-                                    tile={tile}
-                                    size="sm"
-                                    highlighted={isCorrectTile}
-                                    wrong={isChosen && !d.answer.isCorrect}
-                                  />
-                                );
-                              })}
-                            </div>
-                          )}
-
-                          <div className="text-xs space-y-0.5 text-gray-300">
-                            <div>
-                              <span className="text-gray-500">正解: </span>
-                              <span className="font-bold text-green-400">
-                                {d.problem?.correctDiscards
-                                  .map((cd) => {
-                                    const suit = cd[0] as Suit;
-                                    const num = parseInt(cd[1]);
-                                    return tileLabel({ suit, num, id: cd });
-                                  })
-                                  .join(" / ")}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="text-gray-500">あなた: </span>
-                              <span className={`font-bold ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
-                                {isTimeout ? "時間切れ" : tileLabel(d.answer.discardedTile)}
-                              </span>
-                            </div>
-                            {d.problem?.description && (
-                              <div className="mt-2 text-base leading-relaxed text-gray-200 bg-white/10 rounded-lg px-3 py-2">
-                                💡 {d.problem.description}
+                    {rec.gameMode === "fu"
+                      ? rec.details.map((d, j) => {
+                          const problem = d.problem as FuProblem | null;
+                          const result: FuResult | null = problem ? computeFu(problem) : null;
+                          return (
+                            <div
+                              key={j}
+                              className={`rounded-xl p-3 border ${
+                                d.answer.isCorrect
+                                  ? "border-green-500/40 bg-green-500/10"
+                                  : "border-red-500/40 bg-red-500/10"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className={`text-lg font-black ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
+                                  {d.answer.isCorrect ? "○" : "✗"}
+                                </span>
+                                <span className="text-sm font-bold text-gray-300">問題 {j + 1}</span>
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+
+                              {problem && (
+                                <div className="mb-2 bg-black/20 rounded-xl p-2">
+                                  <FuHand problem={problem} />
+                                </div>
+                              )}
+
+                              <div className="text-xs space-y-0.5 text-gray-300 mb-2">
+                                <div>
+                                  <span className="text-gray-500">正解: </span>
+                                  <span className="font-bold text-green-400">
+                                    {d.answer.correctFu}符
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">あなた: </span>
+                                  <span className={`font-bold ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
+                                    {d.answer.timedOut ? "時間切れ" : `${d.answer.chosenFu}符`}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {result && (
+                                <div className="bg-black/20 rounded-lg px-3 py-2">
+                                  <FuBreakdown result={result} />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                      : rec.details.map((d, j) => {
+                          const isTimeout = d.answer.timedOut || !d.answer.discardedTile;
+                          const problem = d.problem as Problem | null;
+                          return (
+                            <div
+                              key={j}
+                              className={`rounded-xl p-3 border ${
+                                d.answer.isCorrect
+                                  ? "border-green-500/40 bg-green-500/10"
+                                  : "border-red-500/40 bg-red-500/10"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className={`text-lg font-black ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
+                                  {d.answer.isCorrect ? "○" : "✗"}
+                                </span>
+                                <span className="text-sm font-bold text-gray-300">問題 {j + 1}</span>
+                              </div>
+
+                              {problem && (
+                                <div className="flex flex-wrap gap-0.5 mb-2">
+                                  {problem.tiles.map((tile) => {
+                                    const isCorrectTile = problem.correctDiscards.includes(`${tile.suit}${tile.num}`);
+                                    const isChosen =
+                                      !isTimeout &&
+                                      !!d.answer.discardedTile &&
+                                      tile.suit === d.answer.discardedTile.suit &&
+                                      tile.num === d.answer.discardedTile.num;
+                                    return (
+                                      <Tile
+                                        key={tile.id}
+                                        tile={tile}
+                                        size="sm"
+                                        highlighted={isCorrectTile}
+                                        wrong={isChosen && !d.answer.isCorrect}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              <div className="text-xs space-y-0.5 text-gray-300">
+                                <div>
+                                  <span className="text-gray-500">正解: </span>
+                                  <span className="font-bold text-green-400">
+                                    {problem?.correctDiscards
+                                      .map((cd) => {
+                                        const suit = cd[0] as Suit;
+                                        const num = parseInt(cd[1]);
+                                        return tileLabel({ suit, num, id: cd });
+                                      })
+                                      .join(" / ")}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">あなた: </span>
+                                  <span className={`font-bold ${d.answer.isCorrect ? "text-green-400" : "text-red-400"}`}>
+                                    {isTimeout || !d.answer.discardedTile ? "時間切れ" : tileLabel(d.answer.discardedTile)}
+                                  </span>
+                                </div>
+                                {problem?.description && (
+                                  <div className="mt-2 text-base leading-relaxed text-gray-200 bg-white/10 rounded-lg px-3 py-2">
+                                    💡 {problem.description}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                   </div>
                 )}
               </motion.div>

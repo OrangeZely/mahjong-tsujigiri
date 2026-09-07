@@ -20,9 +20,14 @@ export interface Problem {
   isAuto: boolean;
 }
 
+export type GameMode = "speed" | "casual" | "fu";
+
 export interface GameAnswer {
   problemId: string;
-  discardedTile: Tile;
+  discardedTile?: Tile; // 清一色/何切るモード用
+  chosenFu?: number; // 符計算モード用: 選んだ符
+  correctFu?: number; // 符計算モード用: 正解の符
+  timedOut?: boolean; // 鬼斬りモードの時間切れ
   isCorrect: boolean;
   timeMs: number;
 }
@@ -33,8 +38,8 @@ export interface GameResult {
   incorrectCount: number;
   accuracy: number; // 0-100
   score: number;
-  gameMode: "speed" | "casual";
-  oniMode?: boolean; // 鬼斬りモード（1問5秒＋連続正解で獲得点倍々、両モード共通）
+  gameMode: GameMode;
+  oniMode?: boolean; // 鬼斬りモード（1問5秒＋連続正解で獲得点倍々、全モード共通）
   answers: GameAnswer[];
   durationMs: number;
 }
@@ -46,6 +51,6 @@ export interface RankingEntry {
   totalAnswered: number;
   accuracy: number;
   score: number;
-  gameMode: "speed" | "casual";
+  gameMode: GameMode;
   createdAt: string;
 }

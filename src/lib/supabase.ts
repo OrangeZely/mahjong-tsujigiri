@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { RankingEntry, GameResult, Problem } from "@/types/mahjong";
+import { RankingEntry, GameResult, Problem, GameMode } from "@/types/mahjong";
 import { rowToProblem } from "@/lib/mahjong";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -32,7 +32,7 @@ export async function saveScore(
 // ランキング取得（上位50件）
 export async function fetchRanking(
   period: "all" | "week" = "all",
-  mode?: "speed" | "casual"
+  mode?: GameMode
 ): Promise<RankingEntry[]> {
   let query = supabase
     .from("scores")
@@ -101,7 +101,7 @@ function rowToRanking(row: Record<string, unknown>): RankingEntry {
     totalAnswered: row.total_answered as number,
     accuracy: row.accuracy as number,
     score: row.score as number,
-    gameMode: (row.game_mode as "speed" | "casual") || "speed",
+    gameMode: (row.game_mode as GameMode) || "speed",
     createdAt: row.created_at as string,
   };
 }

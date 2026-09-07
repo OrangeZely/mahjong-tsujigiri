@@ -8,14 +8,21 @@ import { RankingEntry } from "@/types/mahjong";
 import { getRank } from "@/lib/ranks";
 import AdBanner from "@/components/AdBanner";
 
-type RankingTab = "all" | "week" | "speed" | "casual";
+type RankingTab = "all" | "week" | "speed" | "casual" | "fu";
 
 const TABS: { key: RankingTab; label: string }[] = [
   { key: "all", label: "全期間" },
   { key: "week", label: "今週" },
   { key: "speed", label: "⚡清一色" },
   { key: "casual", label: "🧘何切る" },
+  { key: "fu", label: "🧮符計算" },
 ];
+
+const MODE_EMOJI: Record<"speed" | "casual" | "fu", string> = {
+  speed: "⚡",
+  casual: "🧘",
+  fu: "🧮",
+};
 
 export default function RankingPage() {
   const router = useRouter();
@@ -53,7 +60,7 @@ export default function RankingPage() {
   useEffect(() => {
     setLoading(true);
     const promise =
-      tab === "speed" || tab === "casual"
+      tab === "speed" || tab === "casual" || tab === "fu"
         ? fetchRanking("all", tab)
         : fetchRanking(tab);
     promise.then((data) => {
@@ -136,7 +143,7 @@ export default function RankingPage() {
                 {/* プレイヤー名 */}
                 <div className="flex-1 min-w-0">
                   <div className="text-white font-bold truncate">
-                    <span className="mr-1">{entry.gameMode === "casual" ? "🧘" : "⚡"}</span>
+                    <span className="mr-1">{MODE_EMOJI[entry.gameMode] ?? "⚡"}</span>
                     {entry.playerName}
                   </div>
                   <div className="text-gray-400 text-xs">

@@ -5,20 +5,20 @@ import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { useGameStore } from "@/store/gameStore";
-import { tileLabel } from "@/lib/mahjong";
+import { FuRound } from "@/store/fuGameStore";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
-import Tile from "@/components/Tile";
+import { FuHand, FuBreakdown } from "@/components/FuHandDisplay";
 import { usePremiumStore } from "@/store/premiumStore";
 import { maybeShowInterstitial } from "@/lib/ads";
 
 interface Props {
   result: GameResult;
+  rounds: FuRound[];
   onReset: () => void;
 }
 
-export default function ResultModal({ result, onReset }: Props) {
+export default function FuResultModal({ result, rounds, onReset }: Props) {
   const [playerName, setPlayerName] = useState("");
   const [editingName, setEditingName] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -26,19 +26,16 @@ export default function ResultModal({ result, onReset }: Props) {
   const [saving, setSaving] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
-  const problems = useGameStore((s) => s.problems);
 
-  // 登録済みのプレイヤー名を読み込む
   useEffect(() => {
     const saved = getPlayerName();
     if (saved) {
       setPlayerName(saved);
     } else {
-      setEditingName(true); // 未登録なら入力欄を表示
+      setEditingName(true);
     }
   }, []);
 
-  // ゲーム終了時、数回に1回だけ全画面広告を出す（購入済みなら出さない）
   useEffect(() => {
     const { noAds, loaded } = usePremiumStore.getState();
     if (loaded && !noAds) maybeShowInterstitial();
@@ -46,7 +43,7 @@ export default function ResultModal({ result, onReset }: Props) {
 
   const handleSave = async () => {
     if (!playerName.trim()) return;
-    savePlayerName(playerName); // 次回から自動で使う
+    savePlayerName(playerName);
     setSaving(true);
     const [{ error }, rank] = await Promise.all([
       saveScore(playerName.trim(), result),
@@ -73,12 +70,12 @@ export default function ResultModal({ result, onReset }: Props) {
         className="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
       >
         {/* ヘッダー */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
-          <div className="text-4xl mb-1">⚔️</div>
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white text-center">
+          <div className="text-4xl mb-1">🧮</div>
           <h2 className="text-3xl font-black">そこまで！</h2>
           {result.oniMode && (
             <div className="mt-1 inline-block bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full">
-              {result.gameMode === "casual" ? "👺" : "👹"} 鬼斬りモード
+              👹 鬼斬りモード
             </div>
           )}
         </div>
@@ -106,7 +103,6 @@ export default function ResultModal({ result, onReset }: Props) {
             </div>
           </div>
 
-          {/* スコア & 格付け */}
           <div className="text-center bg-yellow-50 rounded-xl p-4">
             <div className="text-xs text-gray-500 mb-1">スコア</div>
             <div className="text-5xl font-black text-yellow-600">
@@ -180,9 +176,7 @@ export default function ResultModal({ result, onReset }: Props) {
           {showDetails && (
             <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
               {result.answers.map((answer, i) => {
-                const problem = problems.find((p) => p.id === answer.problemId);
-                const discardedTile = answer.discardedTile;
-                const isTimeout = !discardedTile || discardedTile.id === "timeout";
+                const round = rounds.find((r) => r.problem.id === answer.problemId);
                 return (
                   <div
                     key={i}
@@ -195,48 +189,32 @@ export default function ResultModal({ result, onReset }: Props) {
                       <span className="text-sm font-bold text-gray-600">問題 {i + 1}</span>
                     </div>
 
-                    {/* 手牌 */}
-                    {problem && (
-                      <div className="flex flex-wrap gap-0.5 mb-2">
-                        {problem.tiles.map((tile) => {
-                          const isCorrectTile = problem.correctDiscards.includes(`${tile.suit}${tile.num}`);
-                          const isChosen = !isTimeout && !!discardedTile && tile.suit === discardedTile.suit && tile.num === discardedTile.num;
-                          return (
-                            <Tile
-                              key={tile.id}
-                              tile={tile}
-                              size="sm"
-                              highlighted={isCorrectTile}
-                              wrong={isChosen && !answer.isCorrect}
-                            />
-                          );
-                        })}
+                    {round && (
+                      <div className="mb-2 bg-gray-900 rounded-xl p-2">
+                        <FuHand problem={round.problem} />
                       </div>
                     )}
 
-                    <div className="text-xs space-y-0.5">
+                    <div className="text-xs space-y-0.5 mb-2">
                       <div>
                         <span className="text-gray-500">正解: </span>
                         <span className="font-bold text-green-700">
-                          {problem?.correctDiscards.map((cd) => {
-                            const suit = cd[0] as import("@/types/mahjong").Suit;
-                            const num = parseInt(cd[1]);
-                            return tileLabel({ suit, num, id: cd });
-                          }).join(" / ")}
+                          {answer.correctFu}符
                         </span>
                       </div>
                       <div>
                         <span className="text-gray-500">あなた: </span>
                         <span className={`font-bold ${answer.isCorrect ? "text-green-700" : "text-red-600"}`}>
-                          {isTimeout || !discardedTile ? "時間切れ" : tileLabel(discardedTile)}
+                          {answer.timedOut ? "時間切れ" : `${answer.chosenFu}符`}
                         </span>
                       </div>
-                      {problem?.description && (
-                        <div className="mt-2 text-base leading-relaxed text-gray-700 bg-white/70 rounded-lg px-3 py-2">
-                          💡 {problem.description}
-                        </div>
-                      )}
                     </div>
+
+                    {round && (
+                      <div className="bg-gray-900 rounded-lg px-3 py-2">
+                        <FuBreakdown result={round.result} />
+                      </div>
+                    )}
                   </div>
                 );
               })}

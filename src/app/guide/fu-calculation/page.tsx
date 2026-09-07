@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import FuQuizClient from "./FuQuizClient";
 
 export const metadata: Metadata = {
   title: "符計算の覚え方 - 麻雀の点数計算をクイズで練習 | 麻雀 辻斬る！",
@@ -132,16 +131,21 @@ export default function FuCalculationPage() {
             </div>
           </section>
 
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">
-              実際にクイズで練習しよう
+          <section className="bg-white/5 border-2 border-purple-500/50 rounded-2xl p-5 text-center">
+            <h2 className="text-xl font-bold text-white mb-2">
+              読んだら、すぐ試そう
             </h2>
             <p className="text-sm mb-4">
-              完成した手牌が表示されます。黄色い枠は和了牌（アガリ牌）です。
-              状況（ツモ/ロン・面前/鳴き・待ちの形）をヒントに、合計符を4択から選んでみましょう。
-              答えた後は内訳がすべて表示されるので、間違えても復習になります。
+              完成した手牌を見て合計符を4択で答える「符計算モード」で実戦練習できます。
+              黄色い枠は和了牌（アガリ牌）、答えた後は内訳がすべて表示されるので、間違えても復習になります。
+              60秒間で何問解けるか挑戦してみてください。
             </p>
-            <FuQuizClient />
+            <Link
+              href="/fu-game"
+              className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black px-8 py-3 rounded-xl transition-colors"
+            >
+              符計算モードで遊ぶ 🧮
+            </Link>
           </section>
 
           <div className="pt-4 flex gap-4 justify-center flex-wrap">

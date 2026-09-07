@@ -1,4 +1,5 @@
-import { GameResult, Problem, GameAnswer } from "@/types/mahjong";
+import { GameResult, Problem, GameAnswer, GameMode } from "@/types/mahjong";
+import { FuProblem } from "@/types/fu";
 
 // ==================== プレイ履歴のローカル保存 ====================
 // 端末のlocalStorageに保存する（Supabaseには送らない）
@@ -10,13 +11,13 @@ const MAX_HISTORY = 50; // 保存する最大試合数
 // 振り返り用に問題のスナップショットも一緒に保存する
 export interface HistoryAnswer {
   answer: GameAnswer;
-  problem: Problem | null;
+  problem: Problem | FuProblem | null;
 }
 
 export interface GameRecord {
   id: string;
   playedAt: string; // ISO日時
-  gameMode: "speed" | "casual";
+  gameMode: GameMode;
   oniMode?: boolean;
   correctCount: number;
   totalAnswered: number;
@@ -30,7 +31,7 @@ function isBrowser(): boolean {
 }
 
 // 試合結果を履歴に追加
-export function saveGameRecord(result: GameResult, problems: Problem[]): void {
+export function saveGameRecord(result: GameResult, problems: (Problem | FuProblem)[]): void {
   if (!isBrowser()) return;
 
   const details: HistoryAnswer[] = result.answers.map((answer) => ({

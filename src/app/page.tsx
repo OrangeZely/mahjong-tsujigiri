@@ -141,7 +141,7 @@ export default function HomePage() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => router.push("/game?mode=casual")}
-          className="cursor-pointer bg-gradient-to-br from-green-800 to-green-950 border-2 border-green-500 rounded-2xl p-5 mb-8 text-left shadow-xl"
+          className="cursor-pointer bg-gradient-to-br from-green-800 to-green-950 border-2 border-green-500 rounded-2xl p-5 mb-4 text-left shadow-xl"
         >
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">🧘</span>
@@ -154,6 +154,27 @@ export default function HomePage() {
             <div>・1問ごとの制限時間は<span className="text-yellow-300 font-bold">なし</span></div>
             <div>・60秒間で解いた問題数を競う</div>
             <div>・<span className="text-yellow-300 font-bold">👺鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
+          </div>
+        </motion.div>
+
+        {/* 符計算モード */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => router.push("/fu-game")}
+          className="cursor-pointer bg-gradient-to-br from-purple-800 to-purple-950 border-2 border-purple-500 rounded-2xl p-5 mb-8 text-left shadow-xl"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-3xl">🧮</span>
+            <div>
+              <div className="text-white font-black text-xl">符計算モード</div>
+              <div className="text-purple-300 text-xs">60秒間で符計算を何問解けるか</div>
+            </div>
+          </div>
+          <div className="text-gray-300 text-sm space-y-1">
+            <div>・完成した手牌を見て合計符を4択で回答</div>
+            <div>・60秒間で解いた問題数を競う</div>
+            <div>・<span className="text-yellow-300 font-bold">👹鬼斬りモード</span>は1問5秒＆連続正解で獲得点倍々</div>
           </div>
         </motion.div>
 

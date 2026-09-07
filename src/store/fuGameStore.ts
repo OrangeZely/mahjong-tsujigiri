@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { Problem, GameAnswer, GameResult, Tile, GameMode } from "@/types/mahjong";
-import { fetchProblems, fetchCasualProblems } from "@/lib/supabase";
+import { GameAnswer, GameResult, GameMode } from "@/types/mahjong";
+import { FuProblem, FuResult } from "@/types/fu";
+import { generateFuProblem, computeFu, generateChoices } from "@/lib/fu";
 import { saveGameRecord } from "@/lib/history";
 
-export type { GameMode } from "@/types/mahjong";
-
-export type GamePhase =
+export type FuGamePhase =
   | "idle"
   | "loading"
   | "playing"
@@ -15,25 +14,32 @@ export type GamePhase =
 const GAME_DURATION_MS = 60_000;
 const QUESTION_DURATION_MS = 5_000;
 const ANSWER_DISPLAY_MS = 500;
-const PROBLEM_POOL_SIZE = 200;
-const ONI_MAX_MULTIPLIER = 8; // 鬼斬りモード: 獲得点の上限倍率（素点の8倍まで）
+const ROUND_POOL_SIZE = 200;
+const ONI_MAX_MULTIPLIER = 8;
+const BASE_SCORE = 100; // 何切るモードと同じ配点（4択の難易度感が近いため）
+const PENALTY_SCORE = 50;
 
-interface GameState {
-  phase: GamePhase;
-  gameMode: GameMode;
-  oniMode: boolean; // 鬼斬りモード: 1問5秒制限＋連続正解で獲得点倍々（両モードで使用可）
-  problems: Problem[];
+export interface FuRound {
+  problem: FuProblem;
+  result: FuResult;
+  choices: number[];
+}
+
+interface FuGameState {
+  phase: FuGamePhase;
+  oniMode: boolean;
+  rounds: FuRound[];
   currentIndex: number;
   answers: GameAnswer[];
-  lastAnswer: { isCorrect: boolean; tile: Tile } | null;
+  lastAnswer: { isCorrect: boolean; chosenFu: number } | null;
 
   gameStartedAt: number | null;
   questionStartedAt: number | null;
   gameTimeLeft: number;
   questionTimeLeft: number;
 
-  startGame: (mode: GameMode, oni?: boolean) => void;
-  submitAnswer: (tile: Tile) => void;
+  startGame: (oni?: boolean) => void;
+  submitAnswer: (chosenFu: number) => void;
   timeoutQuestion: () => void;
   tickGame: (now: number) => void;
   finishGame: () => void;
@@ -42,11 +48,19 @@ interface GameState {
   getResult: () => GameResult;
 }
 
-export const useGameStore = create<GameState>((set, get) => ({
+function generatePool(size: number): FuRound[] {
+  return Array.from({ length: size }, (_, i) => {
+    const problem = generateFuProblem(`fu_${Date.now()}_${i}_${Math.random()}`);
+    const result = computeFu(problem);
+    const choices = generateChoices(result.total);
+    return { problem, result, choices };
+  });
+}
+
+export const useFuGameStore = create<FuGameState>((set, get) => ({
   phase: "idle",
-  gameMode: "speed",
   oniMode: false,
-  problems: [],
+  rounds: [],
   currentIndex: 0,
   answers: [],
   lastAnswer: null,
@@ -55,59 +69,43 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameTimeLeft: GAME_DURATION_MS,
   questionTimeLeft: QUESTION_DURATION_MS,
 
-  startGame: async (mode: GameMode, oni: boolean = false) => {
-    const oniMode = oni;
-    set({ phase: "loading", gameMode: mode, oniMode });
+  startGame: (oni: boolean = false) => {
+    set({ phase: "loading", oniMode: oni });
 
-    const dbProblems = mode === "casual"
-      ? await fetchCasualProblems()
-      : await fetchProblems();
-
-    if (dbProblems.length === 0) {
-      alert("問題が登録されていません。Supabaseに問題を追加してください。");
-      set({ phase: "idle" });
-      return;
-    }
-
-    const repeated: Problem[] = [];
-    while (repeated.length < PROBLEM_POOL_SIZE) {
-      const shuffled = [...dbProblems].sort(() => Math.random() - 0.5);
-      repeated.push(...shuffled);
-    }
-    const problems = repeated.slice(0, PROBLEM_POOL_SIZE);
-
+    const rounds = generatePool(ROUND_POOL_SIZE);
     const now = Date.now();
     set({
       phase: "playing",
-      problems,
+      rounds,
       currentIndex: 0,
       answers: [],
       lastAnswer: null,
       gameStartedAt: now,
       questionStartedAt: now,
       gameTimeLeft: GAME_DURATION_MS,
-      questionTimeLeft: oniMode ? QUESTION_DURATION_MS : Infinity,
+      questionTimeLeft: oni ? QUESTION_DURATION_MS : Infinity,
     });
   },
 
-  submitAnswer: (tile: Tile) => {
-    const { problems, currentIndex, questionStartedAt, answers, oniMode } = get();
-    const problem = problems[currentIndex];
-    if (!problem) return;
+  submitAnswer: (chosenFu: number) => {
+    const { rounds, currentIndex, questionStartedAt, answers, oniMode } = get();
+    const round = rounds[currentIndex];
+    if (!round) return;
 
-    const isCorrect = problem.correctDiscards.includes(`${tile.suit}${tile.num}`);
+    const isCorrect = chosenFu === round.result.total;
     const timeMs = Date.now() - (questionStartedAt ?? Date.now());
 
     const answer: GameAnswer = {
-      problemId: problem.id,
-      discardedTile: tile,
+      problemId: round.problem.id,
+      chosenFu,
+      correctFu: round.result.total,
       isCorrect,
       timeMs,
     };
 
     set({
       phase: "answered",
-      lastAnswer: { isCorrect, tile },
+      lastAnswer: { isCorrect, chosenFu },
       answers: [...answers, answer],
     });
 
@@ -129,20 +127,21 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   timeoutQuestion: () => {
-    const { problems, currentIndex, answers } = get();
-    const problem = problems[currentIndex];
-    if (!problem) return;
+    const { rounds, currentIndex, answers } = get();
+    const round = rounds[currentIndex];
+    if (!round) return;
 
     const answer: GameAnswer = {
-      problemId: problem.id,
-      discardedTile: { suit: "m", num: 0, id: "timeout" },
+      problemId: round.problem.id,
+      correctFu: round.result.total,
+      timedOut: true,
       isCorrect: false,
       timeMs: QUESTION_DURATION_MS,
     };
 
     set({
       phase: "answered",
-      lastAnswer: { isCorrect: false, tile: { suit: "m", num: 0, id: "timeout" } },
+      lastAnswer: { isCorrect: false, chosenFu: -1 },
       answers: [...answers, answer],
     });
 
@@ -189,16 +188,15 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   finishGame: () => {
     set({ phase: "finished", gameTimeLeft: 0 });
-    // プレイ履歴を端末に保存
-    const { problems } = get();
-    saveGameRecord(get().getResult(), problems);
+    const { rounds } = get();
+    saveGameRecord(get().getResult(), rounds.map((r) => r.problem));
   },
 
   resetGame: () => {
     set({
       phase: "idle",
       oniMode: false,
-      problems: [],
+      rounds: [],
       currentIndex: 0,
       answers: [],
       lastAnswer: null,
@@ -210,34 +208,31 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   getResult: (): GameResult => {
-    const { answers, gameStartedAt, gameMode, oniMode } = get();
-    const totalAnswered = answers.filter((a) => a.discardedTile?.id !== "timeout").length;
+    const { answers, gameStartedAt, oniMode } = get();
+    const totalAnswered = answers.filter((a) => !a.timedOut).length;
     const correctCount = answers.filter((a) => a.isCorrect).length;
     const incorrectCount = answers.filter((a) => !a.isCorrect).length;
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
 
-    // 素点と減点はモードごと（清一色: 1000/−300、何切る: 100/−50）
-    const base = gameMode === "casual" ? 100 : 1000;
-    const penalty = gameMode === "casual" ? 50 : 300;
-
     let rawScore: number;
     if (oniMode) {
-      // 鬼斬りモード: 連続正解で獲得点が倍々（素点の8倍で頭打ち）、不正解・時間切れで素点に戻る
-      let gain = base;
+      let gain = BASE_SCORE;
       let earned = 0;
       for (const a of answers) {
         if (a.isCorrect) {
           earned += gain;
-          gain = Math.min(gain * 2, base * ONI_MAX_MULTIPLIER);
+          gain = Math.min(gain * 2, BASE_SCORE * ONI_MAX_MULTIPLIER);
         } else {
-          gain = base;
+          gain = BASE_SCORE;
         }
       }
-      rawScore = earned - incorrectCount * penalty + accuracy;
+      rawScore = earned - incorrectCount * PENALTY_SCORE + accuracy;
     } else {
-      rawScore = correctCount * base - incorrectCount * penalty + accuracy;
+      rawScore = correctCount * BASE_SCORE - incorrectCount * PENALTY_SCORE + accuracy;
     }
     const score = Math.max(0, rawScore);
+    const gameMode: GameMode = "fu";
+
     return {
       totalAnswered: answers.length,
       correctCount,
@@ -252,7 +247,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 }));
 
-// デバッグ用: ブラウザコンソールから window.__gameStore で状態を確認できる
+// デバッグ用: ブラウザコンソールから window.__fuGameStore で状態を確認できる
 if (typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).__gameStore = useGameStore;
+  (window as unknown as Record<string, unknown>).__fuGameStore = useFuGameStore;
 }
