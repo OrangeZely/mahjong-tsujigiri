@@ -23,14 +23,17 @@ export default function PurchaseSection() {
   } = usePremiumStore();
   const [message, setMessage] = useState<string | null>(null);
 
-  // ネイティブ判定はマウント後に行う。ビルド時のプリレンダリングでは
-  // 常に false になるため、直接呼ぶとハイドレーションがずれる。
+  // ネイティブ判定・プラットフォーム判定はマウント後に行う。ビルド時のプリレンダリングでは
+  // 常に false/web になるため、直接呼ぶとハイドレーションがずれる。
   const [isNative, setIsNative] = useState(false);
-  /* eslint-disable react-hooks/set-state-in-effect -- ネイティブ判定はハイドレーション後に行う */
+  const [platform, setPlatform] = useState<"ios" | "android" | "web">("web");
+  /* eslint-disable react-hooks/set-state-in-effect -- ネイティブ・プラットフォーム判定はハイドレーション後に行う */
   useEffect(() => {
     setIsNative(Capacitor.isNativePlatform());
+    setPlatform(Capacitor.getPlatform() as "ios" | "android" | "web");
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
+  const isAndroid = platform === "android";
 
   const hasAnyPrice = Boolean(prices.monthly || prices.annual || prices.remove_ads);
 
@@ -75,11 +78,14 @@ export default function PurchaseSection() {
             （無料プランは1日{DAILY_FREE_PLAYS}回まで）
           </p>
 
-          {/* App Store ガイドライン 3.1.2 で必須の開示事項 */}
+          {/* App Store ガイドライン 3.1.2 で必須の開示事項（Androidでも同内容をプラットフォームに合わせて表示） */}
           <p className="text-[11px] text-gray-500 leading-relaxed mb-3">
             プレミアムは自動更新される定期購読です。年額プランは1年ごと、月額プランは1ヶ月ごとに、
             上記の内容をご利用いただけます。期間終了の24時間前までに解約されない限り自動更新され、
-            更新料金はApple IDに請求されます。解約はiOSの「設定」→「サブスクリプション」から
+            更新料金は{isAndroid ? "Google Playの支払い方法" : "Apple ID"}に請求されます。
+            解約は{isAndroid
+              ? "Google Playストアアプリの「お支払いと定期購入」"
+              : "iOSの「設定」→「サブスクリプション」"}から
             いつでも行えます。
           </p>
 
@@ -158,17 +164,19 @@ export default function PurchaseSection() {
         >
           購入を復元
         </button>
-        {/* App Store ガイドライン 3.1.2(c) が要求する EULA へのリンク。
+        {/* App Store ガイドライン 3.1.2(c) が要求する EULA へのリンク（iOSのみ）。
             App Store Connect では Apple の標準EULAを使うと申告しているため、
-            アプリ内からもその標準EULAに到達できるようにする。 */}
-        <a
-          href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
-        >
-          利用規約（EULA）
-        </a>
+            アプリ内からもその標準EULAに到達できるようにする。Google Playには同様の要求が無い。 */}
+        {!isAndroid && (
+          <a
+            href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+          >
+            利用規約（EULA）
+          </a>
+        )}
         <Link
           href="/terms"
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
