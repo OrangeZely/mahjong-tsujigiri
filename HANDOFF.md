@@ -66,9 +66,9 @@
 - ✅ バックアップ: Google Drive マイドライブ「麻雀辻斬る_署名キー_バックアップ」
 - ✅ プライバシーポリシー: 本番URL + `/privacy` をPlay Consoleに登録予定
 - ✅ AABビルド: `npm run build && npx cap sync && cd android && ./gradlew bundleRelease`（JAVA_HOMEはAndroid Studio同梱JDKを指定すること）。`app/build/outputs/bundle/release/app-release.aab` に生成済み
-- ✅ Play Console個人デベロッパーアカウント登録済み（$25支払い済み）。**このアプリ自体をPlay Consoleに新規登録する作業はまだ**（初回アップロード時にGoogle Play アプリ署名を必ず有効化すること）
+- ✅ **訂正（2026-09-08）**: アプリは既に2026年7月17日にPlay Consoleへ登録済みで、「クローズド テスト」トラックが稼働中だった（Play Console画面で確認。パッケージ名 `com.orangezely.mahjongtsujigiru` 一致、その時点でインストール済みユーザー2人）。新規登録は不要で、**既存アプリへのバージョン更新として提出すればよい**。7月時点のAABは`versionCode 1`のはずなので、再アップロードには上げる必要がある→`versionCode 2`/`versionName "1.1"`に更新しビルド済み（`android/app/build.gradle`）
 - ✅ 掲載情報下書き: `store-assets/playstore-listing-ja.md`（符計算モード追記・カテゴリ注意書きあり）、スクリーンショット3枚: `store-assets/playstore-screenshots/`
-- ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件。**テスター12人分のGoogleアカウントメールアドレスの用意が必要**（jelly側で準備）
+- ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件。**7月時点でインストール済みユーザーはまだ2人だったので、12人にはまだ届いていない可能性が高い**。テスター12人分のGoogleアカウントメールアドレスの用意が必要（jelly側で準備）
 - ⬜ AdMobのAndroid本番広告ユニットID未取得（`.env.local`に`NEXT_PUBLIC_ADMOB_ANDROID_BANNER`/`NEXT_PUBLIC_ADMOB_ANDROID_INTERSTITIAL`が必要、現状テストIDのまま）。**先にクローズドテストへ広告非対応/テストIDのまま提出しても問題ない**（データセーフティ申告だけ現状に合わせて正直に回答すればよい）
 - ⬜ アプリ内課金（RevenueCat Android用`goog_`キー・Play Console側の商品作成）は未着手。**最初のクローズドテストは課金非対応のままでも提出可**
 
