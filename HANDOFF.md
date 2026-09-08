@@ -59,16 +59,18 @@
 - 差し替え手順: 全牌の内容を囲む共通bboxで切り出し→高さ720に縮小→上記の実ファイル名で保存（PILスクリプトで実施）。ファイル名を変えなければコード変更不要
 - 字牌の並び順 z1東/z2南/z3西/z4北/z5白/z6發/z7中 は目視確認済み（標準順）
 
-## Play Storeリリース状況
+## Play Storeリリース状況（2026-09-08更新）
 
-- ✅ Capacitorプロジェクト・静的書き出しビルド・cap sync 動作確認済み
+- ✅ Capacitorプロジェクト・静的書き出しビルド・cap sync 動作確認済み（Androidエミュレータで符計算モード含む全画面の起動確認済み）
 - ✅ 署名キー: `android/app/mahjong-upload.jks` + `android/key.properties`（**両方gitignore済み・コミット禁止**）
 - ✅ バックアップ: Google Drive マイドライブ「麻雀辻斬る_署名キー_バックアップ」
 - ✅ プライバシーポリシー: 本番URL + `/privacy` をPlay Consoleに登録予定
-- ⬜ AABビルド: `npm run build && npx cap sync android && cd android && ./gradlew bundleRelease`
-- ⬜ Play Console登録（**初回アップロード時にGoogle Play アプリ署名を必ず有効化**）
-- ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件
-- ⬜ 収益化はAdMob予定（ポリシーは対応済み。実装時はデータセーフティ申告の更新必須）
+- ✅ AABビルド: `npm run build && npx cap sync && cd android && ./gradlew bundleRelease`（JAVA_HOMEはAndroid Studio同梱JDKを指定すること）。`app/build/outputs/bundle/release/app-release.aab` に生成済み
+- ✅ Play Console個人デベロッパーアカウント登録済み（$25支払い済み）。**このアプリ自体をPlay Consoleに新規登録する作業はまだ**（初回アップロード時にGoogle Play アプリ署名を必ず有効化すること）
+- ✅ 掲載情報下書き: `store-assets/playstore-listing-ja.md`（符計算モード追記・カテゴリ注意書きあり）、スクリーンショット3枚: `store-assets/playstore-screenshots/`
+- ⬜ 個人アカウントのため クローズドテスト テスター12人×14日間 が製品版公開の条件。**テスター12人分のGoogleアカウントメールアドレスの用意が必要**（jelly側で準備）
+- ⬜ AdMobのAndroid本番広告ユニットID未取得（`.env.local`に`NEXT_PUBLIC_ADMOB_ANDROID_BANNER`/`NEXT_PUBLIC_ADMOB_ANDROID_INTERSTITIAL`が必要、現状テストIDのまま）。**先にクローズドテストへ広告非対応/テストIDのまま提出しても問題ない**（データセーフティ申告だけ現状に合わせて正直に回答すればよい）
+- ⬜ アプリ内課金（RevenueCat Android用`goog_`キー・Play Console側の商品作成）は未着手。**最初のクローズドテストは課金非対応のままでも提出可**
 
 ## 課金モデル（2026-08-17 決定・実装済み）
 
