@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
@@ -9,6 +9,7 @@ import { useGameStore } from "@/store/gameStore";
 import { tileLabel } from "@/lib/mahjong";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
+import { recordAnsweredCount, maybeRequestReview } from "@/lib/reviewPrompt";
 import Tile from "@/components/Tile";
 
 interface Props {
@@ -25,6 +26,7 @@ export default function ResultModal({ result, onReset }: Props) {
   const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
   const problems = useGameStore((s) => s.problems);
+  const recordedRef = useRef(false);
 
   // 登録済みのプレイヤー名を読み込む
   /* eslint-disable react-hooks/set-state-in-effect -- 端末保存名はモーダル表示後に読む */
@@ -37,6 +39,13 @@ export default function ResultModal({ result, onReset }: Props) {
     }
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  // このセッションの回答数をレビュー依頼判定用の累計に加算する（1回だけ）
+  useEffect(() => {
+    if (recordedRef.current) return;
+    recordedRef.current = true;
+    recordAnsweredCount(result.totalAnswered);
+  }, [result.totalAnswered]);
 
   const handleSave = async () => {
     if (!playerName.trim()) return;
@@ -154,6 +163,7 @@ export default function ResultModal({ result, onReset }: Props) {
           ) : (
             <button
               onClick={() => {
+                void maybeRequestReview();
                 onReset();
                 router.push("/ranking");
               }}
@@ -239,7 +249,10 @@ export default function ResultModal({ result, onReset }: Props) {
 
           {/* もう一度 */}
           <button
-            onClick={onReset}
+            onClick={() => {
+              void maybeRequestReview();
+              onReset();
+            }}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
             もう一度プレイ 🔄
@@ -248,6 +261,7 @@ export default function ResultModal({ result, onReset }: Props) {
           {/* トップに戻る */}
           <button
             onClick={() => {
+              void maybeRequestReview();
               onReset();
               router.push("/");
             }}

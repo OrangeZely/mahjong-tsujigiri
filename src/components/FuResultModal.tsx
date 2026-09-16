@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { FuRound } from "@/store/fuGameStore";
 import { getRank } from "@/lib/ranks";
 import { getPlayerName, setPlayerName as savePlayerName } from "@/lib/profile";
+import { recordAnsweredCount, maybeRequestReview } from "@/lib/reviewPrompt";
 import { FuHand, FuBreakdown } from "@/components/FuHandDisplay";
 
 interface Props {
@@ -24,6 +25,7 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
   const [saving, setSaving] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
+  const recordedRef = useRef(false);
 
   /* eslint-disable react-hooks/set-state-in-effect -- 端末保存名はモーダル表示後に読む */
   useEffect(() => {
@@ -35,6 +37,13 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
     }
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  // このセッションの回答数をレビュー依頼判定用の累計に加算する（1回だけ）
+  useEffect(() => {
+    if (recordedRef.current) return;
+    recordedRef.current = true;
+    recordAnsweredCount(result.totalAnswered);
+  }, [result.totalAnswered]);
 
   const handleSave = async () => {
     if (!playerName.trim()) return;
@@ -151,6 +160,7 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
           ) : (
             <button
               onClick={() => {
+                void maybeRequestReview();
                 onReset();
                 router.push("/ranking");
               }}
@@ -218,7 +228,10 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
 
           {/* もう一度 */}
           <button
-            onClick={onReset}
+            onClick={() => {
+              void maybeRequestReview();
+              onReset();
+            }}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
             もう一度プレイ 🔄
@@ -227,6 +240,7 @@ export default function FuResultModal({ result, rounds, onReset }: Props) {
           {/* トップに戻る */}
           <button
             onClick={() => {
+              void maybeRequestReview();
               onReset();
               router.push("/");
             }}
