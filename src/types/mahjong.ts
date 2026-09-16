@@ -16,6 +16,7 @@ export interface Problem {
   dora?: Tile[];              // ドラ表示牌
   correctDiscards: string[];  // 正解牌（suit+num形式）
   difficulty: 1 | 2 | 3;
+  descriptionEn?: string;
   description?: string;       // 問題解説
   isAuto: boolean;
 }

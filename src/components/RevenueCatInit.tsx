@@ -16,7 +16,7 @@ export default function RevenueCatInit() {
     (async () => {
       await withTimeout(initRevenueCat(), 5000, undefined);
       await load();
-      await initAds();
+      if (!usePremiumStore.getState().noAds) await initAds();
     })();
   }, [load]);
 

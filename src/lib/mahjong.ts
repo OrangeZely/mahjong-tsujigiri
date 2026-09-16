@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/locale";
 import { Tile, Suit, Problem } from "@/types/mahjong";
 
 // ==================== 牌ユーティリティ ====================
@@ -18,7 +19,11 @@ export function tileKey(suit: Suit, num: number): string {
   return `${suit}${num}`;
 }
 
-export function tileLabel(tile: Tile): string {
+export function tileLabel(tile: Tile, locale: Locale = "ja"): string {
+  if (locale === "en") {
+    if (tile.suit === "z") return ["", "East", "South", "West", "North", "White Dragon", "Green Dragon", "Red Dragon"][tile.num];
+    return `${tile.isRed ? "Red " : ""}${tile.num} ${ { m: "Characters", p: "Circles", s: "Bamboo" }[tile.suit] }`;
+  }
   if (tile.suit === "z") return JIHAI_LABELS[tile.num];
   return `${tile.num}${SUIT_LABELS[tile.suit]}`;
 }
@@ -269,6 +274,7 @@ export function rowToProblem(row: {
   tiles_str: string;
   correct_discards: string;
   difficulty: number;
+  description_en?: string;
   description?: string;
   dora?: string;
 }): Problem {
@@ -284,6 +290,7 @@ export function rowToProblem(row: {
     correctDiscards: corrects,
     difficulty: row.difficulty as 1 | 2 | 3,
     description: row.description,
+    descriptionEn: row.description_en,
     isAuto: false,
   };
 }

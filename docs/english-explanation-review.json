@@ -1,0 +1,41 @@
+{
+  "date": "2026-09-16",
+  "method": "50 full-flush English explanations enumerate exact winning shapes for accepted discards. 120 casual explanations are edited translations reviewed against the supplied hand and accepted discard. Source strategy rankings/probabilities have not been independently simulated. Original Japanese and answer keys remain unchanged.",
+  "issues": [
+    {
+      "table": "problems",
+      "id": "2698d45c-c7a9-4e05-a59e-939b55fa8341",
+      "issue": "Original starts with discard 1, but the hand contains no 1; accepted discard is 8p. English waits are calculated from the accepted discard."
+    },
+    {
+      "table": "problems_casual",
+      "id": "5457e298-061a-4ab2-bfcc-47e6d7c1139b",
+      "issue": "Original references a Bamboo shape absent from the hand; English refers to Characters and the actual Bamboo block."
+    },
+    {
+      "table": "problems_casual",
+      "id": "6db3cb0b-e30a-4173-956d-4d2f2748c5db",
+      "issue": "Original 1–7s wait was corrected to 4s/7s for the stated dora-Pon shape."
+    },
+    {
+      "table": "problems_casual",
+      "id": "b5b65a43-25a2-419e-adae-73445a9f79f7",
+      "issue": "Original calls 5m red but tiles_str does not mark it red; English avoids that unverified detail."
+    },
+    {
+      "table": "problems_casual",
+      "id": "ba4a8ad5-f906-4a13-8a84-47431bab6017",
+      "issue": "Original says discard 7m, absent from the hand; accepted 7s is retained and unsupported numeric claims omitted."
+    },
+    {
+      "table": "problems_casual",
+      "id": "f50f53dc-4965-458e-b59b-7762fbdb7d5b",
+      "issue": "Original explanation describes other suits/discards than this hand. English describes the actual accepted 8s discard and Red Dragon pair."
+    },
+    {
+      "table": "problems_casual",
+      "id": "fe3de4be-b54f-469d-bf83-87abea5fda6a",
+      "issue": "Original recommends 2p and says four pairs, inconsistent with accepted 4m and the three actual pairs. English describes the accepted discard without repeating those claims."
+    }
+  ]
+}

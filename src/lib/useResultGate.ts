@@ -17,10 +17,12 @@ export function useResultGate(isFinished: boolean): boolean {
       return;
     }
     let cancelled = false;
+    const controller = new AbortController();
     const { noAds, loaded } = usePremiumStore.getState();
-    const showAd = loaded && !noAds ? maybeShowInterstitial() : Promise.resolve();
+    const showAd = loaded && !noAds ? maybeShowInterstitial(controller.signal) : Promise.resolve();
 
     const finish = () => {
+      controller.abort();
       if (!cancelled) setReady(true);
     };
     // ネイティブ広告SDKが応答しなくても、結果画面を永久に塞がない。
@@ -29,6 +31,7 @@ export function useResultGate(isFinished: boolean): boolean {
 
     return () => {
       cancelled = true;
+      controller.abort();
       window.clearTimeout(timeoutId);
     };
   }, [isFinished]);

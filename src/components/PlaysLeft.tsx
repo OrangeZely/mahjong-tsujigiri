@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/i18n/client";
 
 import { useEffect } from "react";
 import { usePremiumStore } from "@/store/premiumStore";
@@ -6,6 +7,7 @@ import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
 
 // 今日の残りプレイ回数の表示。プレミアム会員には出さない。
 export default function PlaysLeft() {
+  const { t } = useI18n();
   const premium = usePremiumStore((s) => s.premium);
   const remaining = usePremiumStore((s) => s.remainingPlays);
   const refreshRemaining = usePremiumStore((s) => s.refreshRemaining);
@@ -23,8 +25,8 @@ export default function PlaysLeft() {
       className={`mt-3 text-xs ${isEmpty ? "text-red-400" : "text-gray-400"}`}
     >
       {isEmpty
-        ? "本日のプレイ回数を使い切りました（明日0時に回復）"
-        : `本日の残りプレイ回数 ${remaining} / ${DAILY_FREE_PLAYS}`}
+        ? t("本日のプレイ回数を使い切りました（明日0時に回復）")
+        : t("playsRemaining", {remaining, limit: DAILY_FREE_PLAYS})}
     </p>
   );
 }

@@ -213,6 +213,10 @@
 			<string>3qcr597p9d.skadnetwork</string>
 		</dict>
 	</array>
+	<key>CFBundleLocalizations</key>
+	<array><string>ja</string><string>en</string></array>
+	<key>GADDelayAppMeasurementInit</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ja</string>
 	<key>CFBundleDisplayName</key>

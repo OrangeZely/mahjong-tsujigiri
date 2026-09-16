@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { useI18n } from "@/i18n/client";
+import { tileLabel } from "@/lib/mahjong";
 import Image from "next/image";
 import { Tile as TileType } from "@/types/mahjong";
 
@@ -40,6 +42,7 @@ export default function Tile({
   wrong,
   size = "md",
 }: TileProps) {
+  const {locale} = useI18n();
   const sizeClasses = {
     sm: "w-10 h-14",
     md: "flex-1 min-w-0 aspect-[3/4]",
@@ -68,7 +71,7 @@ export default function Tile({
     >
       <Image
         src={getTileImagePath(tile)}
-        alt={`${tile.suit}${tile.num}${tile.isRed ? "r" : ""}`}
+        alt={tileLabel(tile, locale)}
         fill
         className="object-contain"
         unoptimized

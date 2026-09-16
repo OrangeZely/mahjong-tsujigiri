@@ -1,7 +1,8 @@
 "use client";
+import { useI18n } from "@/i18n/client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/i18n/client";
 import { motion } from "framer-motion";
 import { Capacitor } from "@capacitor/core";
 import { usePremiumStore } from "@/store/premiumStore";
@@ -10,6 +11,7 @@ import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
 // 課金プランの一覧（サブスク2種＋広告除去の買い切り）と購入の復元。
 // ネイティブアプリでのみ表示する（Web版は購入手段が無いため）。
 export default function PurchaseSection() {
+  const { t } = useI18n();
   const {
     noAds,
     premium,
@@ -49,7 +51,7 @@ export default function PurchaseSection() {
     setMessage(null);
     const outcome = await purchase(plan);
     if (outcome === "error") {
-      setMessage("購入できませんでした。時間をおいて再度お試しください。");
+      setMessage(t("購入できませんでした。時間をおいて再度お試しください。"));
     }
   };
 
@@ -57,7 +59,7 @@ export default function PurchaseSection() {
     setMessage(null);
     const restored = await restore();
     setMessage(
-      restored ? "購入を復元しました" : "復元できる購入が見つかりませんでした"
+      restored ? t("購入を復元しました") : t("復元できる購入が見つかりませんでした")
     );
   };
 
@@ -65,29 +67,20 @@ export default function PurchaseSection() {
     <div className="mt-8 text-left">
       {premium ? (
         <p className="text-center text-sm text-emerald-400">
-          ✓ プレミアム会員（無制限プレイ・広告なし）
-        </p>
+          {t("✓ プレミアム会員（無制限プレイ・広告なし）")}</p>
       ) : (
         <>
           <h2 className="text-center text-white font-bold mb-1">
-            プレミアムで制限解除
-          </h2>
+            {t("プレミアムで制限解除")}</h2>
           <p className="text-center text-xs text-gray-400 mb-3">
-            プレイ無制限・広告なし・毎月新しい問題が追加されます
-            <br />
-            （無料プランは1日{DAILY_FREE_PLAYS}回まで）
-          </p>
+            {t("プレイ無制限・広告なし・毎月新しい問題が追加されます")}<br />
+            {t("freeLimit", {limit: DAILY_FREE_PLAYS})}</p>
 
           {/* App Store ガイドライン 3.1.2 で必須の開示事項（Androidでも同内容をプラットフォームに合わせて表示） */}
           <p className="text-[11px] text-gray-500 leading-relaxed mb-3">
-            プレミアムは自動更新される定期購読です。年額プランは1年ごと、月額プランは1ヶ月ごとに、
-            上記の内容をご利用いただけます。期間終了の24時間前までに解約されない限り自動更新され、
-            更新料金は{isAndroid ? "Google Playの支払い方法" : "Apple ID"}に請求されます。
-            解約は{isAndroid
-              ? "Google Playストアアプリの「お支払いと定期購入」"
-              : "iOSの「設定」→「サブスクリプション」"}から
-            いつでも行えます。
-          </p>
+            {t("プレミアムは自動更新される定期購読です。年額プランは1年ごと、月額プランは1ヶ月ごとに、 上記の内容をご利用いただけます。期間終了の24時間前までに解約されない限り自動更新され、 更新料金は")}{isAndroid ? t("Google Playの支払い方法") : "Apple ID"}{t("に請求されます。 解約は")}{isAndroid
+              ? t("Google Playストアアプリの「お支払いと定期購入」")
+              : t("iOSの「設定」→「サブスクリプション」")}{t("から いつでも行えます。")}</p>
 
           <div className="flex flex-col gap-2">
             {prices.annual && (
@@ -98,8 +91,8 @@ export default function PurchaseSection() {
                 className="w-full bg-yellow-500/15 border-2 border-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-500/25 transition-colors disabled:opacity-50"
               >
                 {purchasing === "annual"
-                  ? "処理中…"
-                  : `${prices.annual} / 1年（自動更新）　🏅 いちばんお得`}
+                  ? t("処理中…")
+                  : t("annualPrice", {price: prices.annual})}
               </motion.button>
             )}
 
@@ -111,8 +104,8 @@ export default function PurchaseSection() {
                 className="w-full bg-white/10 border-2 border-white/30 text-white font-bold py-3 rounded-xl hover:bg-white/20 transition-colors disabled:opacity-50"
               >
                 {purchasing === "monthly"
-                  ? "処理中…"
-                  : `${prices.monthly} / 1ヶ月（自動更新）`}
+                  ? t("処理中…")
+                  : t("monthlyPrice", {price: prices.monthly})}
               </motion.button>
             )}
           </div>
@@ -122,20 +115,17 @@ export default function PurchaseSection() {
           {!hasAnyPrice && (
             <div className="text-center mt-1">
               {pricesLoading ? (
-                <p className="text-xs text-gray-400">購入プランを読み込み中…</p>
+                <p className="text-xs text-gray-400">{t("購入プランを読み込み中…")}</p>
               ) : (
                 <>
                   <p className="text-xs text-gray-400 mb-2">
-                    購入プランを読み込めませんでした。
-                    <br />
-                    通信環境をご確認のうえ、もう一度お試しください。
-                  </p>
+                    {t("購入プランを読み込めませんでした。")}<br />
+                    {t("通信環境をご確認のうえ、もう一度お試しください。")}</p>
                   <button
                     onClick={() => reloadPrices()}
                     className="bg-white/10 border border-white/30 text-white text-sm px-6 py-2 rounded-xl hover:bg-white/20 transition-colors"
                   >
-                    再読み込み
-                  </button>
+                    {t("再読み込み")}</button>
                 </>
               )}
             </div>
@@ -152,8 +142,8 @@ export default function PurchaseSection() {
           className="mt-3 w-full bg-white/5 border border-emerald-400/50 text-gray-200 text-sm py-2.5 rounded-xl hover:bg-emerald-400/15 transition-colors disabled:opacity-50"
         >
           {purchasing === "remove_ads"
-            ? "処理中…"
-            : `広告を消すだけなら ${prices.remove_ads}（買い切り）`}
+            ? t("処理中…")
+            : t("removeAdsPrice", {price: prices.remove_ads})}
         </motion.button>
       )}
 
@@ -162,8 +152,7 @@ export default function PurchaseSection() {
           onClick={handleRestore}
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
-          購入を復元
-        </button>
+          {t("購入を復元")}</button>
         {/* App Store ガイドライン 3.1.2(c) が要求する EULA へのリンク（iOSのみ）。
             App Store Connect では Apple の標準EULAを使うと申告しているため、
             アプリ内からもその標準EULAに到達できるようにする。Google Playには同様の要求が無い。 */}
@@ -174,21 +163,18 @@ export default function PurchaseSection() {
             rel="noopener noreferrer"
             className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
           >
-            利用規約（EULA）
-          </a>
+            {t("利用規約（EULA）")}</a>
         )}
         <Link
           href="/terms"
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
-          アプリ利用規約
-        </Link>
+          {t("アプリ利用規約")}</Link>
         <Link
           href="/privacy"
           className="text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
         >
-          プライバシーポリシー
-        </Link>
+          {t("プライバシーポリシー")}</Link>
       </div>
 
       {message && (

@@ -1,10 +1,12 @@
 "use client";
+import { useI18n } from "@/i18n/client";
 
+import ProblemExplanation from "@/components/ProblemExplanation";
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { GameResult } from "@/types/mahjong";
 import { saveScore, fetchMyRank } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/client";
 import { useGameStore } from "@/store/gameStore";
 import { tileLabel } from "@/lib/mahjong";
 import { getRank } from "@/lib/ranks";
@@ -18,6 +20,7 @@ interface Props {
 }
 
 export default function ResultModal({ result, onReset }: Props) {
+  const { t, locale } = useI18n();
   const [playerName, setPlayerName] = useState("");
   const [editingName, setEditingName] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -78,11 +81,10 @@ export default function ResultModal({ result, onReset }: Props) {
         {/* ヘッダー */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
           <div className="text-4xl mb-1">⚔️</div>
-          <h2 className="text-3xl font-black">そこまで！</h2>
+          <h2 className="text-3xl font-black">{t("そこまで！")}</h2>
           {result.oniMode && (
             <div className="mt-1 inline-block bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full">
-              {result.gameMode === "casual" ? "👺" : "👹"} 鬼斬りモード
-            </div>
+              {result.gameMode === "casual" ? "👺" : "👹"} {t("鬼斬りモード")}</div>
           )}
         </div>
 
@@ -93,39 +95,39 @@ export default function ResultModal({ result, onReset }: Props) {
               <div className="text-3xl font-black text-green-600">
                 {result.correctCount}
               </div>
-              <div className="text-xs text-gray-500 mt-1">正解数</div>
+              <div className="text-xs text-gray-500 mt-1">{t("正解数")}</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-3">
               <div className="text-3xl font-black text-blue-600">
                 {result.totalAnswered}
               </div>
-              <div className="text-xs text-gray-500 mt-1">回答数</div>
+              <div className="text-xs text-gray-500 mt-1">{t("回答数")}</div>
             </div>
             <div className="bg-purple-50 rounded-xl p-3">
               <div className="text-3xl font-black text-purple-600">
                 {result.accuracy}%
               </div>
-              <div className="text-xs text-gray-500 mt-1">正答率</div>
+              <div className="text-xs text-gray-500 mt-1">{t("正答率")}</div>
             </div>
           </div>
 
           {/* スコア & 格付け */}
           <div className="text-center bg-yellow-50 rounded-xl p-4">
-            <div className="text-xs text-gray-500 mb-1">スコア</div>
+            <div className="text-xs text-gray-500 mb-1">{t("スコア")}</div>
             <div className="text-5xl font-black text-yellow-600">
               {result.score.toLocaleString()}
             </div>
             <div className="mt-3 pt-3 border-t border-yellow-200">
-              <div className="text-xs text-gray-500 mb-1">格付け</div>
+              <div className="text-xs text-gray-500 mb-1">{t("格付け")}</div>
               <div className="text-2xl font-black text-orange-600">
-                {getRank(result.score)}
+                {getRank(result.score, locale)}
               </div>
             </div>
           </div>
 
           {myRank && (
             <div className="text-center text-indigo-600 font-bold text-lg">
-              🏆 あなたの順位: <span className="text-2xl">{myRank}位</span>
+              {t("🏆 あなたの順位:")}<span className="text-2xl">{myRank}{t("位")}</span>
             </div>
           )}
 
@@ -135,7 +137,7 @@ export default function ResultModal({ result, onReset }: Props) {
               {editingName ? (
                 <input
                   type="text"
-                  placeholder="プレイヤー名を入力"
+                  placeholder={t("プレイヤー名を入力")}
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                   maxLength={20}
@@ -143,13 +145,11 @@ export default function ResultModal({ result, onReset }: Props) {
                 />
               ) : (
                 <div className="text-center text-sm text-gray-500">
-                  <span className="font-bold text-gray-700">{playerName}</span> として登録
-                  <button
+                  <span className="font-bold text-gray-700">{playerName}</span> {t("として登録")}<button
                     onClick={() => setEditingName(true)}
                     className="ml-2 text-indigo-500 underline"
                   >
-                    名前を変更
-                  </button>
+                    {t("名前を変更")}</button>
                 </div>
               )}
               <button
@@ -157,7 +157,7 @@ export default function ResultModal({ result, onReset }: Props) {
                 disabled={!playerName.trim() || saving}
                 className="w-full bg-indigo-600 text-white rounded-xl py-3 font-bold text-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
-                {saving ? "登録中..." : "ランキングに登録 🏆"}
+                {saving ? t("登録中...") : t("ランキングに登録 🏆")}
               </button>
             </div>
           ) : (
@@ -169,8 +169,7 @@ export default function ResultModal({ result, onReset }: Props) {
               }}
               className="w-full bg-yellow-500 text-white rounded-xl py-3 font-bold text-lg hover:bg-yellow-600 transition-colors"
             >
-              ランキングを見る
-            </button>
+              {t("ランキングを見る")}</button>
           )}
 
           {/* 答え合わせ */}
@@ -178,7 +177,7 @@ export default function ResultModal({ result, onReset }: Props) {
             onClick={() => setShowDetails((v) => !v)}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
-            {showDetails ? "答え合わせを閉じる ▲" : "答え合わせを見る ▼"}
+            {showDetails ? t("答え合わせを閉じる ▲") : t("答え合わせを見る ▼")}
           </button>
 
           {showDetails && (
@@ -196,7 +195,7 @@ export default function ResultModal({ result, onReset }: Props) {
                       <span className={`text-xl font-black ${answer.isCorrect ? "text-green-600" : "text-red-500"}`}>
                         {answer.isCorrect ? "○" : "✗"}
                       </span>
-                      <span className="text-sm font-bold text-gray-600">問題 {i + 1}</span>
+                      <span className="text-sm font-bold text-gray-600">{t("問題")}{i + 1}</span>
                     </div>
 
                     {/* 手牌 */}
@@ -220,24 +219,24 @@ export default function ResultModal({ result, onReset }: Props) {
 
                     <div className="text-xs space-y-0.5">
                       <div>
-                        <span className="text-gray-500">正解: </span>
+                        <span className="text-gray-500">{t("正解:")}</span>
                         <span className="font-bold text-green-700">
                           {problem?.correctDiscards.map((cd) => {
                             const suit = cd[0] as import("@/types/mahjong").Suit;
                             const num = parseInt(cd[1]);
-                            return tileLabel({ suit, num, id: cd });
+                            return tileLabel({ suit, num, id: cd }, locale);
                           }).join(" / ")}
                         </span>
                       </div>
                       <div>
-                        <span className="text-gray-500">あなた: </span>
+                        <span className="text-gray-500">{t("あなた:")}</span>
                         <span className={`font-bold ${answer.isCorrect ? "text-green-700" : "text-red-600"}`}>
-                          {isTimeout || !discardedTile ? "時間切れ" : tileLabel(discardedTile)}
+                          {isTimeout || !discardedTile ? t("時間切れ") : tileLabel(discardedTile, locale)}
                         </span>
                       </div>
                       {problem?.description && (
                         <div className="mt-2 text-base leading-relaxed text-gray-700 bg-white/70 rounded-lg px-3 py-2">
-                          💡 {problem.description}
+                          <ProblemExplanation problem={problem} mode={result.gameMode} />
                         </div>
                       )}
                     </div>
@@ -255,8 +254,7 @@ export default function ResultModal({ result, onReset }: Props) {
             }}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
-            もう一度プレイ 🔄
-          </button>
+            {t("もう一度プレイ 🔄")}</button>
 
           {/* トップに戻る */}
           <button
@@ -267,8 +265,7 @@ export default function ResultModal({ result, onReset }: Props) {
             }}
             className="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-bold hover:bg-gray-200 transition-colors"
           >
-            トップに戻る 🏠
-          </button>
+            {t("トップに戻る 🏠")}</button>
         </div>
       </motion.div>
     </motion.div>

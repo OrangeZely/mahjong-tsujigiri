@@ -1,0 +1,3954 @@
+{
+  "problems": {
+    "04aa265b-8371-448c-a376-b4fc79a6b63d": {
+      "source": "5切4789(7枚)\n8切4569(7枚)\n9切36/7(8枚)\n4切36/7(8枚)",
+      "tiles": [
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8",
+        "p8",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p4",
+        "p5",
+        "p8",
+        "p9"
+      ],
+      "en": "Discard 5p: wait on 4p, 7p, 8p, 9p (7 copies before accounting for other visible tiles).\nDiscard 8p: wait on 4p, 5p, 6p, 9p (7 copies before accounting for other visible tiles).\nDiscard 9p: wait on 3p, 6p, 7p (8 copies before accounting for other visible tiles).\nDiscard 4p: wait on 3p, 6p, 7p (8 copies before accounting for other visible tiles)."
+    },
+    "06b88146-a44b-4835-91f3-9b984cd60305": {
+      "source": "6切1237(11枚)\n2切369/5(9枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s2",
+        "s6"
+      ],
+      "en": "Discard 6s: wait on 1s, 2s, 3s, 7s (11 copies before accounting for other visible tiles).\nDiscard 2s: wait on 3s, 5s, 6s, 9s (9 copies before accounting for other visible tiles)."
+    },
+    "09e3d632-4686-4072-b696-2347de007173": {
+      "source": "8切1234（11枚）",
+      "tiles": [
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discard 8p: wait on 1p, 2p, 3p, 4p (11 copies before accounting for other visible tiles)."
+    },
+    "0d754d83-f980-46a9-bd91-474684ccd282": {
+      "source": "3切147/69(16枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s8",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s3"
+      ],
+      "en": "Discard 3s: wait on 1s, 4s, 6s, 7s, 9s (16 copies before accounting for other visible tiles)."
+    },
+    "165ebbc6-71aa-4424-bd95-c3cbea8af611": {
+      "source": "7切23458(12枚)\n2切147/8(12枚)",
+      "tiles": [
+        "p2",
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p9",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p2",
+        "p7"
+      ],
+      "en": "Discard 7p: wait on 2p, 3p, 4p, 5p, 8p (12 copies before accounting for other visible tiles).\nDiscard 2p: wait on 1p, 4p, 7p, 8p (12 copies before accounting for other visible tiles)."
+    },
+    "16e74d21-1e90-4294-b65f-f9b29d8ed47c": {
+      "source": "3切147/258(17枚)",
+      "tiles": [
+        "p2",
+        "p3",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p6",
+        "p7"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Discard 3p: wait on 1p, 2p, 4p, 5p, 7p, 8p (17 copies before accounting for other visible tiles)."
+    },
+    "2102dbea-0b58-42ea-8d26-67f1e60256f8": {
+      "source": "2切147/8(12枚)",
+      "tiles": [
+        "p2",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p2"
+      ],
+      "en": "Discard 2p: wait on 1p, 4p, 7p, 8p (12 copies before accounting for other visible tiles)."
+    },
+    "2237aa48-3d07-4df8-a98d-c82ad7f2f9e0": {
+      "source": "4切258/7/9(13枚)\n7切23459(13枚)",
+      "tiles": [
+        "s2",
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s4",
+        "s7"
+      ],
+      "en": "Discard 4s: wait on 2s, 5s, 7s, 8s, 9s (13 copies before accounting for other visible tiles).\nDiscard 7s: wait on 2s, 3s, 4s, 5s, 9s (13 copies before accounting for other visible tiles)."
+    },
+    "2698d45c-c7a9-4e05-a59e-939b55fa8341": {
+      "source": "1切147/369（17枚）　",
+      "tiles": [
+        "p2",
+        "p2",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8",
+        "p8",
+        "p9"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discard 8p: wait on 1p, 3p, 4p, 6p, 7p, 9p (17 copies before accounting for other visible tiles)."
+    },
+    "289b26b3-0753-475c-9b10-2edeebe97fe9": {
+      "source": "5切14369(15枚)\n8切147/369(17枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8"
+      ],
+      "discards": [
+        "p5",
+        "p8"
+      ],
+      "en": "Discard 5p: wait on 1p, 3p, 4p, 6p, 9p (15 copies before accounting for other visible tiles).\nDiscard 8p: wait on 1p, 3p, 4p, 6p, 7p, 9p (17 copies before accounting for other visible tiles)."
+    },
+    "28e4dd14-cb3c-44f4-9a08-a5cc08db3fd0": {
+      "source": "2切4569(11枚)\n1切25/69(11枚）",
+      "tiles": [
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s1",
+        "s2"
+      ],
+      "en": "Discard 2s: wait on 4s, 5s, 6s, 9s (11 copies before accounting for other visible tiles).\nDiscard 1s: wait on 2s, 5s, 6s, 9s (11 copies before accounting for other visible tiles)."
+    },
+    "29511db0-ead2-4017-98ae-14b62b7d8835": {
+      "source": "7切258/36(14枚)",
+      "tiles": [
+        "s1",
+        "s1",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discard 7s: wait on 2s, 3s, 5s, 6s, 8s (14 copies before accounting for other visible tiles)."
+    },
+    "2c86df79-68e2-4711-85d4-d0c4e70f619c": {
+      "source": "5切147/2(12枚)\n2切47/58(9枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s2",
+        "s5"
+      ],
+      "en": "Discard 5s: wait on 1s, 2s, 4s, 7s (12 copies before accounting for other visible tiles).\nDiscard 2s: wait on 4s, 5s, 7s, 8s (9 copies before accounting for other visible tiles)."
+    },
+    "2ed877e1-8d7d-43e2-8118-19853f3990f9": {
+      "source": "5切147/6(11枚)\n2切36/47(10枚)",
+      "tiles": [
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s8",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s2",
+        "s5"
+      ],
+      "en": "Discard 5s: wait on 1s, 4s, 6s, 7s (11 copies before accounting for other visible tiles).\nDiscard 2s: wait on 3s, 4s, 6s, 7s (10 copies before accounting for other visible tiles)."
+    },
+    "32f8c90d-4067-4995-b1b9-33e02433bf6f": {
+      "source": "3切258(7枚)\n2切369(7枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s2",
+        "s3"
+      ],
+      "en": "Discard 3s: wait on 2s, 5s, 8s (7 copies before accounting for other visible tiles).\nDiscard 2s: wait on 3s, 6s, 9s (7 copies before accounting for other visible tiles)."
+    },
+    "34c2620b-f3ee-41fe-9875-e70c9cf4fb13": {
+      "source": "7切34569（11枚）",
+      "tiles": [
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discard 7s: wait on 3s, 4s, 5s, 6s, 9s (11 copies before accounting for other visible tiles)."
+    },
+    "38848058-a6df-470a-8053-dcc5933c9fe3": {
+      "source": "1切56789（10枚）\n7切13456（11枚）",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p7",
+        "p8",
+        "p8",
+        "p8"
+      ],
+      "discards": [
+        "p1",
+        "p7"
+      ],
+      "en": "Discard 1p: wait on 5p, 6p, 7p, 8p, 9p (10 copies before accounting for other visible tiles).\nDiscard 7p: wait on 1p, 3p, 4p, 5p, 6p (11 copies before accounting for other visible tiles)."
+    },
+    "39f38c9d-0c72-4b53-b8c6-8ce6f22ee880": {
+      "source": "5切146789(16枚)\n2切346789(15枚)",
+      "tiles": [
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8"
+      ],
+      "discards": [
+        "p2",
+        "p5"
+      ],
+      "en": "Discard 5p: wait on 1p, 4p, 6p, 7p, 8p, 9p (16 copies before accounting for other visible tiles).\nDiscard 2p: wait on 3p, 4p, 6p, 7p, 8p, 9p (15 copies before accounting for other visible tiles)."
+    },
+    "446e4495-8642-410f-a6f1-8aec3ae84220": {
+      "source": "3切258/7(11枚)",
+      "tiles": [
+        "p2",
+        "p3",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Discard 3p: wait on 2p, 5p, 7p, 8p (11 copies before accounting for other visible tiles)."
+    },
+    "4a80ca62-969c-4873-a933-3d48d02f9277": {
+      "source": "2切15679（14枚）",
+      "tiles": [
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "Discard 2s: wait on 1s, 5s, 6s, 7s, 9s (14 copies before accounting for other visible tiles)."
+    },
+    "4ace8ddf-dc3f-4995-a728-1b85c948ff39": {
+      "source": "9切34578(9枚)",
+      "tiles": [
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p9"
+      ],
+      "en": "Discard 9p: wait on 3p, 4p, 5p, 7p, 8p (9 copies before accounting for other visible tiles)."
+    },
+    "4e340555-b8ae-46e1-9a5e-33f982896fbe": {
+      "source": "7切24689(13枚)\n6切2348(11枚)\n3切46789(11枚)",
+      "tiles": [
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s3",
+        "s6",
+        "s7"
+      ],
+      "en": "Discard 7s: wait on 2s, 4s, 6s, 8s, 9s (13 copies before accounting for other visible tiles).\nDiscard 6s: wait on 2s, 3s, 4s, 8s (11 copies before accounting for other visible tiles).\nDiscard 3s: wait on 4s, 6s, 7s, 8s, 9s (11 copies before accounting for other visible tiles)."
+    },
+    "598f68e2-9f80-4894-a245-edade6401cdf": {
+      "source": "7切3456(10枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Discard 7p: wait on 3p, 4p, 5p, 6p (10 copies before accounting for other visible tiles)."
+    },
+    "5d9e82a0-a103-4358-bf43-ed74123aaf63": {
+      "source": "4切258/36（13枚）\n1切36/58（11枚）",
+      "tiles": [
+        "s1",
+        "s1",
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Discard 4s: wait on 2s, 3s, 5s, 6s, 8s (13 copies before accounting for other visible tiles)."
+    },
+    "62b98e6e-03f3-4813-8c77-046b3d4963a7": {
+      "source": "4切35678（10枚）\n8切147（7枚）",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8",
+        "p8"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Discard 4p: wait on 3p, 5p, 6p, 7p, 8p (10 copies before accounting for other visible tiles)."
+    },
+    "692022bd-1496-468d-9b9b-0cae6ba036d8": {
+      "source": "5切369/2(12枚)\n6切23458(12枚)",
+      "tiles": [
+        "s1",
+        "s1",
+        "s1",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s5",
+        "s6"
+      ],
+      "en": "Discard 5s: wait on 2s, 3s, 6s, 9s (12 copies before accounting for other visible tiles).\nDiscard 6s: wait on 2s, 3s, 4s, 5s, 8s (12 copies before accounting for other visible tiles)."
+    },
+    "69a60bbd-18dc-4a6d-ab18-24e21ad11a63": {
+      "source": "7切145(9枚)\n3切147/6(11枚)\n6切1234(9枚)",
+      "tiles": [
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p8",
+        "p8",
+        "p8"
+      ],
+      "discards": [
+        "p3",
+        "p6",
+        "p7"
+      ],
+      "en": "Discard 7p: wait on 1p, 4p, 5p (9 copies before accounting for other visible tiles).\nDiscard 3p: wait on 1p, 4p, 6p, 7p (11 copies before accounting for other visible tiles).\nDiscard 6p: wait on 1p, 2p, 3p, 4p (9 copies before accounting for other visible tiles)."
+    },
+    "6dbc9f9f-ede1-44f8-8e75-e21176cad42b": {
+      "source": "1切258/6(11枚)\n4切258/6(11枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p7"
+      ],
+      "discards": [
+        "p1",
+        "p4"
+      ],
+      "en": "Discard 1p: wait on 2p, 5p, 6p, 8p (11 copies before accounting for other visible tiles).\nDiscard 4p: wait on 2p, 5p, 6p, 8p (11 copies before accounting for other visible tiles)."
+    },
+    "71117606-bfce-4be6-9e41-9f3f946a1034": {
+      "source": "2切369/58（15枚）",
+      "tiles": [
+        "s1",
+        "s1",
+        "s2",
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "Discard 2s: wait on 3s, 5s, 6s, 8s, 9s (15 copies before accounting for other visible tiles)."
+    },
+    "78b057f6-2b16-40cb-9ff9-23f46b4e170c": {
+      "source": "9切3658(11枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p9"
+      ],
+      "en": "Discard 9p: wait on 3p, 5p, 6p, 8p (11 copies before accounting for other visible tiles)."
+    },
+    "7f02ab3c-4f66-4024-937d-87e4a623b6cf": {
+      "source": "1切3694（11枚）\n2切369/1（10枚）",
+      "tiles": [
+        "p1",
+        "p1",
+        "p2",
+        "p3",
+        "p3",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "discards": [
+        "p1",
+        "p2"
+      ],
+      "en": "Discard 1p: wait on 3p, 4p, 6p, 9p (11 copies before accounting for other visible tiles).\nDiscard 2p: wait on 1p, 3p, 6p, 9p (10 copies before accounting for other visible tiles)."
+    },
+    "83d9bf51-4dab-4d29-a6ee-53c4bd7203f0": {
+      "source": "6切1234（9枚）\n3切147/6（11枚）",
+      "tiles": [
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "s3",
+        "s6"
+      ],
+      "en": "Discard 6s: wait on 1s, 2s, 3s, 4s (9 copies before accounting for other visible tiles).\nDiscard 3s: wait on 1s, 4s, 6s, 7s (11 copies before accounting for other visible tiles)."
+    },
+    "8518e4b0-51ef-481d-bfd3-823ed6296fa2": {
+      "source": "6切258/47/9(13枚)",
+      "tiles": [
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s8",
+        "s8",
+        "s8",
+        "s9",
+        "s9"
+      ],
+      "discards": [
+        "s6"
+      ],
+      "en": "Discard 6s: wait on 2s, 4s, 5s, 7s, 8s, 9s (13 copies before accounting for other visible tiles)."
+    },
+    "86e26199-9233-4915-a3a9-c4789497558a": {
+      "source": "3切14/5(7枚)\n2切345(5枚)\n4切258(7枚)",
+      "tiles": [
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p8",
+        "p9"
+      ],
+      "discards": [
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "en": "Discard 3p: wait on 1p, 4p, 5p (7 copies before accounting for other visible tiles).\nDiscard 2p: wait on 3p, 4p, 5p (5 copies before accounting for other visible tiles).\nDiscard 4p: wait on 2p, 5p, 8p (7 copies before accounting for other visible tiles)."
+    },
+    "887fd0b9-0d12-4f43-90c5-01aedad5593f": {
+      "source": "5切369/4（11枚）　",
+      "tiles": [
+        "s2",
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discard 5s: wait on 3s, 4s, 6s, 9s (11 copies before accounting for other visible tiles)."
+    },
+    "951fc144-37aa-4473-b780-3e2a2c0fbaac": {
+      "source": "4切25678(12枚)",
+      "tiles": [
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8",
+        "p8",
+        "p9",
+        "p9",
+        "p9"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Discard 4p: wait on 2p, 5p, 6p, 7p, 8p (12 copies before accounting for other visible tiles)."
+    },
+    "95e9af63-4398-495d-be9a-4a0c295b611e": {
+      "source": "8切24567(10枚)",
+      "tiles": [
+        "s1",
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s: wait on 2s, 4s, 5s, 6s, 7s (10 copies before accounting for other visible tiles)."
+    },
+    "a09bf544-0fdf-4d60-9b36-6f87ad5691bb": {
+      "source": "9切47/58(9枚)\n6切47/58(9枚)",
+      "tiles": [
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s6",
+        "s9"
+      ],
+      "en": "Discard 9s: wait on 4s, 5s, 7s, 8s (9 copies before accounting for other visible tiles).\nDiscard 6s: wait on 4s, 5s, 7s, 8s (9 copies before accounting for other visible tiles)."
+    },
+    "a0bedfe6-2524-40b4-8159-dabb5e2c308a": {
+      "source": "1切24569(13枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "discards": [
+        "p1"
+      ],
+      "en": "Discard 1p: wait on 2p, 4p, 5p, 6p, 9p (13 copies before accounting for other visible tiles)."
+    },
+    "a4f01577-d130-48ae-885f-ac1a592a0e38": {
+      "source": "5切369/8(12枚)\n8切3456(8枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8"
+      ],
+      "discards": [
+        "p5",
+        "p8"
+      ],
+      "en": "Discard 5p: wait on 3p, 6p, 8p, 9p (12 copies before accounting for other visible tiles).\nDiscard 8p: wait on 3p, 4p, 5p, 6p (8 copies before accounting for other visible tiles)."
+    },
+    "adf613b8-2683-4d8c-9b17-1d9313ef3b44": {
+      "source": "1切258/69(15枚)\n4切258/69(15枚)",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m3",
+        "m4",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m7",
+        "m7",
+        "m7",
+        "m8",
+        "m8"
+      ],
+      "discards": [
+        "m1",
+        "m4"
+      ],
+      "en": "Discard 1m: wait on 2m, 5m, 6m, 8m, 9m (15 copies before accounting for other visible tiles).\nDiscard 4m: wait on 2m, 5m, 6m, 8m, 9m (15 copies before accounting for other visible tiles)."
+    },
+    "b17256f5-ff87-47bc-a6ea-af4c4b38266c": {
+      "source": "7切258/3(11枚)",
+      "tiles": [
+        "p1",
+        "p1",
+        "p1",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Discard 7p: wait on 2p, 3p, 5p, 8p (11 copies before accounting for other visible tiles)."
+    },
+    "b17a650e-58f3-48c2-82bc-eede6ed88548": {
+      "source": "3切147/258(17枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s9",
+        "s9",
+        "s9"
+      ],
+      "discards": [
+        "s3"
+      ],
+      "en": "Discard 3s: wait on 1s, 2s, 4s, 5s, 7s, 8s (17 copies before accounting for other visible tiles)."
+    },
+    "beb32bcd-1079-4ac3-ac1d-fbe067271456": {
+      "source": "1s切234679（13枚）　",
+      "tiles": [
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s1"
+      ],
+      "en": "Discard 1s: wait on 2s, 3s, 4s, 6s, 7s, 9s (13 copies before accounting for other visible tiles)."
+    },
+    "da561c3d-e78a-41fc-8d54-15c8961f9888": {
+      "source": "9切147/258(17枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Discard 9s: wait on 1s, 2s, 4s, 5s, 7s, 8s (17 copies before accounting for other visible tiles)."
+    },
+    "da567cb0-1e7e-48d6-a827-e241553f5408": {
+      "source": "6切1237(12枚)\n2切3567(10枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s8",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s2",
+        "s6"
+      ],
+      "en": "Discard 6s: wait on 1s, 2s, 3s, 7s (12 copies before accounting for other visible tiles).\nDiscard 2s: wait on 3s, 5s, 6s, 7s (10 copies before accounting for other visible tiles)."
+    },
+    "e38601ab-38dc-4e79-a6b5-927eec04b8e1": {
+      "source": "9切12347(11枚)\n6切12347(11枚)",
+      "tiles": [
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "p9"
+      ],
+      "discards": [
+        "p6",
+        "p9"
+      ],
+      "en": "Discard 9p: wait on 1p, 2p, 3p, 4p, 7p (11 copies before accounting for other visible tiles).\nDiscard 6p: wait on 1p, 2p, 3p, 4p, 7p (11 copies before accounting for other visible tiles)."
+    },
+    "e4e49304-fa3f-47a1-be17-dbf3eceec18c": {
+      "source": "8切147/3(11枚)\n5切147/3(11枚)\n2切369/1(12枚)",
+      "tiles": [
+        "p1",
+        "p2",
+        "p2",
+        "p2",
+        "p2",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "discards": [
+        "p2",
+        "p5",
+        "p8"
+      ],
+      "en": "Discard 8p: wait on 1p, 3p, 4p, 7p (11 copies before accounting for other visible tiles).\nDiscard 5p: wait on 1p, 3p, 4p, 7p (11 copies before accounting for other visible tiles).\nDiscard 2p: wait on 1p, 3p, 6p, 9p (12 copies before accounting for other visible tiles)."
+    },
+    "ece40e43-b4e0-4286-9c70-0c6bad9ced0b": {
+      "source": "7切123469(16枚)",
+      "tiles": [
+        "s2",
+        "s2",
+        "s3",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discard 7s: wait on 1s, 2s, 3s, 4s, 6s, 9s (16 copies before accounting for other visible tiles)."
+    },
+    "f92ca19d-c3fe-4fdd-a732-b901009b2c38": {
+      "source": "5切1468(10枚)\n6切1458(11枚)\n8切14569(14枚)",
+      "tiles": [
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s5",
+        "s6",
+        "s8"
+      ],
+      "en": "Discard 5s: wait on 1s, 4s, 6s, 8s (10 copies before accounting for other visible tiles).\nDiscard 6s: wait on 1s, 4s, 5s, 8s (11 copies before accounting for other visible tiles).\nDiscard 8s: wait on 1s, 4s, 5s, 6s, 9s (14 copies before accounting for other visible tiles)."
+    }
+  },
+  "problems_casual": {
+    "01f0158b-cea5-4e8f-8a77-dd7339514ea2": {
+      "source": "打6pか打8sで完全一向聴。2m-5mを引いたら「どの待ちになるか?」で考えると良いぱん。タンヤオを確定させ、先に5pを引けばイーペーコーのおまけがつく打8sが期待値最大だぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discarding 6p or 8s gives a flexible one-shanten hand. Imagine the final wait after drawing 2m or 5m. Discard 8s to secure All Simples while retaining the chance of Twin Sequences if 5p arrives first; the original analysis rates this choice highest in expected value."
+    },
+    "05689c60-de25-4440-a232-5b8e496412d5": {
+      "source": "受け入れ最大だぱん。テンパイ確率、アガリ確率、期待値、すべての数値で最大となるぱん。「マンズから切り出すと、3m-6mか5m-8mのどちらかの受けが消える」を理由にマンズには触らない典型的な例だぱん。",
+      "tiles": [
+        "m4",
+        "m5",
+        "m6",
+        "m6",
+        "m6",
+        "m7",
+        "p3",
+        "p3",
+        "p4",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Discard 3p for the widest improvement options. Breaking the Characters shape loses either the 3m/6m or 5m/8m acceptance. The original analysis favors this discard for reaching ready, winning, and expected value."
+    },
+    "075dbdbc-9834-4a9b-954e-970f3876537b": {
+      "source": "9mトイツは絶対にリャンメン変化しないので、一番ピンフになりやすい形に受けるぱんよ。打4pで4p6p8pのリャンカンに受けるのが一番ピンフになりやすいぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m9",
+        "m9",
+        "p4",
+        "p4",
+        "p6",
+        "p8",
+        "s3",
+        "s4",
+        "s5",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "The 9m pair cannot become a two-sided shape. Discard 4p to retain 4p6p8p as a double closed-wait shape and maximize the chance of finishing with Pinfu."
+    },
+    "0899f1de-5f8e-41f4-9b84-ba9c96d27ed9": {
+      "source": "打1pで完全一向聴だぱん。一通は無くなるが、多くのツモでピンフになるぱん。打7sにはピンフー通という最高形があるぱんが、ピンフー通が完成する確率は低いぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "p1",
+        "p2",
+        "p2",
+        "p5",
+        "p6",
+        "p7",
+        "p8",
+        "p9",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p1"
+      ],
+      "en": "Discard 1p for a flexible one-shanten hand. This gives up Full Straight but allows Pinfu on many draws. Discarding 7s can produce the ideal Pinfu plus Full Straight, but that narrow best case is less likely."
+    },
+    "08e57967-f884-4dbd-b571-4fd5c9977c7d": {
+      "source": "唯一の雀頭である8pトイツを固定して、4sと4mのくっつきを狙うぱん。ソーズは2s~6s、マンズは1m~6mでテンパイが取れるぱん(※ただし、愚形を多く含むぱん）。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "p2",
+        "p2",
+        "p2",
+        "p8",
+        "p8",
+        "p9",
+        "s4",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p9"
+      ],
+      "en": "Fix 8p8p as the pair and discard 9p. Look for tiles connecting to 4s or 4m: 2s–6s and 1m–6m can bring the hand to ready, although several of the resulting waits are poor."
+    },
+    "08f1ef2a-1f39-45f0-aaec-b8d8f7931d1c": {
+      "source": "受け入れ最大だぱん。この形はできるだけテンパイまで壊さないようにするのがコツだぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "m8",
+        "p2",
+        "p2",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m for the widest acceptance. Try to preserve this flexible shape until you reach ready."
+    },
+    "0ac31b7d-c30b-418b-9f1a-da8cf5a3b291": {
+      "source": "ピンズが『リャンメンカンチャン』の形に見えた人は注意するぱん。8mと8pはどちらも不要牌だぱんが、より不要な8pから切るぱん。9m引きで下記のような、さらに広い1シャンテンに変化できるぱんよ。🐼",
+      "tiles": [
+        "m7",
+        "m7",
+        "m8",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "The Circles shape may look like a combined two-sided and closed-wait shape, but 8p is less useful here than 8m. Keep 8m: drawing 9m can create a wider one-shanten hand."
+    },
+    "0d9f9a16-7ae6-41e0-bf78-a2107419d145": {
+      "source": "萬子と索子で2面子と１雀頭ができるとして、筒子で２面子をつくるぱん。rp引きの聴牌を考えると7pから切るぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "s1",
+        "s1",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Plan for two sets in Circles while Characters and Bamboo provide two sets and the pair. Discard 7p, considering the ready shape you can reach by drawing a red 5p."
+    },
+    "0e5c0816-22a8-4fe4-ac07-30e2553ce9b3": {
+      "source": "赤5sが出る一盃口は狙わないぱんよ。打8sと打8mの受け入れ枚数は同じだが、最終形として残ったときに差が出る（※6mを自分で使っている）ぱん！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m5",
+        "m6",
+        "m7",
+        "m7",
+        "m8",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s. Discarding 8m accepts the same number of tiles, but the eventual waits differ because you already use 6m. Do not force Twin Sequences at the cost of discarding a red 5s."
+    },
+    "106a896a-fced-4a8f-80a0-87a5e8e9a799": {
+      "source": "7m,4p,7sの浮き牌比較だぱん。7sは3面待ちの可能性があるので残すぱん。7mと4pは最終形として残ったときに、端寄りの待ちになる方が浮き牌として優秀ぱん。シャンポン待ちになったときに、1pが4pのスジになる点も良いぱんね！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "p1",
+        "p1",
+        "p4",
+        "p7",
+        "p8",
+        "p9",
+        "s3",
+        "s4",
+        "s5",
+        "s7"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Compare the isolated 7m, 4p, and 7s. Keep 7s for its three-sided-wait potential. Between 7m and 4p, favor the tile that leads to a wait nearer the edge of a suit. The 1p pair can also make the related 4p double-pair wait less obvious to opponents. Discard 4p."
+    },
+    "109fcee7-212d-4fd1-b7ee-3a29b4b4b66e": {
+      "source": "アガリ形は4メンツ1雀頭！強い5ブロックを作るんだぱん！🐼",
+      "tiles": [
+        "m1",
+        "m2",
+        "m2",
+        "m7",
+        "m8",
+        "m9",
+        "p7",
+        "p7",
+        "s4",
+        "s4",
+        "s5",
+        "s7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "A standard winning hand needs four sets and one pair. Keep the strongest five blocks and discard 7s."
+    },
+    "12abf41f-c169-4f3a-a6a3-eaff39713897": {
+      "source": "『二度受け』を嫌わない例だぱん。「ドラ受け」「タンヤオ」「三色」と二度受けになっている部分が強すぎるぱん。2p3p外しと3m4m外しでは4枚もの差が出るものの、4枚差を埋めるだけのメリットがあるぱん。2pと3pは、内側で危険な3pから切るのが良さそうだぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m6",
+        "m7",
+        "p2",
+        "p3",
+        "p6",
+        "p7",
+        "p8",
+        "s4",
+        "s4",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "This is a case where overlapping acceptance is worth keeping: dora, All Simples, and Mixed Sequences potential make the Characters blocks valuable. Dropping 2p3p loses four improving copies compared with dropping 3m4m, but preserves enough value to justify it. Start with the more central 3p."
+    },
+    "17fbf4ba-a48a-4fc7-bba5-c333456901b2": {
+      "source": "ブロックは足りているものの、1p2pのペンチャンが不満だぱん。今欲しいのは「ペンチャンと交換できるリャンメンターツ」なので、リャンメンターツができやすい牌を残すぱん。3sを残すより、7sを残した方がリャンメンを作りやすいぱん🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m4",
+        "m5",
+        "m7",
+        "m8",
+        "m9",
+        "p1",
+        "p2",
+        "s2",
+        "s2",
+        "s2",
+        "s3",
+        "s7"
+      ],
+      "discards": [
+        "s3"
+      ],
+      "en": "You have enough blocks, but the 1p2p edge shape is weak. Keep isolated tiles that can form a two-sided replacement for it. The isolated 7s is better at creating that replacement than the extra 3s, so discard 3s."
+    },
+    "1e3fe387-038d-4605-99ba-04940b25ca38": {
+      "source": "打8mで完全1シャンテンだぱん。ドラ6sをトイツ固定する打5sは、4p-7p引きでドラこそ出ないぱんがシャンポン待ち（4枚待ち）になってしまうぱん。",
+      "tiles": [
+        "m6",
+        "m6",
+        "m8",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6",
+        "s6"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m for a flexible one-shanten shape. Fixing the dora 6s pair by discarding 5s retains the dora on a 4p/7p draw, but can leave only a four-copy double-pair wait."
+    },
+    "209b1798-44db-43ff-95a0-c630db3f5b4c": {
+      "source": "打8mとしても7mの受け入れを失っていないことが大きいぱん。萬子の形はいわゆる二度受けの形だぱん。",
+      "tiles": [
+        "m5",
+        "m6",
+        "m6",
+        "m8",
+        "p2",
+        "p4",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m. The overlapping Characters shape still accepts 7m, so this discard does not lose that useful draw."
+    },
+    "20d36f83-caee-457a-95e7-9875f728760f": {
+      "source": "『リャンメンカンチャン亜種』。ソーズをそのまま残せば、カン3sをツモってもピンフテンパイとなるぱん。打8mと打2sは受け入れ枚数的には同じなので使い分けるぱん！平面上はピンフが確定できる打8mが正解となるぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "s2",
+        "s4",
+        "s4",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Preserve the Bamboo shape: even drawing the closed-wait 3s can lead to Pinfu ready. Discarding 8m and 2s accepts the same number of tiles, but 8m best preserves Pinfu in this hand-only comparison."
+    },
+    "24d62aec-633b-4158-8aa6-cb243039aebb": {
+      "source": "端寄りの8sトイツ雀頭固定の、6pと4mのくっつきと考えるぱん。8s8s9sを残して7sを引けばドラ絡みの6p-9p待ちテンパイが取れるぱんが、ドラ9pでアガれるとは限らないぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "p6",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s2",
+        "s2",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Fix the near-terminal 8s pair and discard 9s, looking for connections to 6p and 4m. Keeping 8s8s9s allows a 7s draw to create a 6p/9p wait involving the dora, but does not guarantee winning on that dora."
+    },
+    "257144d9-9005-43fa-a73b-b0d7649c017d": {
+      "source": "受け入れを最大にする3sを打つぱん。ツモ2sで一盃口のおまけがつくぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "p3",
+        "p4",
+        "p5",
+        "p9",
+        "p9",
+        "s1",
+        "s1",
+        "s2",
+        "s3",
+        "s3",
+        "s3",
+        "s4"
+      ],
+      "discards": [
+        "s3"
+      ],
+      "en": "Discard 3s to maximize acceptance. Drawing 2s first can also add Twin Sequences."
+    },
+    "2735d4a9-b61d-4a6f-b06f-ec2c4b7d9b66": {
+      "source": "ドラポンを逃さず、ドラポンができたときに良い待ちを残したいぱん。打6sが受け入れ最大かつ強い形だぱん。打2sで2s4s6sのリャンカンに構えてしまうと、ドラポンでテンパイが取れないので注意するぱん！🐼",
+      "tiles": [
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m9",
+        "s2",
+        "s2",
+        "s4",
+        "s6",
+        "s9",
+        "s9",
+        "s9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s6"
+      ],
+      "en": "Keep the option of calling Pon on the dora while preserving a good final wait. Discard 6s for a wide, strong shape. Discarding 2s to form 2s4s6s would prevent that dora Pon from immediately making the hand ready."
+    },
+    "27f022cf-137b-4388-a4f2-aa700dd530b8": {
+      "source": "ピンズを2p3pのリャンメン、ソーズを5s7s9sのリャンカンに構えるぱん。ツモ8sで5sが出てしまうが、それでもピンフになるので十分だぱん。その後のツモ7sや9sは雀頭を変更するぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m6",
+        "m7",
+        "m8",
+        "p2",
+        "p3",
+        "p3",
+        "s4",
+        "s4",
+        "s5",
+        "s7",
+        "s9"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Discard 3p, retaining 2p3p as a two-sided block and 5s7s9s as a double closed-wait block. Drawing 8s discards 5s but still gives Pinfu. A later 7s or 9s draw can change the pair."
+    },
+    "28aa24fc-9c8f-43c7-b2c2-8bffe137ce22": {
+      "source": "アガリ形は4メンツ1雀頭の5ブロックだぱんが、今回の手は6ブロックでメンツオーバーだぱん。「リャンメン＞カンチャン＞ペンチャン」だぱんよ！🐼",
+      "tiles": [
+        "m4",
+        "m5",
+        "m5",
+        "m8",
+        "m9",
+        "p3",
+        "p4",
+        "p8",
+        "p8",
+        "p8",
+        "s2",
+        "s4",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "m8",
+        "m9"
+      ],
+      "en": "There are six blocks, one more than a standard hand needs. Remove the weak 8m9m edge block. As a basic shape comparison, two-sided blocks are stronger than closed blocks, which are stronger than edge blocks."
+    },
+    "2b6a22ca-b76c-4137-817f-78edb224d776": {
+      "source": "打4pとすれば必ず両面聴牌になり、3色も狙える形になるぱん。",
+      "tiles": [
+        "m4",
+        "m4",
+        "m5",
+        "m5",
+        "m6",
+        "m7",
+        "m7",
+        "m8",
+        "p4",
+        "p4",
+        "p5",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Discard 4p to preserve routes to two-sided ready and the possibility of Mixed Sequences."
+    },
+    "2bcd54c7-39d4-45dd-9508-730b64e681d9": {
+      "source": "打8mか打5sが完全一向聴で受け入れ最大だぱん。ドラ6sを対子固定する打5sが期待値最大だぱん。その後のツモ4sは、1sと入れ替えてタンヤオを目指すぱん！🐼",
+      "tiles": [
+        "m7",
+        "m7",
+        "m8",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6",
+        "s6"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discarding 8m or 5s gives the widest flexible one-shanten shape. Prefer 5s to fix the dora 6s pair. If 4s arrives later, it can replace 1s to pursue All Simples."
+    },
+    "2d4a183e-d7d9-40bf-ae00-22a19177569c": {
+      "source": "打5pで4p5pのリャンメン固定とする手もあるが、「4トイツでチートイツ2シャンテン」であることや、5m-8m引きで完全1シャンテンに取れることから、2s4sのカンチャン落としがオススメだぱん！🐼",
+      "tiles": [
+        "m6",
+        "m6",
+        "m7",
+        "m7",
+        "p4",
+        "p5",
+        "p5",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s4",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "You could discard 5p to fix 4p5p, but four pairs also leave Seven Pairs two-shanten away. Drop the 2s4s closed block, beginning with 2s, and retain the chance of a flexible one-shanten shape on 5m or 8m."
+    },
+    "2d679587-5cde-47d8-8d1f-fe9b6d0dafbf": {
+      "source": "打8mが完全一向聴で受け入れ最大だぱん。この構えなら、必ずリャンメン待ちの聴牌が取れるぱん！🐼",
+      "tiles": [
+        "m3",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "p5",
+        "p6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m for maximum acceptance in a flexible one-shanten shape. This preserves a two-sided wait when the hand becomes ready."
+    },
+    "31171d94-ba11-4fad-aaa5-40bfacb75883": {
+      "source": "受け入れ枚数、三色の受け入れともに2p切りが優秀ぱん。ドラ1の立直でも十分だぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "p2",
+        "p4",
+        "p6",
+        "p7",
+        "p8",
+        "p9",
+        "s5",
+        "s5",
+        "s5r",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p2"
+      ],
+      "en": "Discard 2p. This choice has strong acceptance and keeps Mixed Sequences potential. Riichi with one dora is already a useful outcome."
+    },
+    "31533e05-6d57-4a13-be89-14a4ab487505": {
+      "source": "6ブロックでメンツオーバーだぱん...トイツ4つはチートイツ2シャンテンなので、トイツを崩さないことが大事ぱん。トイツに絡まない2s4sのカンチャンを落とすが、赤5sに備え2sからぱん。🐼",
+      "tiles": [
+        "m2",
+        "m4",
+        "m4",
+        "m6",
+        "m7",
+        "p4",
+        "p5",
+        "p5",
+        "p8",
+        "p8",
+        "s2",
+        "s4",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "There are six blocks and four pairs. Keep the pairs to retain the Seven Pairs route. Drop the 2s4s closed block, starting with 2s so you can still use a red 5s."
+    },
+    "3abb1982-49d6-4c7c-a779-559098099b4b": {
+      "source": "形、 枚数、打点要素など、いろんな要素が絡んだ手牌だぱんね...ここでは6s7s8sをメンツ固定する打9sが期待値最大となるぱん。三色のできやすさだけでなく、テンパイ形でも有利だぱん！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "p4",
+        "p6",
+        "p7",
+        "p8",
+        "s1",
+        "s1",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Several factors matter here: shape, acceptance, and hand value. Discard 9s to fix 6s7s8s as a set. The original analysis favors this both for Mixed Sequences potential and for the eventual ready shape."
+    },
+    "3c15270d-ef15-4b77-af5e-aecce60bb119": {
+      "source": "2m5m6m7m7m８mは『リャンメンカンチャン』と呼ばれる形だぱん。打3m,7s,8sの3つが同枚数という面白い形になっているぱん。8s縦引きなどのピンフが崩れるテンパイ形が無くなる打8sがお得となるぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m3",
+        "m5",
+        "m6",
+        "m7",
+        "m7",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s. Discarding 3m, 7s, or 8s accepts the same number of tiles, but discarding 8s removes ready paths that would break Pinfu, such as pairing the extra 8s. Preserve the combined two-sided/closed-wait Characters shape."
+    },
+    "3fd68f65-7856-4c30-93ab-2057afde1d45": {
+      "source": "リャンメンテンパイのなりやすさで考えると良いぱん。7mと6s7s8s9sが2種でリャンメンテンパイになるのに対し、4p5p6p8pはツモ7pでしかリャンメンテンパイにならないぱん🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "p4",
+        "p5",
+        "p6",
+        "p8",
+        "s1",
+        "s1",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Think about how easily each isolated tile or extended set produces two-sided ready. The 7m and 6s7s8s9s shapes offer more such improvements than 4p5p6p8p, which needs 7p. Discard 8p."
+    },
+    "42bb1334-460b-410f-8e95-2a2468b3d197": {
+      "source": "8mと1sどちらも不要牌に見えるが、1sを残せばツモ2sで1s2s3s4sとつながり 1s-4s待ちノベタンリーチが打てるぱん。これは雀頭が無いときに有効なテクニックだぱん。形だけを考えれば打3pもアリなのだぱんが、こちらは好形変化のタネなので残しておきたいぱんね。🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m8",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p7",
+        "p8",
+        "p9",
+        "s1",
+        "s3",
+        "s4"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m and keep 1s: drawing 2s connects 1s2s3s4s, allowing a two-sided pair wait on 1s/4s when there is no fixed pair. Retain 3p as a seed for better shape changes."
+    },
+    "42f70700-68be-49e8-8791-7a4e3e198311": {
+      "source": "打4sでのリャンメン固定は柔軟だぱんが、5mが遊び牌となるぱん。5mを残しても手放しで喜べるツモは5mと6mぐらいだぱん。ツモ2mからの変化を考えると、慌てて4s5sの形で固定する意味は薄そうだぱん。",
+      "tiles": [
+        "m3",
+        "m3",
+        "m5",
+        "p1",
+        "p2",
+        "p3",
+        "p6",
+        "p7",
+        "p8",
+        "s4",
+        "s4",
+        "s5",
+        "s7",
+        "s9"
+      ],
+      "discards": [
+        "m5"
+      ],
+      "en": "Discard 5m. Keeping it offers relatively few especially strong draws, mainly another 5m or 6m. There is no need to rush into fixing 4s5s as a two-sided block; consider the changes available after drawing 2m."
+    },
+    "43b24d7d-6023-4434-befd-1c7dd5a72669": {
+      "source": "索子と筒子のくっつきを期待したいぱん。8mを残すと一通が残るぱん。",
+      "tiles": [
+        "m1",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m8",
+        "p5",
+        "p5",
+        "p6",
+        "s6",
+        "z6",
+        "z6"
+      ],
+      "discards": [
+        "m1"
+      ],
+      "en": "Discard 1m and look for connections in Circles and Bamboo. Keeping 8m preserves the possibility of Full Straight."
+    },
+    "4421c275-28de-44bf-9110-74242dc3fb61": {
+      "source": "6ブロックでメンツオーバーなので、一番弱いブロックを落とせば良いぱんが、「弱いターツが選べない」「三色が見える」「3ヘッド」などの理由から、6ブロック維持の打4pがオススメだぱん。",
+      "tiles": [
+        "m2",
+        "m4",
+        "m8",
+        "m8",
+        "p3",
+        "p4",
+        "p4",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s4",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "This six-block hand is an exception to immediately dropping an entire block. No weak block stands out, Mixed Sequences remains possible, and there are three pair candidates. Discard 4p while keeping all six blocks for now."
+    },
+    "44fd3528-2956-4eda-9ba4-7cf9736d022d": {
+      "source": "6ブロックでメンツオーバーだぱん。「リャンメン＞カンチャン＞ペンチャン」のルールに従い、一番弱いペンチャンターツを落とすぱん。🐼",
+      "tiles": [
+        "m2",
+        "m4",
+        "m4",
+        "m7",
+        "m7",
+        "p4",
+        "p5",
+        "p5",
+        "p8",
+        "p9",
+        "s2",
+        "s4",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p8",
+        "p9"
+      ],
+      "en": "There are six blocks. Remove the weakest one, the 8p9p edge block, instead of damaging a two-sided or closed block."
+    },
+    "48cfcd61-7f60-4af3-a750-43d08ddeb3a3": {
+      "source": "3メンツと雀頭が確保された形なので、欲しいのはリャンメンターツだぱん。6s7s8s9sは形の上で\nは4連形だぱんが、8sを引いた6s7s8s8s9sの形が弱すぎるなど、リャンメン作りには不向きだぱん。打9sでの6s7s8sメンツ固定がオススメだぱん！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "p3",
+        "p4",
+        "p5",
+        "p7",
+        "s1",
+        "s1",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Three sets and a pair are already secured; the missing piece is a two-sided incomplete sequence. Although 6s7s8s9s is four consecutive tiles, some improvements such as drawing 8s are awkward. Discard 9s to fix 6s7s8s as a set."
+    },
+    "4ca6b25f-7214-46f4-b4ec-7a74afc44efd": {
+      "source": "打7mか打7sで完全一向聴だぱん。2p-5pを引いたら「どの待ちになるか?」で考えると良いぱんね。ソーズは先に6sを引いたときしか一盃口にならないのがポイント(※ソーズ待ちテンパイは、6s-9s待ちに受けるため）ぱん。🐼",
+      "tiles": [
+        "m4",
+        "m5",
+        "m6",
+        "m6",
+        "m6",
+        "m7",
+        "p3",
+        "p4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discarding 7m or 7s gives flexible one-shanten. Compare the final waits after drawing 2p or 5p. The Bamboo shape gains Twin Sequences only if 6s arrives first, because Bamboo-ready hands otherwise favor the 6s/9s wait. Discard 7s."
+    },
+    "5126d061-d117-4261-89e5-f364ea0f9308": {
+      "source": "打7pが受け入れ最大だぱんが、枚数差の割に愚形テンパイ率が高いぱん。打5mと打5sは裏目対応で差が出るぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m5",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s5",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discarding 7p maximizes immediate acceptance but often produces a poor wait. Compare discarding 5m and 5s by how well the hand can recover after an otherwise missed draw; the preferred answer is 5s."
+    },
+    "5457e298-061a-4ab2-bfcc-47e6d7c1139b": {
+      "source": "5pと8p、どちらも不要だが、3s4s5s5s6sか5m6mの部分で雀頭候補ができたときをイメージして5pから切るぱん🐼",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m5",
+        "m6",
+        "p5",
+        "p7",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "p5"
+      ],
+      "en": "Both 5p and 8p are expendable. Discard 5p first, considering what happens when the Characters shape or 5s6s develops a pair candidate."
+    },
+    "54de1e31-31f2-4a0e-a38e-cb65d5e50c07": {
+      "source": "打8pか打7sで完全一向聴だぱん。9p,9sでタンヤオが崩れるのは同じだぱん。6p,6sでタンヤオが確定するのも同じだぱん。イーペーコーの分だけ打8pの方がお得だぱん。4sが来たときに7sと入れ替えて広くするのを忘れないようにするぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "p8",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discarding 8p or 7s gives flexible one-shanten. Both have similar All Simples prospects, but keeping the Bamboo shape adds Twin Sequences potential. Discard 8p. If 4s arrives, consider replacing 7s to widen the hand."
+    },
+    "561247b3-1040-4ed1-a1e3-46ca88159167": {
+      "source": "良形受け入れを考えると萬子は5種(2m4m5m7m8m)、筒子は４種(4p5p7p8p)、索子は2種(5s7s)だから索子の亜リャンメンを払うぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m8",
+        "m8",
+        "p5r",
+        "p6",
+        "p6",
+        "p7",
+        "s4",
+        "s5",
+        "s6",
+        "s6"
+      ],
+      "discards": [
+        "s6"
+      ],
+      "en": "Compare favorable-shape improvements: the Characters block has five tile types, Circles has four, and Bamboo has only two. Discard 6s from the weaker Bamboo sequence-plus-pair shape."
+    },
+    "5817ca89-4beb-4bb3-a2a6-fe95ef3debb9": {
+      "source": "2ヘッドに受けない例外形だぱん。打2p,4p,6pの受け入れは同じだぱん。2へッドで進めると「役無しドラ無しテンパイ」が濃厚となってしまうぱん。変化も期待できないので、ここは一番ピンフになりやすいように受けるのが良さそうだぱん！",
+      "tiles": [
+        "m2",
+        "m3",
+        "m9",
+        "m9",
+        "p2",
+        "p4",
+        "p4",
+        "p6",
+        "p8",
+        "s4",
+        "s5",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "This is an exception to preserving two pair candidates. Discarding 2p, 4p, or 6p has equal acceptance, but keeping two pairs is likely to produce ready without a yaku or dora. Discard 4p to favor Pinfu."
+    },
+    "5d201371-449f-46e8-a906-ea1487900681": {
+      "source": "端寄りの亜リャンメン（1s1s2s3s） と孤立した4mの比較だぱん。ここでは4mをくっつきのための牌として残した方が有利となるぱん。ただし、亜リャンメンが1s1s2s3sのような端寄りのケースに限るぱん。",
+      "tiles": [
+        "m4",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s1",
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "discards": [
+        "s1"
+      ],
+      "en": "Compare the near-terminal 1s1s2s3s shape with the isolated 4m. Here it is better to keep 4m for connections and discard 1s. This conclusion is specific to a sequence-plus-pair shape near the edge of a suit."
+    },
+    "5e320f7a-2513-495f-b9c0-663cd6abd50e": {
+      "source": "1s2s2s3s4s6sはリャンメンカンチャンが端についた形で、3sと5sの受け入れがあるぱん。ソーズで2ブロック、マンズで2ブロック確保できそうなので、残り1ブロックはピンズで確保したいぱん。3pと7pの孤立牌はどちらもくっつきの牌として優秀なので両方残すぱん！🐼",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m8",
+        "m8",
+        "m9",
+        "p3",
+        "p7",
+        "s1",
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s6"
+      ],
+      "discards": [
+        "m9"
+      ],
+      "en": "The Bamboo shape accepts 3s and 5s and can supply two blocks. Characters can also supply two. Keep both isolated Circles tiles as strong seeds for the remaining block and discard 9m."
+    },
+    "5f1b91e1-25aa-49d2-b0aa-c9abeafb0a3b": {
+      "source": "打8pと打5mの受け入れ枚数は同じだぱん。先に6mを引いたときにイーペーコーがつく分、打8pがお得だぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m5",
+        "m5",
+        "m6",
+        "m7",
+        "m7",
+        "m8",
+        "p7",
+        "p8",
+        "p8",
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discarding 8p or 5m accepts the same number of tiles. Keep the Characters shape: drawing 6m first can add Twin Sequences. Discard 8p."
+    },
+    "6066a439-56c5-40bc-8c58-d410454a0311": {
+      "source": "受け入れ最大は打3pだぱんが、最終形がカンチャンになりやすい目先の受け入れ枚数よりも最終形を重視する打6sがオススメだぱん。なお、6pや7pが来たときに567三色が見えるようになるので、準備しておくぱん。",
+      "tiles": [
+        "m5",
+        "m6",
+        "m7",
+        "m8",
+        "m8",
+        "p3",
+        "p3",
+        "p5",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "s6"
+      ],
+      "en": "Discarding 3p maximizes immediate acceptance but often leaves a closed wait. Prefer 6s for the quality of the final wait. Be ready to reconsider Mixed Sequences in 5–6–7 if 6p or 7p arrives."
+    },
+    "60cec172-2ac1-4f51-a8ba-580459313518": {
+      "source": "受け入れ最大に受ける打8sがオススメだぱん。打8pには、ツモ6sで最高形があるぱんが、打8sに対し18枚損で厳しいぱん...",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s5",
+        "s7",
+        "s8",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s for maximum acceptance. Discarding 8p has an attractive best case after drawing 6s, but gives up 18 improving copies compared with 8s in the original analysis."
+    },
+    "61b86879-d8c6-4621-8c5b-8e59ead7585c": {
+      "source": "1sと中の浮き牌比較ぱんよ。打点十分ながらも手役の確保が難しいぱめ、役牌中の重なりの価値が高いぱん。有っても無くても2s3sが裏目にならない1sは価値が低いぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m3",
+        "m4",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p9",
+        "s1",
+        "s4",
+        "z7"
+      ],
+      "discards": [
+        "s1"
+      ],
+      "en": "Compare isolated 1s and Red Dragon. The hand has enough value but needs a reliable yaku, so pairing Red Dragon is valuable. The 1s adds little because the hand can still use 2s and 3s without it. Discard 1s."
+    },
+    "635bebc7-17dc-453b-9d36-cd7741cfb137": {
+      "source": "6ブロックでメンツオーバーなので、一番弱いブロックを落とすぱん。変化が少ないペンチャンターツ落としが基本だぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m7",
+        "m8",
+        "p1",
+        "p2",
+        "p8",
+        "p8",
+        "s1",
+        "s3",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "p1",
+        "p2"
+      ],
+      "en": "There are six blocks. Remove the weakest block, 1p2p. An edge block has few ways to improve, so it is usually the first block to drop."
+    },
+    "64b07ef3-95ed-42bf-a8ca-2027e13705ec": {
+      "source": "ドラ9sを雀頭にした下記のテンパイ形が最高形だぱん。\n2m3m4m2p2p2p7p8p6s7s8s9s9s\nこの形をイメージして逆算で打1mだぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "m1"
+      ],
+      "en": "Imagine the ideal ready hand with the dora 9s pair: 2m3m4m / 2p2p2p / 7p8p / 6s7s8s / 9s9s. Work backward from that shape and discard 1m."
+    },
+    "6587cdb8-d144-490d-8877-a8beceb14b9b": {
+      "source": "5p6p7pの面子を抜いて考えてみるぱん。2p2p3pと5p5p7pの比較で完全イーシャンテンになる打7pを選ぶぱん。",
+      "tiles": [
+        "p2",
+        "p2",
+        "p3",
+        "p5",
+        "p5",
+        "p5r",
+        "p6",
+        "p7",
+        "p7",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Set aside a completed 5p6p7p and compare the remaining 2p2p3p and 5p5p7p shapes. Discard 7p for flexible one-shanten."
+    },
+    "66c7eb83-f8c7-452c-9f05-48d356f4d54b": {
+      "source": "絶好の3pツモでピンズ2メンツが確定したので、3m,7m,6pのくっつきテンパイ狙いだぱん。123の三色があるので3mは残すぱん。7mと6pの比較はツモ5pで3面待ちになる6pを残すぱん。ツモ1pと来てもカン5p待ちのテンパイが取れるぱん。",
+      "tiles": [
+        "m3",
+        "m7",
+        "p1",
+        "p2",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "p6",
+        "s1",
+        "s2",
+        "s3",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "m7"
+      ],
+      "en": "The Circles shape supplies two sets, so compare connections to 3m, 7m, and 6p. Keep 3m for Mixed Sequences in 1–2–3, and 6p for a three-sided wait after drawing 5p. Discard 7m. Drawing 1p can still allow a closed 5p wait."
+    },
+    "690080d3-1c7c-4cb9-b114-4d8657d195b5": {
+      "source": "7p8p8pをリャンメンと雀頭のどちらにでも使えるように構えるぱん。マンズとソーズは、テンパイ時の形で比較すると良いぱん。「タンヤオ」や「イーペーコー」、「ツモ8mが弱すぎる」などの点から打9mがお得だぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s3",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "m9"
+      ],
+      "en": "Keep 7p8p8p flexible so it can provide either a two-sided block or the pair. Compare Characters and Bamboo by their final waits, All Simples, and Twin Sequences potential. Discard 9m; drawing 8m into the retained Characters shape would otherwise be weak."
+    },
+    "6c7ae3dc-b33e-45a9-882c-57df0096b384": {
+      "source": "打8pか打5sが受け入れ最大だぱん。ドラ6sを固定する打5sがオススメだぱん。現状の形は決して良くないぱんが、ツモ4sからの喰いタンや、ツモ2m-5mからの完全シャンテンなど、優秀な変化が多いぱん！",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m8",
+        "p7",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6",
+        "s6"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discarding 8p or 5s maximizes acceptance. Prefer 5s to fix the dora 6s pair. The current shape has weaknesses, but useful changes include open All Simples after 4s and flexible one-shanten after 2m or 5m."
+    },
+    "6db3cb0b-e30a-4173-956d-4d2f2748c5db": {
+      "source": "ドラポンができれば1-7sのリャンメン待ちが約束された形だぱん。形が決まっているので、ピンズは1ブロックで十分だぱん。🐼",
+      "tiles": [
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p9",
+        "s5",
+        "s6",
+        "s8",
+        "s8",
+        "s9",
+        "s9",
+        "s9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "p9"
+      ],
+      "en": "Discard 9p. Calling Pon on the dora can produce ready on 4s/7s, so the Circles tiles only need to supply one block. Keep the structure that supports that plan."
+    },
+    "6de6d2cf-cd3b-43a2-9279-d79faa4dffa2": {
+      "source": "変化面ではマンズを残した方が有利だぱんが、打8mで678の三色を狙ってみるぱん。決して三色になりやすい形ではないが、ツモ6p,6sだけでなく、ツモ3p,4s,5sでも三色含みの1シャンテンに変化するぱん。",
+      "tiles": [
+        "m5",
+        "m6",
+        "m7",
+        "m8",
+        "m8",
+        "p3",
+        "p3",
+        "p7",
+        "p8",
+        "s3",
+        "s5",
+        "s5",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Keeping the Characters shape offers flexibility, but discarding 8m preserves Mixed Sequences in 6–7–8. Besides 6p and 6s, draws such as 3p, 4s, and 5s can create one-shanten shapes with that possibility."
+    },
+    "6f9ae442-5bd3-42b6-9a00-c41120ac498d": {
+      "source": "メンタンピンの打点上昇が偉いので8p9pを落とすぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "m8",
+        "p4",
+        "p5",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s3",
+        "s4",
+        "s5r",
+        "s6"
+      ],
+      "discards": [
+        "p8",
+        "p9"
+      ],
+      "en": "Drop 8p9p. Preserve the route to a closed hand with Riichi, All Simples, and Pinfu rather than sacrificing that value for the extra block."
+    },
+    "749fdd6a-c73c-4348-b6cc-e4441a730234": {
+      "source": "打2p,8p,4sの受け入れ枚数は同じだぱん。ピンフになりやすいようにピンズは2p4p6p8pのまま残しておくぱん！",
+      "tiles": [
+        "m2",
+        "m3",
+        "m9",
+        "m9",
+        "p2",
+        "p4",
+        "p6",
+        "p8",
+        "s4",
+        "s4",
+        "s5",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Discarding 2p, 8p, or 4s accepts the same number of tiles. Keep 2p4p6p8p intact to make Pinfu more likely, and discard 4s."
+    },
+    "75393c36-cde1-4495-8dec-9af2372237dc": {
+      "source": "rp使いたいのはわかるぱんが、聴牌枚数を一番多くするぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m7",
+        "m7",
+        "m9",
+        "p1",
+        "p1",
+        "p1",
+        "p5r",
+        "p7",
+        "p9",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "m9"
+      ],
+      "en": "A red 5p is tempting to keep, but maximize the number of draws that reach ready. Discard 9m."
+    },
+    "82cd04c5-48ac-4ae7-96e5-af60c44f1670": {
+      "source": "5s切りで3s-6s-9s,4s-7sの5面待ちに受けての即リーチが正解だぱん。8s切りはピンフ確定だぱんが、単純なリャンメン（3s-6s）待ちで10枚損だぱん。",
+      "tiles": [
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8",
+        "p9",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discard 5s and declare Riichi on the five tile types 3s, 4s, 6s, 7s, and 9s. Discarding 8s guarantees Pinfu but leaves only 3s/6s, losing ten available winning copies in the original analysis."
+    },
+    "85531f0c-f4ee-4d34-8340-a32a0d0589ed": {
+      "source": "7m8m8mをリャンメンと雀頭のどちらにでも使えるように構えるぱん。この構えなら多くのソーズツモでリャンメンテンパイが取れるぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "m8",
+        "m8",
+        "p4",
+        "p7",
+        "p8",
+        "p9",
+        "s3",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Discard 4p. Keep 7m8m8m flexible as either a two-sided block or the pair; many Bamboo draws then lead to a two-sided ready hand."
+    },
+    "8626db82-7851-4991-ae89-94607fc133dd": {
+      "source": "3m,7m,3pの3択だぱん。3mは、1s-4sを引いて2sが雀頭候補から外れたときの形を想定すると残したいぱん。7m残しは、5m引きで3m5m7mのリャンカン、678の三色変化などが見込めるぱん。3p残しは、ツモ4pでリャンメンができても5pが二度受けになってしまうぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m3",
+        "m7",
+        "p3",
+        "p6",
+        "p7",
+        "s2",
+        "s2",
+        "s3",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Compare 3m, 7m, and 3p. Keep 3m for cases where drawing 1s or 4s means 2s is no longer the pair. Keep 7m for a 3m5m7m shape after 5m and possible 6–7–8 Mixed Sequences. Discard 3p: even a 4p connection creates overlapping acceptance for 5p."
+    },
+    "86898e3a-c543-4ebe-937b-60c7829e6080": {
+      "source": "5ブロックが確保されているから「無くても良い牌」を探すんだぱん！🐼",
+      "tiles": [
+        "m7",
+        "m7",
+        "p1",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s4",
+        "s4",
+        "s5",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "Five blocks are already available. Find the tile the hand can do without: 2s."
+    },
+    "88d6e6cd-577f-4467-8058-2c722aa510aa": {
+      "source": "打7m,2p,9pの3択だぱん。ピンズはカン3pとカン8pの受けがある『離れリャンカン』と呼ばれる形だぱん。ピンズから仕掛けて中後付けテンパイを取る前提なら打7mが良いぱん。",
+      "tiles": [
+        "m5",
+        "m5",
+        "m7",
+        "m9",
+        "m9",
+        "m9",
+        "p2",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "m7"
+      ],
+      "en": "Choose among 7m, 2p, and 9p. The Circles tiles can accept both 3p and 8p through separated closed-wait shapes. If the plan is to call in Circles and then use Red Dragon as the yaku, discard 7m."
+    },
+    "8d08baaf-ec20-4aed-ac6a-89ce6ca3d4ba": {
+      "source": "2ヘッドを意識して打つぱん。2ヘッドに構えるには打7sか打5pだぱんが、ここでは打7sが正解ぱんね。ポイントは赤牌ぱん。打7sとすれば、5pと5sの両方の赤牌に対応できて、また「端寄りのリャンメンは強い」という視点でも打7sが有利だぱん。🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m7",
+        "m8",
+        "m9",
+        "p4",
+        "p5",
+        "p5",
+        "s6",
+        "s7",
+        "s7",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Keep two pair candidates. Discarding 7s rather than 5p accommodates both red 5p and red 5s and keeps the more favorable near-edge two-sided wait."
+    },
+    "91004a9f-afbd-41c2-91e7-eeda05c85c1d": {
+      "source": "ちょうど5ブロックで切る牌がないパンね。ここではトイツの数（雀頭候補）に注目して、3つある雀頭候補を2つにしておくぱん。4s切りが受け入れ最大だぱん。🐼",
+      "tiles": [
+        "m7",
+        "m7",
+        "p1",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p9",
+        "s4",
+        "s4",
+        "s5",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "With exactly five blocks, compare the number of pair candidates. Reduce three candidates to two by discarding 4s; this maximizes acceptance."
+    },
+    "91635b43-0019-47c9-af00-1acf8bb32fe7": {
+      "source": "4sを切って受け入れを最大に構えるぱん。",
+      "tiles": [
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p5r",
+        "p7",
+        "p9",
+        "s2",
+        "s2",
+        "s2",
+        "s4",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Discard 4s to maximize improving draws."
+    },
+    "93fb4842-1b8c-4062-9a35-31c24c33c158": {
+      "source": "ブロックが足りないので、7m,3p,7pからの選択だぱん。雀頭候補は十分なので、欲しいのはリャンメンターツだぱん。アンコ側（そば）はリャンメンターツが作りづらいので打3pがオススメだぱん。3pを残してのツモ1pは最悪、ツモ4pも決して良い形ではないぱん。🐼",
+      "tiles": [
+        "m3",
+        "m3",
+        "m7",
+        "p2",
+        "p2",
+        "p2",
+        "p3",
+        "p7",
+        "s2",
+        "s2",
+        "s3",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "The hand needs another block, so compare 7m, 3p, and 7p. You already have enough pair candidates and want a two-sided shape. The 3p next to the concealed 2p triplet is poor at making one; even 1p and 4p draws are awkward. Discard 3p."
+    },
+    "96a2971e-20de-4052-9669-e557191075ba": {
+      "source": "素直に受け入れ最大に受ける打8mが期待値最大となるぱん。打8pには、ツモ6mで最高形があるぱんが、打8mに対し18枚損で厳しいぱん...",
+      "tiles": [
+        "m5",
+        "m7",
+        "m8",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m for maximum acceptance and the highest expected value in the original analysis. Keeping it by discarding 8p has an attractive best case after 6m but gives up 18 improving copies."
+    },
+    "988be077-c09d-4050-b107-1e73fc2c0207": {
+      "source": "欲しいのは雀頭だぱん。変則3面待ちがある3mは優先して残すぱん。7mと2pは、自分で2pを2枚使っているため、単純に7mの方が重なる確率が高いぱん。さらにツモ8mで三色含みの形に変化するぱん。🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m3",
+        "m7",
+        "p1",
+        "p2",
+        "p2",
+        "p3",
+        "p7",
+        "p8",
+        "p9",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "p2"
+      ],
+      "en": "The hand needs a pair. Keep 3m for an irregular three-sided wait. Between 7m and 2p, another 7m is more available because two 2p are already in your hand. Keeping 7m also allows a Mixed Sequences change on 8m. Discard 2p."
+    },
+    "9a4aead2-207c-4ef1-9b14-5807d0020763": {
+      "source": "打4sは打1mに対し7枚損だぱんが、チャンタや一盃口といった打点面で有利な形が多いぱん。1mや9pのチーで高めチャンタのテンパイを取ることができるぱん。",
+      "tiles": [
+        "m1",
+        "m1",
+        "m2",
+        "m3",
+        "p7",
+        "p8",
+        "p8",
+        "s4",
+        "s7",
+        "s8",
+        "s9",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Discard 4s. This loses seven improving copies compared with discarding 1m, but retains valuable Common Ends and Twin Sequences possibilities. Calling Chii on 1m or 9p can create ready with a Common Ends possibility."
+    },
+    "9b8b6483-26ef-43ec-923c-2826b7a2c982": {
+      "source": "打1pで『完全1シャンテン』。ポイントは雀頭候補を2つ用意することぱん！",
+      "tiles": [
+        "m4",
+        "m5",
+        "p1",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p9",
+        "s6",
+        "s7",
+        "s7",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "p1"
+      ],
+      "en": "Discard 1p for flexible one-shanten. The key is keeping two pair candidates."
+    },
+    "9cbbf300-bcbc-4dfe-a4ca-ac8ff3a2a127": {
+      "source": "「6sと8sチーからのテンパイ形」を優先して、ソーズをすべて残したくなるぱんが、麻雀の基本は「リーチをかけてツモる」ことだぱん！ここでは「鳴きやすさ」よりも「メンゼンでリーチを打てる広さ」が大事だぱん🐼",
+      "tiles": [
+        "m7",
+        "m8",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "s5",
+        "s7",
+        "s8",
+        "s8",
+        "s9",
+        "z7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s to favor the wider closed Riichi route. Keeping every Bamboo tile may make calls on 6s or 8s attractive, but ease of calling is not the only consideration; preserve strong closed-hand acceptance."
+    },
+    "9cc3bbe5-466d-4ca6-b830-83216a94ef41": {
+      "source": "6ブロックでメンツオーバーなので、一番弱いブロックを落とすぱん。3pはドラだぱん。7pトイツは変化が優秀なブロックなので残すぱん。残ったソーズ2s4sとマンズ2m4mのカンチャン同士の比較だぱんが、ソーズはツモ5s時に3面待ちになる分だけ強いぱん。",
+      "tiles": [
+        "m2",
+        "m4",
+        "m7",
+        "m8",
+        "m9",
+        "p3",
+        "p3",
+        "p7",
+        "p7",
+        "s2",
+        "s4",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m2"
+      ],
+      "en": "There are six blocks. Keep the dora 3p pair and the flexible 7p pair. Of the two closed blocks, 2s4s can combine with 6s7s8s for a three-sided wait after 5s. Remove the weaker 2m4m block, beginning with 2m."
+    },
+    "9fff6476-a5b3-404c-8d2f-c3e87714c935": {
+      "source": "リャンメンテンパイのなりやすさ、リャンメンテンパイになったときの形で考えると良いぱん。6s7s8s9sは5sと7sの2種でリャンメンテンパイ、4p5p6p8pはツモ7pで3面待ちテンパイになるぱん！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m8",
+        "p4",
+        "p5",
+        "p6",
+        "p8",
+        "s1",
+        "s1",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m. The Bamboo extension offers two types of draws to reach two-sided ready, while drawing 7p into 4p5p6p8p creates a three-sided wait. Keep both of those possibilities."
+    },
+    "a70aedd0-449d-4baa-9715-b66b40984857": {
+      "source": "良形立直をしたいので、索子5s8sの縦の重なりも見るぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m5r",
+        "m9",
+        "m9",
+        "m9",
+        "p5",
+        "p5",
+        "p6",
+        "s5",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m5"
+      ],
+      "en": "Discard the ordinary 5m while retaining the red 5m. Aim for Riichi on a good wait and keep the possibility of pairing either end of 5s6s7s8s."
+    },
+    "a7cd5b42-1d3b-4716-9348-0ffff7243290": {
+      "source": "「最終形を意識してターツ選択」をする例だぱん。打7pと打8sの受け入れ枚数は同じだぱんが、2p縦引きなどでテンパイした場合に、3面待ちになる打7pが有利だぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "p2",
+        "p2",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p7",
+        "p8",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Compare final waits, not just immediate acceptance. Discarding 7p and 8s accepts the same number of tiles, but discarding 7p can lead to a three-sided wait when draws such as another 2p bring the hand to ready."
+    },
+    "a862fc0e-f262-40f4-b881-5c46b50e02c0": {
+      "source": "「リャンメン＞カンチャン＞ペンチャン」のルールに従うんだぱん！一番弱い8m9mのペンチャンターツを落とすぱんよ！🐼",
+      "tiles": [
+        "m5",
+        "m5",
+        "m6",
+        "m8",
+        "m9",
+        "p2",
+        "p4",
+        "p8",
+        "p8",
+        "s2",
+        "s4",
+        "s4",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "m9"
+      ],
+      "en": "Follow the basic preference for two-sided blocks over closed blocks over edge blocks. Start dropping the weakest 8m9m edge block with 9m."
+    },
+    "aaa84677-2289-453b-831f-c6e18071cea7": {
+      "source": "8p切りがもっとも手広いが、2p切りの789三色を見たいぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p7",
+        "p7",
+        "p8",
+        "s6",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "p2"
+      ],
+      "en": "Discarding 8p is widest immediately, but discard 2p here to retain Mixed Sequences in 7–8–9."
+    },
+    "ac783f4a-14ff-4d54-a38f-bfe42925d331": {
+      "source": "7m8m8mをリャンメンと雀頭のどちらにでも使えるように構えるぱん。4連形と亜リャンメンは、4連形を残した方がリャンメンテンパイになりやすいぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "m8",
+        "m8",
+        "p5",
+        "p6",
+        "p7",
+        "p8",
+        "s3",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "s3"
+      ],
+      "en": "Keep 7m8m8m flexible as either the pair or a two-sided block. A four-tile consecutive shape is more likely to produce two-sided ready than the Bamboo sequence-plus-pair shape here. Discard 3s."
+    },
+    "b06a571e-fd39-4b6a-ba30-7d285a933643": {
+      "source": "両面聴牌を目指すことを考えると打1pのほうが良さそうだぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m4",
+        "p1",
+        "p3",
+        "p4",
+        "p5r",
+        "p7",
+        "s1",
+        "s1",
+        "s3",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p1"
+      ],
+      "en": "Discard 1p to favor a two-sided ready hand."
+    },
+    "b17582df-2bf1-44fa-8d75-27811b3681eb": {
+      "source": "4sに3sと5sがくっついても3色は確定しないぱん。それなら一通を狙いつつ聴牌枚数を最大に構えるぱん。",
+      "tiles": [
+        "m1",
+        "m1",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7",
+        "m8",
+        "m9",
+        "p1",
+        "p1",
+        "p3",
+        "p4",
+        "s4"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Even if 3s or 5s connects to the isolated 4s, Mixed Sequences is not guaranteed. Discard 4s, retaining Full Straight potential while maximizing draws to ready."
+    },
+    "b1b3af40-aded-474e-ae03-04f878678502": {
+      "source": "筒子5p6p7pを抜いて考えてみるぱん。索子の雀頭を固定した方が手広いぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p7",
+        "p7",
+        "s3",
+        "s3",
+        "s4"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Set aside 5p6p7p and inspect the remaining shape. Fixing the Bamboo pair gives wider acceptance, so discard 4s."
+    },
+    "b363741c-d6dd-4e20-8fcf-4afc59f89b06": {
+      "source": "強い部分は固定し、弱い部分はフォロー牌を残しておくぱん。6p6p8pは弱い部分なので、3枚セットで残しておくぱん。ピンズ引きテンパイなら5m-8mのリャンメン待ちでリーチが打てるぱん。",
+      "tiles": [
+        "m4",
+        "m5",
+        "m6",
+        "m6",
+        "m6",
+        "m7",
+        "p2",
+        "p2",
+        "p6",
+        "p6",
+        "p8",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "m6"
+      ],
+      "en": "Fix the strong part of the hand and keep support around the weaker part. Retain all of 6p6p8p and discard 6m. If a Circles draw brings the hand to ready, the Characters can supply a 5m/8m Riichi wait."
+    },
+    "b4d8e499-e02a-4cb7-bf5f-b98017ef08f5": {
+      "source": "6ブロックでメンツオーバーなので、一番弱いブロックを落とすぱん。テンパイまではヘッド候補が2つあると良いぱん！",
+      "tiles": [
+        "m4",
+        "m5",
+        "m8",
+        "m8",
+        "m9",
+        "p2",
+        "p4",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "p2"
+      ],
+      "en": "There are six blocks. Remove the weakest 2p4p block, starting with 2p. Preserve two possible pairs until the hand is ready."
+    },
+    "b54429ab-45ee-4abe-aaf8-c45f1e9fedd9": {
+      "source": "シャンポン待ちになった時に役牌の7zと端の9pで待ちたいので8pを切りたいぱん。",
+      "tiles": [
+        "p2",
+        "p3",
+        "p4",
+        "p8",
+        "p8",
+        "p9",
+        "p9",
+        "s3",
+        "s4",
+        "s5r",
+        "s6",
+        "s7",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discard 8p so a double-pair wait can use Red Dragon and the terminal 9p, rather than the less attractive 8p."
+    },
+    "b5b65a43-25a2-419e-adae-73445a9f79f7": {
+      "source": "ダブドラ赤5mが孤立時。赤5mを横伸びでも縦重なりでも使えるように構えるぱん。それには7p8p8pとセットで残すと良いぱん。ツモ4mや6mで横伸びすれば8pを雀頭にし、ツモ5mの縦重なりで雀頭になれば6p-9pのリャンメン待ちでテンパイが取れるぱん。",
+      "tiles": [
+        "m5",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "discards": [
+        "s1"
+      ],
+      "en": "Discard 1s. Keep the valuable isolated 5m together with 7p8p8p so you can use it either in a sequence or as the pair. Drawing 4m or 6m can use 8p as the pair; pairing 5m instead leaves a 6p/9p wait."
+    },
+    "b79c01a4-8f61-480d-94ed-16eb20c01660": {
+      "source": "1m3m4m5m5m6mの形は『リャンメンカンチャン』と呼ばれる形で、4m-7mのリャンメンとカン2mの受けがあるぱん🐼",
+      "tiles": [
+        "m1",
+        "m3",
+        "m4",
+        "m5",
+        "m5",
+        "m6",
+        "p1",
+        "p2",
+        "p3",
+        "p5",
+        "p6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s. The Characters shape combines a two-sided 4m/7m acceptance with a closed 2m acceptance, so keep it intact."
+    },
+    "b7cd4e7c-fe86-4189-81c6-72d2e1cbe442": {
+      "source": "筒子で作れる両面ターツは5p6pの4p-7p受けだけ。9pを切ってツモ8pでも聴牌を取れるようにするぱん。",
+      "tiles": [
+        "m7",
+        "m8",
+        "p5",
+        "p6",
+        "p6",
+        "p7",
+        "p8",
+        "p8",
+        "p9",
+        "s1",
+        "s1",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "p9"
+      ],
+      "en": "The Circles block’s two-sided acceptance comes from 5p6p waiting on 4p/7p. Discard 9p to retain the ability to reach ready by drawing 8p too."
+    },
+    "b7fcc119-61a5-497b-bdb5-718dbc8b8b34": {
+      "source": "一番手広いのは打7sだが、1pを切ってタンヤオや一盃口の道を残したいぱん。",
+      "tiles": [
+        "m5",
+        "m6",
+        "m7",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "p1"
+      ],
+      "en": "Discarding 7s gives the widest immediate acceptance, but discard 1p here to retain All Simples and Twin Sequences possibilities."
+    },
+    "ba0ce902-86d1-4717-bfff-9bf91007c556": {
+      "source": "3s4s4s4s5s6sから切り出すと、2s-5sか4s-7sのどちらかの受けが消えるぱん。単独のリャンメンを作る打4pが正解だぱん🐼",
+      "tiles": [
+        "m5",
+        "m6",
+        "m7",
+        "p3",
+        "p4",
+        "p4",
+        "p8",
+        "p8",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "p4"
+      ],
+      "en": "Cutting into 3s4s4s4s5s6s loses either 2s/5s or 4s/7s acceptance. Discard 4p to retain an independent two-sided 3p4p block instead."
+    },
+    "ba4a8ad5-f906-4a13-8a84-47431bab6017": {
+      "source": "打7mが受け入れ最大 （32枚）だぱん。単騎待ちになることもあるぱんが、8割弱の確率でリャンメンもしくは亜リャンメンの聴牌に取れるぱん。🐼",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m5",
+        "m6",
+        "p3",
+        "p4",
+        "p5",
+        "p5",
+        "p6",
+        "s6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discard 7s to maximize acceptance while preserving several routes to a good ready shape. Keep the Characters and Circles two-sided connections intact."
+    },
+    "be5fa686-116b-45bd-ab1c-a0e43c5c410e": {
+      "source": "萬子は二度受けの形だが、筒子のカンチャンの形よりは残すぱん。強い形でリーチを打ちたいぱんね。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m5",
+        "m6",
+        "m6",
+        "p5",
+        "p5r",
+        "p7",
+        "p7",
+        "p8",
+        "p9",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "The Characters shape has overlapping acceptance, but it is still worth keeping over the weaker Circles closed shape. Discard 7p and aim for Riichi with a stronger final wait."
+    },
+    "c1c96214-58ca-4e31-a3d1-65e89d94bd28": {
+      "source": "タンヤオと三色を目指すぱん。うっかり打7pは5sで聴牌を逃すから気を付けるぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m4",
+        "p2",
+        "p3",
+        "p7",
+        "p7",
+        "s2",
+        "s4",
+        "s6",
+        "s7",
+        "s8",
+        "s9",
+        "s9"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Discard 9s to pursue All Simples and Mixed Sequences. Do not casually discard 7p: doing so would miss ready on a 5s draw."
+    },
+    "c3aeb969-3ba4-42ad-8778-76a113e423e0": {
+      "source": "ドラ2で打点十分の勝負手だぱん。7p8p8pと2s3s4s5sをセットで残すのが広さと好形率のバランスが良いぱん。この構えならソーズは1s~7sまでが有効で、1s~6sならリャンメン待ちテンパイが取れるぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p2",
+        "p2",
+        "p7",
+        "p8",
+        "p8",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "m6"
+      ],
+      "en": "With two dora, the hand already has enough value. Discard 6m and retain 7p8p8p alongside 2s3s4s5s for a balance of acceptance and good waits. Bamboo draws from 1s through 7s improve the hand; 1s through 6s can produce two-sided ready."
+    },
+    "c567132d-990f-4450-9e4f-9f128f70fe57": {
+      "source": "打8sが受け入れ最大だぱん。他のメリットを加味しても、「4枚損」「親番」「ツモ赤5mでもテンパイできる」など、5mを先切りする価値は低いぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m5",
+        "m6",
+        "p1",
+        "p2",
+        "p3",
+        "p5",
+        "p6",
+        "s7",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s for maximum acceptance. Discarding 5m early loses four improving copies, and the hand can still reach ready after drawing a red 5m. The original analysis gives little reason to make that sacrifice, especially as dealer."
+    },
+    "cf2fd289-e54c-4e33-84e4-ffbfbcab8a38": {
+      "source": "６ブロックなのでどこかを崩す。1s2sを落としてタンヤオを目指そう",
+      "tiles": [
+        "m3",
+        "m4",
+        "m6",
+        "m7",
+        "p2",
+        "p2",
+        "p6",
+        "p7",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "s1",
+        "s2"
+      ],
+      "en": "There are six blocks. Remove 1s2s and pursue All Simples."
+    },
+    "d0e053b4-b689-43c2-b46c-f15a8d59ba35": {
+      "source": "受け入れ最大で切るので4sか4mになるぱん。この２つは良形変化の枚数を数えるぱん。4m切りは2種類(3s4s)、4s切りは3種類(1m3m4m)の違いがあるぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m4",
+        "m4",
+        "m6",
+        "m7",
+        "m7",
+        "p7",
+        "p8",
+        "p9",
+        "s4",
+        "s6",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "s4"
+      ],
+      "en": "Discarding 4s or 4m gives maximum immediate acceptance. Compare favorable shape changes: 4m leaves two improving types in Bamboo, while 4s leaves three in Characters. Prefer 4s."
+    },
+    "d107d67e-1da3-49a0-8def-4d76f40200d0": {
+      "source": "完全一向聴に受けたいので、打4mか打6sの2択だぱん。それぞれにテンパイを逃す『裏目』ができるぱんが、この裏目の対応で差が出るぱん。打4mとした場合に限り、本来裏目になるツモ6mを9mと入れ替えることでタンヤオ確定に取ることができるぱん。",
+      "tiles": [
+        "m4",
+        "m5",
+        "m5",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p3",
+        "p4",
+        "p6",
+        "p7",
+        "s5",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "m4"
+      ],
+      "en": "Discarding 4m or 6s gives flexible one-shanten. Compare recovery after a missed draw. After discarding 4m, a later 6m can replace 9m to secure All Simples, making 4m the better choice."
+    },
+    "d1678fce-e48e-4221-bd16-f4580372ef11": {
+      "source": "三色が見えるのがポイントだぱん。4sか5sを引いたときに456三色になるので、好形率だけでなく打点アップの面でも6s7s7sの形を残す価値が高いぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "s2",
+        "s2",
+        "s2",
+        "s6",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "p3"
+      ],
+      "en": "Mixed Sequences potential matters here. Drawing 4s or 5s can lead toward 4–5–6 Mixed Sequences, so retain 6s7s7s for both wait quality and value. Discard 3p."
+    },
+    "d1db6765-498f-414a-82a7-e526fbbc5f25": {
+      "source": "打4p,8p,9sの受け入れ枚数は同じだぱん。ソーズは、3s-6s,8s受けのリャンメンカンチャン。ピンズは4p6p8pのリャンカン。最終形がリャンメン待ちになる可能性を高めるために、愚形部分(4p,6p,8p)を崩さない打9sが期待値最大となるぱん。",
+      "tiles": [
+        "p4",
+        "p6",
+        "p8",
+        "p9",
+        "p9",
+        "p9",
+        "s4",
+        "s5",
+        "s5",
+        "s6",
+        "s7",
+        "s9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s9"
+      ],
+      "en": "Discarding 4p, 8p, or 9s has equal acceptance. Keep the weaker 4p6p8p block supported and preserve the Bamboo two-sided portion. Discard 9s to favor a two-sided final wait."
+    },
+    "d6d63949-a782-4db1-b101-4b5bad4a3bc6": {
+      "source": "1mと8pはどちらも不要だぱんが、1mは有っても無くてもツモ2mでテンパイとなるため、一手でリャンメンが作れる8p残しが正解だぱん。🐼",
+      "tiles": [
+        "m1",
+        "m3",
+        "m4",
+        "p2",
+        "p2",
+        "p2",
+        "p8",
+        "s2",
+        "s2",
+        "s4",
+        "s4",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "m1"
+      ],
+      "en": "Both 1m and 8p look expendable, but drawing 2m still brings the hand to ready without 1m. Keep 8p as a tile that can form a two-sided block in one draw, and discard 1m."
+    },
+    "da331d58-a07e-4ba3-823d-a97251a1c1bd": {
+      "source": "3メンツと雀頭が確保された形なので、欲しいのはリャンメンターツだぱん。1s3s4s5sの形はツモ2sで1s2s3s4s5sとつながり、1s2s3s+4s5sの1メンツとリャンメンターツに変化するぱん。",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m9",
+        "p1",
+        "p1",
+        "p3",
+        "p7",
+        "p8",
+        "p9",
+        "s1",
+        "s3",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "m9"
+      ],
+      "en": "Three sets and a pair are already secured, so look for a two-sided incomplete sequence. Keep 1s: drawing 2s turns 1s3s4s5s into a sequence plus the two-sided 4s5s block. Discard 9m."
+    },
+    "daf7f2ed-8b0b-4a4b-93dc-589fedf5e7f1": {
+      "source": "9pを落としてもツモ1mでタンヤオはなくなっちゃうぱん。",
+      "tiles": [
+        "m2",
+        "m3",
+        "m6",
+        "m7",
+        "p3",
+        "p3",
+        "p4",
+        "p7",
+        "p9",
+        "p9",
+        "s5",
+        "s5",
+        "s6",
+        "s7"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discard 5s. Dropping 9p does not secure All Simples anyway, because drawing 1m would also break that yaku."
+    },
+    "dcdb78eb-0b92-40b8-a0e0-df74290c6616": {
+      "source": "タンヤオが見える6ブロックぱん。8m9mを落としてタンヤオに向かうぱん。打5pだと3p5pの縦受けがなくなっちゃうぱん。",
+      "tiles": [
+        "m6",
+        "m6",
+        "m6",
+        "m8",
+        "m9",
+        "p3",
+        "p3",
+        "p5",
+        "p5",
+        "p6",
+        "s3",
+        "s5r",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m8",
+        "m9"
+      ],
+      "en": "There are six blocks and an All Simples possibility. Drop 8m9m. Discarding 5p instead would lose the chance of building around additional 3p or 5p copies."
+    },
+    "df8d8c56-675c-4c68-87ba-15550a6fc593": {
+      "source": "打7pか打7sで完全一向聴だぱん。7sを残せばタンヤオとイーペーコーで2ハンアップの可能性はあるぱんが、9sでタンヤオとイーペーコーの両方が崩れるのが痛いぱん。確実にタンヤオの1ハンをつける打7sが期待値最大となるぱん。",
+      "tiles": [
+        "m3",
+        "m4",
+        "p4",
+        "p5",
+        "p6",
+        "p6",
+        "p6",
+        "p7",
+        "s5",
+        "s6",
+        "s7",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "Discarding 7p or 7s gives flexible one-shanten. Keeping 7s could add both All Simples and Twin Sequences, but a 9s draw loses both. Prefer 7s to secure the more reliable All Simples han."
+    },
+    "e51820f9-75d0-40e7-9256-5106011bb127": {
+      "source": "役牌を活かしたい手だぱん。最終形を中待ちにできるように打8mか打8sとしたいぱん。最終形が変則3面待ちになる打8sが有利だぱん。🐼",
+      "tiles": [
+        "m6",
+        "m6",
+        "m8",
+        "p1",
+        "p2",
+        "p3",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s6",
+        "s8",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Keep the value of the Red Dragon pair and the possibility of waiting on it. Discarding 8s rather than 8m preserves a potential irregular three-sided final wait."
+    },
+    "e9abb622-ee74-49d5-a6b2-c7f1d4651490": {
+      "source": "6ブロックでメンツオーバーだぱん。6s6s7s7sから6sを1枚切って、3枚構成にしておきたいぱんね〜🐼",
+      "tiles": [
+        "m4",
+        "m5",
+        "m8",
+        "m8",
+        "p4",
+        "p5",
+        "p5",
+        "p7",
+        "p8",
+        "p9",
+        "s6",
+        "s6",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "s6"
+      ],
+      "en": "There are six blocks. Discard one 6s from 6s6s7s7s, leaving a flexible three-tile shape."
+    },
+    "ecccce45-bbfa-4b4e-b841-02fbba68daab": {
+      "source": "ドラポンを逃さず、ドラポンができたときに良い待ちを残したいぱん。6m8mと7s9sのカンチャンの比較だぱんが、最終形や変化など7s9sを残した方が有利になるぱんよ！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m6",
+        "m8",
+        "m9",
+        "m9",
+        "m9",
+        "s4",
+        "s5",
+        "s6",
+        "s7",
+        "s9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Keep the option of calling Pon on the dora and ending with a good wait. Compare the 6m8m and 7s9s closed blocks; retaining 7s9s gives better final-shape and improvement possibilities here. Discard 8m."
+    },
+    "eeb40e90-94ca-4e49-a2d7-7c6d3af81dad": {
+      "source": "アガリ確率と期待値において最大だぱん。これは7s8s8sという、リャンメンでも雀頭でも使える便利な形があるため。1p2p3p4pの4連形とセットで残すことで、多くのツモでリャンメン待ちテンパイが取れるぱん。",
+      "tiles": [
+        "m4",
+        "m7",
+        "m8",
+        "m9",
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "s2",
+        "s2",
+        "s2",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "m4"
+      ],
+      "en": "Discard 4m. Keep the flexible 7s8s8s block together with four consecutive Circles tiles. This combination allows many draws to produce two-sided ready and is favored for win probability and expected value in the original analysis."
+    },
+    "efed644a-6c82-439d-bb2d-db0c17a6472a": {
+      "source": "打7pか打3sで完全一向聴だぱん。ソーズはリャンメン受けだけに限定すると1s-4sと4s-7sの2つの受けがある『二度受け』だぱんが、「一通」と「3面待ち」の可能性がある形を優先するのがオススメだぱん。",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "p7",
+        "p8",
+        "p8",
+        "s2",
+        "s2",
+        "s3",
+        "s5",
+        "s6",
+        "s7",
+        "s8",
+        "s9"
+      ],
+      "discards": [
+        "p7"
+      ],
+      "en": "Discarding 7p or 3s gives flexible one-shanten. The Bamboo shapes overlap on 4s, but they offer Full Straight and three-sided-wait possibilities. Keep those possibilities and discard 7p."
+    },
+    "f37ef0af-0a82-4544-a267-1c04acc999d3": {
+      "source": "打8pが受け入れ最大だぱん。4m-7mを先に引いた場合は、4s-7sリャンメン待ちと2s-5s,6pの変則3面待ちが選択できるぱん",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "m5",
+        "m6",
+        "p6",
+        "p6",
+        "p8",
+        "s3",
+        "s4",
+        "s5",
+        "s5",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "p8"
+      ],
+      "en": "Discard 8p for maximum acceptance. If 4m or 7m arrives first, you can choose between the two-sided 4s/7s wait and an irregular wait on 2s, 5s, or 6p."
+    },
+    "f50f53dc-4965-458e-b59b-7762fbdb7d5b": {
+      "source": "役牌を活かしたい手だぱん。何を引いて手が進んでも最終形を中待ちにできるように8mか8pを切っておきたいぱん。その上で、ピンズはツモ2p-5p,4pの3種でリャンメンが作れる強い形なので、弱いマンズにフォロー牌を残す打8pがオススメだぱん！🐼",
+      "tiles": [
+        "m1",
+        "m2",
+        "m3",
+        "p6",
+        "p6",
+        "p8",
+        "s3",
+        "s4",
+        "s5",
+        "s6",
+        "s6",
+        "s8",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s8"
+      ],
+      "en": "Discard 8s. Retain the Red Dragon pair as a possible yaku and keep 6p6p8p supported while the stronger Bamboo shape remains flexible. Compare the final waits rather than breaking the value pair."
+    },
+    "f6a0462e-a9ed-49c4-b0ef-7014360f71c9": {
+      "source": "打8mが受け入れ最大だぱん。3p4p4p5p6p8pは『リャンメンカンチャン』と呼ばれる形で、リャンメンとカンチャンの受けがあるぱん。🐼",
+      "tiles": [
+        "m7",
+        "m7",
+        "m8",
+        "p3",
+        "p4",
+        "p4",
+        "p5",
+        "p6",
+        "p8",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s6"
+      ],
+      "discards": [
+        "m8"
+      ],
+      "en": "Discard 8m for maximum acceptance. The 3p4p4p5p6p8p shape combines two-sided and closed-wait acceptance, so preserve it."
+    },
+    "f6c1945e-1a95-4d05-adde-f09a0fb94aa6": {
+      "source": "リャンメンテンパイになったときの形で考えると良いぱんよ！3p4p5p7pはツモ6pで3面待ちテンパイ、5s6s7s8sはツモ4sで3面待ちテンパイになるぱん！🐼",
+      "tiles": [
+        "m2",
+        "m2",
+        "m2",
+        "m7",
+        "p3",
+        "p4",
+        "p5",
+        "p7",
+        "s1",
+        "s1",
+        "s5",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "discards": [
+        "m7"
+      ],
+      "en": "Think about the eventual two-sided waits. Drawing 6p into 3p4p5p7p can create a three-sided wait, as can drawing 4s into 5s6s7s8s. Keep both shapes and discard 7m."
+    },
+    "f6e32d1a-ab11-4f48-90bc-840372c2a083": {
+      "source": "一番受け入れを広くするぱん。打5sはピンフになりづらく損になるぱん。",
+      "tiles": [
+        "m6",
+        "m7",
+        "p3",
+        "p4",
+        "p5",
+        "p9",
+        "p9",
+        "s2",
+        "s2",
+        "s3",
+        "s4",
+        "s4",
+        "s4",
+        "s5"
+      ],
+      "discards": [
+        "s2"
+      ],
+      "en": "Discard 2s for the widest acceptance. Discarding 5s makes Pinfu harder to achieve."
+    },
+    "fb3e7477-5950-4648-8f77-bdc44d1fcd20": {
+      "source": "2p3p3p4pのような中ぶくれは、リャンメンは作りやすいものの雀頭を作るのが難しいだぱん。これは中ぶくれで雀頭が作れるケースが、真ん中の2枚（3p) しかないためだぱん。中ぶくれで雀頭作りが期待できないなら、8sを雀頭固定して4mのくっつき目を残したいぱん。",
+      "tiles": [
+        "m4",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p3",
+        "p3",
+        "p4",
+        "s2",
+        "s2",
+        "s2",
+        "s7",
+        "s8",
+        "s8"
+      ],
+      "discards": [
+        "s7"
+      ],
+      "en": "The middle-heavy 2p3p3p4p shape makes two-sided blocks easily but forms a pair only by drawing another 3p. Fix 8s as the pair and keep isolated 4m for connections. Discard 7s."
+    },
+    "fb786095-1915-4ab0-b03b-97da6876283f": {
+      "source": "ドラポンを逃さず、ドラポンができたときに良い待ちを残したいぱんね🐼",
+      "tiles": [
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p9",
+        "s5",
+        "s7",
+        "s8",
+        "s8",
+        "s9",
+        "s9",
+        "s9",
+        "z7",
+        "z7"
+      ],
+      "discards": [
+        "s5"
+      ],
+      "en": "Discard 5s. Preserve the chance to call Pon on the dora and retain a good final wait after that call."
+    },
+    "fe3de4be-b54f-469d-bf83-87abea5fda6a": {
+      "source": "6ブロックでメンツオーバーだぱん...トイツ4つはチートイツ2シャンテンなので、トイツを崩さないことが大事ぱん。トイツに絡まない2pのカンチャンを落とすが、赤5pに備え2pからぱん。",
+      "tiles": [
+        "m4",
+        "m4",
+        "m5",
+        "m8",
+        "m8",
+        "m9",
+        "p2",
+        "p4",
+        "p7",
+        "p8",
+        "s2",
+        "s3",
+        "s7",
+        "s7"
+      ],
+      "discards": [
+        "m4"
+      ],
+      "en": "Discard one 4m, retaining the 4m5m two-sided block and the other pair candidates. This hand has more blocks than a standard hand needs, so compare which shape can lose a tile while preserving useful connections."
+    },
+    "ff71a9b5-8ba1-4cf9-9c5b-e9deae4a49f5": {
+      "source": "3メンツと番頭がほぼ確保された形ぱんなので、欲しいのはリャンメンターツだぱん。1p-4p待ちと3p-6p待ち、どちらの形も逃さないように2pと5pの両方を残しておきたいぱん。🐼",
+      "tiles": [
+        "m1",
+        "m1",
+        "m2",
+        "m3",
+        "m6",
+        "m7",
+        "m8",
+        "m9",
+        "p2",
+        "p5",
+        "s2",
+        "s2",
+        "s2",
+        "z7"
+      ],
+      "discards": [
+        "z7"
+      ],
+      "en": "Three sets and the pair are nearly secured, so the hand needs a two-sided incomplete sequence. Keep both 2p and 5p to retain routes to 1p/4p and 3p/6p waits. Discard Red Dragon."
+    }
+  }
+}

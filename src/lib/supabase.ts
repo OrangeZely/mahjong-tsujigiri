@@ -80,6 +80,7 @@ async function fetchProblemsFromTable(tableName: string): Promise<Problem[]> {
       correct_discards: row.correct_discards,
       difficulty: row.difficulty,
       description: row.description,
+      description_en: row.description_en,
       dora: row.dora,
     })
   );

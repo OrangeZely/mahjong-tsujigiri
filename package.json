@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node scripts/patch-admob-ump.cjs",
+    "test:localization": "node scripts/test-localization.cjs",
+    "test:consent": "node scripts/test-ad-consent.cjs"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.1.0",

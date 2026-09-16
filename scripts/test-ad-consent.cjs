@@ -1,0 +1,91 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- Node CommonJS test script. */
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const ts = require(process.cwd() + '/node_modules/typescript');
+const code = ts.transpileModule(fs.readFileSync('src/lib/ads.ts','utf8'), {compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+const allowed = {status:'OBTAINED', canRequestAds:true, privacyOptionsRequirementStatus:'REQUIRED', isConsentFormAvailable:true};
+function fixture(overrides={}, native=true, env={}, timerDelay) {
+ const listeners = new Map();
+ const calls=[];
+ const mock = {};
+ for (const name of ['initialize','requestConsentInfo','showConsentForm','showPrivacyOptionsForm','showBanner','removeBanner','prepareInterstitial','showInterstitial','prepareRewardVideoAd','showRewardVideoAd']) {
+   mock[name]=async (...args)=>{calls.push([name,...args]); return overrides[name] ? overrides[name](...args) : allowed;};
+ }
+ mock.addListener=async (event, callback)=>{listeners.set(event, callback); return {remove:async()=>{listeners.delete(event);}};};
+ const exports={};
+ vm.runInNewContext(code,{exports,process:{env},setTimeout:timerDelay === undefined ? setTimeout : (fn)=>setTimeout(fn,timerDelay),clearTimeout,console:{warn:()=>{}},require:name=>name==='@capacitor/core'?{Capacitor:{isNativePlatform:()=>native,getPlatform:()=> 'ios'}}:{AdMob:mock,AdmobConsentStatus:{REQUIRED:'REQUIRED'},BannerAdPluginEvents:{SizeChanged:'size'},BannerAdSize:{ADAPTIVE_BANNER:'adaptive'},BannerAdPosition:{BOTTOM_CENTER:'bottom'},RewardAdPluginEvents:{Dismissed:'dismissed',FailedToShow:'failed',Rewarded:'rewarded'}}});
+ return {api:exports,calls,listeners,emit:(event)=>listeners.get(event)?.(),names:()=>calls.map(c=>c[0])};
+}
+(async()=>{
+ let f=fixture({},false);
+ await Promise.all([f.api.initAds(),f.api.showBanner(),f.api.maybeShowInterstitial()]);
+ assert.equal(f.calls.length,0,'Web never invokes native ad SDK');
+ let resolveConsent;
+ f=fixture({requestConsentInfo:()=>({...allowed,status:'REQUIRED',canRequestAds:false}),showConsentForm:()=>new Promise(r=>{resolveConsent=r;})});
+ const launch=f.api.initAds();
+ assert.equal(launch,f.api.initAds(),'Concurrent init shares one consent update');
+ await new Promise(r=>setImmediate(r));
+ assert.deepEqual(f.names(),['requestConsentInfo','showConsentForm']);
+ resolveConsent(allowed);
+ await launch;
+ assert.deepEqual(f.names(),['requestConsentInfo','showConsentForm','initialize']);
+ await f.api.showBanner();
+ assert.equal(f.calls.find(c=>c[0]==='showBanner')[1].npa,true);
+ const controller=new AbortController();controller.abort();
+ await f.api.maybeShowInterstitial(controller.signal);
+ assert.ok(!f.names().includes('prepareInterstitial'));
+ f=fixture({requestConsentInfo:()=>({...allowed,canRequestAds:false,status:'REQUIRED'}),showConsentForm:()=>({...allowed,canRequestAds:false})});
+ await f.api.showBanner();await f.api.maybeShowInterstitial();
+ assert.ok(!f.names().includes('initialize'),'Denied permission prevents SDK initialization');
+ f=fixture({requestConsentInfo:()=>{throw Error('offline');}});
+ await f.api.showBanner();
+ assert.deepEqual(f.names(),['requestConsentInfo'],'Consent failure fails closed');
+ let finishBanner;
+ f=fixture({showBanner:()=>new Promise(r=>{finishBanner=r;})});
+ const pendingBanner=f.api.showBanner();
+ await new Promise(r=>setImmediate(r));
+ await f.api.hideBanner();finishBanner();await pendingBanner;
+ assert.equal(f.names().at(-1),'removeBanner','Leaving screen removes a late banner');
+ let infoReads=0;
+ f=fixture({requestConsentInfo:()=>++infoReads===1?allowed:{...allowed,canRequestAds:false}});
+ await f.api.showBanner();await f.api.showAdPrivacyOptions();await f.api.maybeShowInterstitial();
+ assert.ok(f.names().indexOf('removeBanner')<f.names().indexOf('showPrivacyOptionsForm'));
+ assert.equal(f.names().filter(n=>n==='showBanner').length,1,'Revoked permission does not restore banner');
+ assert.ok(!f.names().includes('prepareInterstitial'));
+ // Production banner/interstitial must not become test ads when rewarded is unset.
+ f=fixture({},true,{NEXT_PUBLIC_ADMOB_IOS_BANNER:'production-banner',NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL:'production-interstitial'});
+ await f.api.showBanner();await f.api.maybeShowInterstitial();
+ assert.equal(f.calls.find(c=>c[0]==='showBanner')[1].isTesting,false);
+ assert.equal(f.calls.find(c=>c[0]==='prepareInterstitial')[1].isTesting,false);
+ let rewardReturned=false;
+ const reward=f.api.showRewardedAd().then(value=>{rewardReturned=true;return value;});
+ await new Promise(r=>setImmediate(r));
+ assert.equal(await f.api.showRewardedAd(),false,'Duplicate requests cannot award a second play');
+ assert.equal(f.calls.find(c=>c[0]==='prepareRewardVideoAd')[1].isTesting,true);
+ f.emit('rewarded');await new Promise(r=>setImmediate(r));
+ assert.equal(rewardReturned,false,'Wait for ad dismissal before starting game');
+ f.emit('dismissed');assert.equal(await reward,true);
+ assert.deepEqual([...f.listeners.keys()],['size'],'Reward listeners are removed; banner size listener remains');
+ f=fixture({showRewardVideoAd:()=>new Promise(()=>{})});
+ const cancelled=f.api.showRewardedAd();await new Promise(r=>setImmediate(r));
+ f.emit('dismissed');assert.equal(await cancelled,false);
+ assert.deepEqual([...f.listeners.keys()],['size'],'Reward listeners are removed; banner size listener remains');
+ let finishPrepare;
+ f=fixture({prepareInterstitial:()=>new Promise(r=>{finishPrepare=r;})});
+ await f.api.initAds();
+ const leave=new AbortController();const interstitial=f.api.maybeShowInterstitial(leave.signal);
+ await new Promise(r=>setImmediate(r));leave.abort();finishPrepare();await interstitial;
+ assert.ok(!f.names().includes('showInterstitial'),'Navigation cancels a prepared interstitial');
+ f=fixture({showBanner:()=>new Promise(r=>{finishBanner=r;})},true,{},5);
+ await f.api.showBanner(); // Caller has timed out, native request is still pending.
+ await f.api.hideBanner();finishBanner();await new Promise(r=>setImmediate(r));
+ assert.equal(f.names().at(-1),'removeBanner','A banner arriving after timeout is still removed');
+ let resolveRewardPrepare;
+ infoReads=0;
+ f=fixture({prepareRewardVideoAd:()=>new Promise(r=>{resolveRewardPrepare=r;}),requestConsentInfo:()=>++infoReads===1?allowed:{...allowed,canRequestAds:false}});
+ const revoked=f.api.showRewardedAd();await new Promise(r=>setImmediate(r));
+ await f.api.showAdPrivacyOptions();resolveRewardPrepare();assert.equal(await revoked,false);
+ assert.ok(!f.names().includes('showRewardVideoAd'),'Consent is rechecked after reward preparation');
+ console.log('Consent mock checks passed: web, concurrent launch, required form, denial, offline, navigation, privacy change, cancelled/late ads, per-format IDs, reward dismissal and duplicate requests. Native device verification is still required.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

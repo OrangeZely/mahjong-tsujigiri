@@ -1,3 +1,5 @@
+import { browserLocale } from "@/i18n/locale";
+import { translate } from "@/i18n/translate";
 import { create } from "zustand";
 import { Problem, GameAnswer, GameResult, Tile, GameMode } from "@/types/mahjong";
 import { fetchProblems, fetchCasualProblems } from "@/lib/supabase";
@@ -66,13 +68,13 @@ export const useGameStore = create<GameState>((set, get) => ({
         : await fetchProblems();
     } catch (error) {
       console.error("[Game] 問題の取得に失敗", error);
-      alert("問題を読み込めませんでした。通信状況を確認して、もう一度お試しください。");
+      alert(translate(browserLocale(), "loadProblemsError"));
       set({ phase: "idle" });
       return false;
     }
 
     if (dbProblems.length === 0) {
-      alert("問題が登録されていません。Supabaseに問題を追加してください。");
+      alert(translate(browserLocale(), "loadProblemsError"));
       set({ phase: "idle" });
       return false;
     }

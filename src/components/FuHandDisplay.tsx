@@ -4,7 +4,8 @@ import React from "react";
 import TileView from "@/components/Tile";
 import { Tile as TileType } from "@/types/mahjong";
 import { FuMentsu, FuProblem, FuResult } from "@/types/fu";
-import { MENTSU_KIND_LABELS, WAIT_TYPE_LABELS } from "@/lib/fu";
+import { useI18n } from "@/i18n/client";
+import { sets, waits, windLabel, pairLabel, fuItemLabel } from "@/i18n/mahjong";
 
 export function MentsuGroup({
   mentsu,
@@ -13,6 +14,7 @@ export function MentsuGroup({
   mentsu: FuMentsu;
   isWaitGroup: boolean;
 }) {
+  const { locale } = useI18n();
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="flex gap-0.5">
@@ -32,7 +34,7 @@ export function MentsuGroup({
             : "bg-white/10 text-gray-300"
         }`}
       >
-        {MENTSU_KIND_LABELS[mentsu.kind]}
+        {sets[mentsu.kind][locale]}
       </span>
     </div>
   );
@@ -49,6 +51,7 @@ export function PairGroup({
   pairReason?: string;
   isWaitGroup: boolean;
 }) {
+  const { locale, t } = useI18n();
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="flex gap-0.5">
@@ -68,7 +71,7 @@ export function PairGroup({
             : "bg-white/10 text-gray-300"
         }`}
       >
-        雀頭{pairReason ? `(${pairReason})` : ""}
+        {t("雀頭")}{pairReason ? ` (${pairLabel(pair, pairFu, pairReason, locale)})` : ""}
       </span>
     </div>
   );
@@ -96,20 +99,21 @@ export function FuContextTags({ problem }: { problem: FuProblem }) {
   const showWindContext =
     problem.roundWind !== undefined || problem.seatWind !== undefined;
 
+  const { locale, t } = useI18n();
   return (
     <div className="flex flex-wrap gap-2 text-xs">
       <span className="bg-white/10 text-white px-2 py-1 rounded-full font-bold">
-        {problem.winType === "tsumo" ? "ツモ和了" : "ロン和了"}
+        {problem.winType === "tsumo" ? t("ツモ和了") : t("ロン和了")}
       </span>
       <span className="bg-white/10 text-white px-2 py-1 rounded-full font-bold">
-        {problem.isMenzen ? "面前" : "鳴きあり"}
+        {problem.isMenzen ? t("面前") : t("鳴きあり")}
       </span>
       <span className="bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full font-bold">
-        待ち: {WAIT_TYPE_LABELS[problem.waitType]}
+        {t("待ち:")}{waits[problem.waitType][locale]}
       </span>
       {showWindContext && (
         <span className="bg-white/10 text-white px-2 py-1 rounded-full font-bold">
-          場風:{problem.roundWind} 自風:{problem.seatWind}
+          {t("場風:")}{windLabel(problem.roundWind, locale)} / {t("自風:")}{windLabel(problem.seatWind, locale)}
         </span>
       )}
     </div>
@@ -118,21 +122,22 @@ export function FuContextTags({ problem }: { problem: FuProblem }) {
 
 // 符の内訳テーブル
 export function FuBreakdown({ result }: { result: FuResult }) {
+  const { locale, t } = useI18n();
   return (
     <div className="space-y-1">
       {result.items.map((item, i) => (
         <div key={i} className="flex justify-between text-sm text-gray-300">
-          <span>{item.label}</span>
-          <span className="text-yellow-300 font-bold">+{item.fu}符</span>
+          <span>{fuItemLabel(item, locale)}</span>
+          <span className="text-yellow-300 font-bold">+{item.fu}{t("符")}</span>
         </div>
       ))}
       <div className="border-t border-white/10 mt-2 pt-2 flex justify-between text-sm">
         <span className="text-gray-400">
-          合計{result.rawTotal}符 → 10符単位に切り上げ
-          {result.isPinfuTsumo && "（平和ツモは20符固定）"}
-          {result.isKuipinfuRon && "（喰い平和ロンは30符固定）"}
+          {t("fuTotal", {fu: result.rawTotal})}
+          {result.isPinfuTsumo && t("（平和ツモは20符固定）")}
+          {result.isKuipinfuRon && t("（喰い平和ロンは30符固定）")}
         </span>
-        <span className="text-white font-black">{result.total}符</span>
+        <span className="text-white font-black">{result.total}{t("符")}</span>
       </div>
     </div>
   );

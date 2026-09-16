@@ -1,15 +1,17 @@
 "use client";
+import { useI18n } from "@/i18n/client";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Capacitor } from "@capacitor/core";
 
 // App Storeのアプリページ（2026-08-21 公開済み）
-const APP_URL = "https://apps.apple.com/jp/app/id6801788392";
+const APP_URL = "https://apps.apple.com/app/id6801788392";
 
 // Web版・LINEミニアプリで、iOSアプリ版への誘導を出す。
 // ネイティブアプリ内では当然不要なので表示しない。
 export default function AppPromoBanner() {
+  const { t } = useI18n();
   // 静的ビルド時にはCapacitorの判定ができないため、マウント後に判断する
   const [show, setShow] = useState(false);
 
@@ -32,12 +34,11 @@ export default function AppPromoBanner() {
     >
       <span className="text-3xl shrink-0">📱</span>
       <span className="text-left">
-        <span className="block text-white font-bold">アプリ版なら もっと快適</span>
+        <span className="block text-white font-bold">{t("アプリ版なら もっと快適")}</span>
         <span className="block text-gray-300 text-xs mt-0.5">
-          サクサク動作・段位や履歴もそのまま。App Storeで無料配信中
-        </span>
+          {t("サクサク動作・段位や履歴もそのまま。App Storeで無料配信中")}</span>
       </span>
-      <span className="ml-auto text-yellow-300 font-bold shrink-0">入手 ›</span>
+      <span className="ml-auto text-yellow-300 font-bold shrink-0">{t("入手 ›")}</span>
     </motion.a>
   );
 }

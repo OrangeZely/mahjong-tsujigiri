@@ -58,7 +58,7 @@ function mentsuLabel(m: FuMentsu): string {
 
 export function computeFu(problem: FuProblem): FuResult {
   const items: FuBreakdownItem[] = [];
-  items.push({ label: "副底", fu: 20 });
+  items.push({ kind: "base", label: "副底", fu: 20 });
 
   const isPinfuShape =
     problem.mentsuList.every((m) => m.kind === "shuntsu") &&
@@ -68,25 +68,25 @@ export function computeFu(problem: FuProblem): FuResult {
   let isPinfuTsumo = false;
 
   if (problem.winType === "ron" && problem.isMenzen) {
-    items.push({ label: "門前加符（ロン）", fu: 10 });
+    items.push({ kind: "closedRon", label: "門前加符（ロン）", fu: 10 });
   }
 
   if (problem.winType === "tsumo") {
     if (isPinfuShape && problem.isMenzen) {
       isPinfuTsumo = true; // 平和のツモはツモ符を加算しない
     } else {
-      items.push({ label: "ツモ符", fu: 2 });
+      items.push({ kind: "tsumo", label: "ツモ符", fu: 2 });
     }
   }
 
   problem.mentsuList.forEach((m) => {
     const fu = mentsuFu(m);
-    if (fu > 0) items.push({ label: mentsuLabel(m), fu });
+    if (fu > 0) items.push({ kind: "set", mentsu: m, label: mentsuLabel(m), fu });
   });
 
   if (problem.pairFu > 0) {
     items.push({
-      label: `雀頭（${problem.pairReason ?? "役牌"}）`,
+      kind: "pair", pair: problem.pair, label: `雀頭（${problem.pairReason ?? "役牌"}）`,
       fu: problem.pairFu,
     });
   }
@@ -94,7 +94,7 @@ export function computeFu(problem: FuProblem): FuResult {
   const waitFu = WAIT_TYPE_FU[problem.waitType];
   if (waitFu > 0) {
     items.push({
-      label: `待ち（${WAIT_TYPE_LABELS[problem.waitType]}）`,
+      kind: "wait", waitType: problem.waitType, label: `待ち（${WAIT_TYPE_LABELS[problem.waitType]}）`,
       fu: waitFu,
     });
   }

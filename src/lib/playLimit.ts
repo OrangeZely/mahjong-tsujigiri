@@ -1,7 +1,7 @@
 // 無料ユーザーの1日あたりのプレイ回数制限。
 // プレミアム（サブスク）加入者は無制限。Web版・LINE版にも同じ制限を適用する。
 
-export const DAILY_FREE_PLAYS = 10;
+export const DAILY_FREE_PLAYS = 5;
 
 const STORAGE_KEY = "tsujigiri_play_count";
 

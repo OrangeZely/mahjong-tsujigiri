@@ -30,6 +30,10 @@ export interface FuProblem {
 }
 
 export interface FuBreakdownItem {
+  kind?: "base" | "closedRon" | "tsumo" | "set" | "pair" | "wait";
+  mentsu?: FuMentsu;
+  pair?: Tile[];
+  waitType?: WaitType;
   label: string;
   fu: number;
 }

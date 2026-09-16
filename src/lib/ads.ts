@@ -8,10 +8,12 @@ const TEST_IDS = {
   ios: {
     banner: "ca-app-pub-3940256099942544/2934735716",
     interstitial: "ca-app-pub-3940256099942544/4411468910",
+    rewarded: "ca-app-pub-3940256099942544/1712485313",
   },
   android: {
     banner: "ca-app-pub-3940256099942544/6300978111",
     interstitial: "ca-app-pub-3940256099942544/1033173712",
+    rewarded: "ca-app-pub-3940256099942544/5224354917",
   },
 };
 
@@ -22,126 +24,184 @@ function adIds() {
       ? {
           banner: process.env.NEXT_PUBLIC_ADMOB_IOS_BANNER,
           interstitial: process.env.NEXT_PUBLIC_ADMOB_IOS_INTERSTITIAL,
+          rewarded: process.env.NEXT_PUBLIC_ADMOB_IOS_REWARDED,
         }
       : {
           banner: process.env.NEXT_PUBLIC_ADMOB_ANDROID_BANNER,
           interstitial: process.env.NEXT_PUBLIC_ADMOB_ANDROID_INTERSTITIAL,
+          rewarded: process.env.NEXT_PUBLIC_ADMOB_ANDROID_REWARDED,
         };
   const banner = env.banner || TEST_IDS[platform].banner;
   const interstitial = env.interstitial || TEST_IDS[platform].interstitial;
+  const rewarded = env.rewarded || TEST_IDS[platform].rewarded;
   // 本番IDが未設定＝テスト広告なので、AdMobにもテストとして伝える
-  const isTesting = !env.banner || !env.interstitial;
-  return { banner, interstitial, isTesting };
+  const isTesting = { banner: !env.banner, interstitial: !env.interstitial, rewarded: !env.rewarded };
+  return { banner, interstitial, rewarded, isTesting };
 }
 
-// ゲーム終了何回に1回、全画面広告を出すか（毎回出すと体験が悪いため）
-const INTERSTITIAL_EVERY = 3;
-
 let initialized = false;
-let finishCount = 0;
+let canRequestAds = false;
+let initPromise: Promise<void> | undefined;
 let bannerVisible = false;
-
-// 実機で計測されたバナーの実際の高さ（px）。
-// アダプティブバナーは端末幅によって高さが変わるため、固定値だとボタンと重なることがある。
-// bannerAdSizeChanged イベントで実測値に更新する。広告が無い/消えた場合は0が飛んでくる。
+let bannerWanted = false;
+let bannerTask: Promise<void> | undefined;
+let rewardInProgress = false;
+let privacyRequired = false;
+let privacyTask: Promise<void> | undefined;
 let bannerHeight = 0;
-type BannerHeightListener = (height: number) => void;
-const bannerHeightListeners = new Set<BannerHeightListener>();
+const heightListeners = new Set<(height: number) => void>();
+const privacyListeners = new Set<() => void>();
+const { AdMob, BannerAdPluginEvents, BannerAdSize, BannerAdPosition, AdmobConsentStatus, RewardAdPluginEvents } = AdMobPlugin;
 
 function setBannerHeight(height: number) {
   bannerHeight = height;
-  bannerHeightListeners.forEach((fn) => fn(height));
+  heightListeners.forEach(fn => fn(height));
 }
-
-export function getBannerHeight(): number {
-  return bannerHeight;
+export function getBannerHeight() { return bannerHeight; }
+export function subscribeBannerHeight(fn: (height: number) => void) {
+  heightListeners.add(fn);
+  return () => { heightListeners.delete(fn); };
 }
-
-export function subscribeBannerHeight(listener: BannerHeightListener): () => void {
-  bannerHeightListeners.add(listener);
-  return () => bannerHeightListeners.delete(listener);
+export function isPrivacyOptionsRequired() { return privacyRequired; }
+export function subscribePrivacyOptions(fn: () => void) {
+  privacyListeners.add(fn);
+  return () => { privacyListeners.delete(fn); };
 }
-
-// RevenueCatと同じ理由で静的importにしている（実機で動的importが完了しないため）
-async function loadAdMob() {
-  return AdMobPlugin;
+function acceptConsentInfo(info: AdMobPlugin.AdmobConsentInfo) {
+  canRequestAds = info.canRequestAds === true;
+  // @capacitor-community/admob@8.1.0 は PrivacyOptionsRequirementStatus enum を
+  // パッケージのエクスポートから漏らしている（型定義には存在するが実行時に取得できない）ため、
+  // 値そのもの（実体は文字列）で比較する。
+  privacyRequired = String(info.privacyOptionsRequirementStatus) === "REQUIRED";
+  privacyListeners.forEach(fn => fn());
 }
-
-// 広告SDKを初期化する。Web/LINEミニアプリでは何もしない。
-//
-// 注意: ATT（App Tracking Transparency）は現在あえて要求していない。
-// AdMob.requestTrackingAuthorization() を呼ぶとプラグインのネイティブ処理が詰まり、
-// 以降の showBanner などが実行されず広告が一切出なくなる事象を確認したため。
-// そのため広告は「パーソナライズなし」で配信され、トラッキングは行わない。
-// 将来ATTを入れる場合は、必ず実機で広告が表示され続けることを確認すること。
-export async function initAds(): Promise<void> {
-  if (initialized) return;
-  if (!Capacitor.isNativePlatform()) return;
-
+async function bounded<T>(promise: Promise<T>): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    const { AdMob, BannerAdPluginEvents } = await loadAdMob();
-    await AdMob.addListener(BannerAdPluginEvents.SizeChanged, (info) => {
-      setBannerHeight(info.height);
-    });
-    await AdMob.initialize({
-      initializeForTesting: adIds().isTesting,
-    });
-    initialized = true;
-  } catch (e) {
-    console.error("[Ads] 初期化に失敗", e);
-  }
+    return await Promise.race([promise, new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error("Ad SDK request timed out")), 8000);
+    })]);
+  } finally { clearTimeout(timer); }
 }
-
-// 画面下部にバナー広告を表示する
+async function initializeSdk() {
+  if (initialized || !canRequestAds) return;
+  await bounded(AdMob.initialize({initializeForTesting: false}));
+  await AdMob.addListener(BannerAdPluginEvents.SizeChanged, info => setBannerHeight(info.height));
+  initialized = true;
+}
+// One consent update per app launch, shared by every ad entry point.
+// No application-cached consent and no geography inferred from UI language.
+// The iOS postinstall patch permits this sequence before Mobile Ads starts.
+export function initAds(): Promise<void> {
+  if (!Capacitor.isNativePlatform()) return Promise.resolve();
+  return initPromise ??= (async () => {
+    try {
+      let info = await bounded(AdMob.requestConsentInfo());
+      // Keep the privacy entry point even if presenting the first form fails.
+      acceptConsentInfo(info);
+      canRequestAds = false;
+      if (info.status === AdmobConsentStatus.REQUIRED && info.isConsentFormAvailable) {
+        // A human may take any amount of time to answer. Do not time out the form.
+        info = await AdMob.showConsentForm();
+      }
+      acceptConsentInfo(info);
+      await initializeSdk();
+    } catch (error) {
+      // The plugin cannot read cached SDK consent after an update failure.
+      // Keep ads off; gameplay remains available. Retry on the next launch.
+      canRequestAds = false;
+      setBannerHeight(0);
+      console.warn("[Ads] Consent or initialization failed", error);
+    }
+  })();
+}
 export async function showBanner(): Promise<void> {
-  if (!Capacitor.isNativePlatform() || bannerVisible) return;
-  await initAds();
-  if (!initialized) return;
-
-  try {
-    const { AdMob, BannerAdSize, BannerAdPosition } = await loadAdMob();
-    const { banner, isTesting } = adIds();
-    await AdMob.showBanner({
-      adId: banner,
-      adSize: BannerAdSize.ADAPTIVE_BANNER,
-      position: BannerAdPosition.BOTTOM_CENTER,
-      margin: 0,
-      isTesting,
-    });
-    bannerVisible = true;
-  } catch (e) {
-    console.error("[Ads] バナー表示に失敗", e);
-  }
-}
-
-// バナー広告を消す（購入時・ゲーム画面など）
-export async function hideBanner(): Promise<void> {
-  if (!Capacitor.isNativePlatform() || !bannerVisible) return;
-  try {
-    const { AdMob } = await loadAdMob();
-    await AdMob.removeBanner();
-    bannerVisible = false;
-    setBannerHeight(0);
-  } catch (e) {
-    console.error("[Ads] バナー削除に失敗", e);
-  }
-}
-
-// ゲーム終了時に呼ぶ。数回に1回だけ全画面広告を出す。
-export async function maybeShowInterstitial(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return;
-  finishCount += 1;
-  if (finishCount % INTERSTITIAL_EVERY !== 0) return;
-
+  bannerWanted = true;
   await initAds();
-  if (!initialized) return;
-
+  if (!bannerWanted || !initialized || !canRequestAds || bannerVisible) return;
+  if (bannerTask) return bounded(bannerTask).catch(() => {});
+  bannerTask = (async () => {
+    try {
+      const {banner, isTesting} = adIds();
+      // Retain the native promise so a late banner can still be removed after navigation.
+      await AdMob.showBanner({adId: banner, adSize: BannerAdSize.ADAPTIVE_BANNER, position: BannerAdPosition.BOTTOM_CENTER, margin: 0, isTesting: isTesting.banner, npa: true});
+      bannerVisible = true;
+      if (!bannerWanted || !canRequestAds) await removeBanner();
+    } catch (error) { setBannerHeight(0); console.warn("[Ads] Banner failed", error); }
+    finally { bannerTask = undefined; }
+  })();
+  return bounded(bannerTask).catch(() => {});
+}
+async function removeBanner() {
+  if (!bannerVisible) return;
+  try { await bounded(AdMob.removeBanner()); }
+  finally { bannerVisible = false; setBannerHeight(0); }
+}
+export async function hideBanner(): Promise<void> {
+  bannerWanted = false;
+  if (!Capacitor.isNativePlatform()) return;
+  try { await removeBanner(); } catch (error) { console.warn("[Ads] Remove banner failed", error); }
+}
+export function showAdPrivacyOptions(): Promise<void> {
+  if (!Capacitor.isNativePlatform()) return Promise.resolve();
+  return privacyTask ??= (async () => {
+    try {
+      await initAds();
+      if (!privacyRequired) return;
+      canRequestAds = false;
+      await removeBanner();
+// A pending banner removes itself if it arrives while permission is suspended.
+      await AdMob.showPrivacyOptionsForm();
+      acceptConsentInfo(await bounded(AdMob.requestConsentInfo()));
+      await initializeSdk();
+      if (bannerWanted && canRequestAds) await showBanner();
+    } catch (error) { canRequestAds = false; throw error; }
+    finally { privacyTask = undefined; }
+  })();
+}
+// Preserve the current policy: try an interstitial after every game.
+// Never hold a game for an outstanding consent form or show an ad after leaving results.
+export async function maybeShowInterstitial(signal?: AbortSignal): Promise<void> {
+  if (!Capacitor.isNativePlatform() || !initialized || !canRequestAds || signal?.aborted) return;
   try {
-    const { AdMob } = await loadAdMob();
-    const { interstitial, isTesting } = adIds();
-    await AdMob.prepareInterstitial({ adId: interstitial, isTesting });
-    await AdMob.showInterstitial();
-  } catch (e) {
-    console.error("[Ads] 全画面広告の表示に失敗", e);
+    const {interstitial, isTesting} = adIds();
+    await bounded(AdMob.prepareInterstitial({adId: interstitial, isTesting: isTesting.interstitial, npa: true}));
+    if (signal?.aborted || !canRequestAds) return;
+    await bounded(AdMob.showInterstitial());
+  } catch (error) { console.warn("[Ads] Interstitial failed", error); }
+}
+
+// 無料プレイ枠を使い切ったユーザー向けのリワード広告。
+// 視聴完了(reward獲得)でtrue、途中で閉じた／読み込み失敗ならfalseを返す。
+export async function showRewardedAd(signal?: AbortSignal): Promise<boolean> {
+  if (!Capacitor.isNativePlatform() || rewardInProgress || signal?.aborted) return false;
+  rewardInProgress = true;
+  const handles: { remove: () => Promise<void> }[] = [];
+  try {
+    await initAds();
+    if (!initialized || !canRequestAds || signal?.aborted) return false;
+    const {rewarded, isTesting} = adIds();
+    await bounded(AdMob.prepareRewardVideoAd({adId: rewarded, isTesting: isTesting.rewarded, npa: true}));
+    if (!canRequestAds || signal?.aborted) return false;
+
+    let earned = false;
+    let resolveResult!: (earned: boolean) => void;
+    const result = new Promise<boolean>(resolve => { resolveResult = resolve; });
+    // Reward callbacks precede dismissal. Wait for dismissal so the game clock
+    // does not run while the ad is still covering the app.
+    handles.push(await AdMob.addListener(RewardAdPluginEvents.Rewarded, () => { earned = true; }));
+    handles.push(await AdMob.addListener(RewardAdPluginEvents.Dismissed, () => resolveResult(earned)));
+    handles.push(await AdMob.addListener(RewardAdPluginEvents.FailedToShow, () => resolveResult(false)));
+    if (!canRequestAds || signal?.aborted) return false;
+    void AdMob.showRewardVideoAd().then(() => { earned = true; }, () => resolveResult(false));
+    const completed = await result;
+    return completed && !signal?.aborted;
+  } catch (error) {
+    console.warn("[Ads] Rewarded ad failed", error);
+    return false;
+  } finally {
+    await Promise.allSettled(handles.map(handle => handle.remove()));
+    rewardInProgress = false;
   }
 }

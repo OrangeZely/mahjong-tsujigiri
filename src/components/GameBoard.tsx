@@ -1,4 +1,5 @@
 "use client";
+import { useI18n } from "@/i18n/client";
 
 import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,6 +8,7 @@ import Tile from "./Tile";
 import { Tile as TileType } from "@/types/mahjong";
 
 export default function GameBoard() {
+  const { t } = useI18n();
   const {
     phase,
     gameMode,
@@ -68,7 +70,7 @@ export default function GameBoard() {
       <div className="w-full flex items-center justify-between bg-gray-900 text-white rounded-xl px-4 py-3">
         {/* 残り時間 */}
         <div className="flex flex-col items-center min-w-[80px]">
-          <span className="text-xs text-gray-400">残り時間</span>
+          <span className="text-xs text-gray-400">{t("残り時間")}</span>
           <span className={`text-3xl font-black tabular-nums ${gameSeconds <= 10 ? "text-red-400 animate-pulse" : "text-white"}`}>
             {gameSeconds}
           </span>
@@ -76,7 +78,7 @@ export default function GameBoard() {
 
         {/* スコア */}
         <div className="flex flex-col items-center">
-          <span className="text-xs text-gray-400">正解 / 回答</span>
+          <span className="text-xs text-gray-400">{t("正解 / 回答")}</span>
           <span className="text-2xl font-bold">
             <span className="text-green-400">{correctCount}</span>
             <span className="text-gray-500 text-lg"> / {totalAnswered}</span>
@@ -85,7 +87,7 @@ export default function GameBoard() {
 
         {/* 問題番号 */}
         <div className="flex flex-col items-center min-w-[80px]">
-          <span className="text-xs text-gray-400">問題</span>
+          <span className="text-xs text-gray-400">{t("問題")}</span>
           <span className="text-xl font-bold text-yellow-300">#{currentIndex + 1}</span>
         </div>
       </div>
@@ -103,17 +105,15 @@ export default function GameBoard() {
         <div className="w-full">
           <div className="flex justify-between text-sm text-gray-500 mb-1">
             <span>
-              {gameMode === "casual" ? "👺" : "👹"} 次の正解{" "}
+              {gameMode === "casual" ? "👺" : "👹"} {t("次の正解")}{" "}
               <span className={`font-bold ${combo > 0 ? "text-red-400" : "text-gray-400"}`}>
-                +{nextGain.toLocaleString()}点
-              </span>
+                +{nextGain.toLocaleString()}{t("点")}</span>
               {combo > 0 && (
-                <span className="ml-1 text-yellow-400 font-bold">({combo}連斬中!)</span>
+                <span className="ml-1 text-yellow-400 font-bold">({combo}{t("連斬中!)")}</span>
               )}
             </span>
             <span className={questionSeconds <= 2 ? "text-red-500 font-bold" : ""}>
-              {questionSeconds}秒
-            </span>
+              {questionSeconds}{t("秒")}</span>
           </div>
           <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
@@ -146,7 +146,7 @@ export default function GameBoard() {
                   : "bg-red-500 text-white"
               }`}
             >
-              {lastAnswer.isCorrect ? "✓ 正解！" : "✗ 不正解"}
+              {lastAnswer.isCorrect ? t("✓ 正解！") : t("✗ 不正解")}
             </div>
           </motion.div>
         )}
@@ -156,7 +156,7 @@ export default function GameBoard() {
       {problem.dora && problem.dora.length > 0 && (
         <div className="w-full bg-gray-900 rounded-xl px-3 py-2 border border-yellow-600/50">
           <div className="flex items-center justify-center gap-3">
-            <span className="text-yellow-400 text-xs font-bold tracking-widest">ドラ</span>
+            <span className="text-yellow-400 text-xs font-bold tracking-widest">{t("ドラ")}</span>
             <div className="flex gap-0.5">
               {problem.dora.map((tile) => (
                 <Tile key={tile.id} tile={tile} size="sm" />
@@ -169,7 +169,7 @@ export default function GameBoard() {
       {/* 副露牌エリア */}
       {problem.openSets && problem.openSets.length > 0 && (
         <div className="w-full bg-green-950 rounded-xl px-3 py-2 border border-green-700">
-          <p className="text-center text-yellow-400 text-xs mb-2 font-bold tracking-widest">副 露</p>
+          <p className="text-center text-yellow-400 text-xs mb-2 font-bold tracking-widest">{t("副 露")}</p>
           <div className="flex justify-center gap-3 flex-wrap">
             {problem.openSets.map((set, i) => (
               <div key={i} className="flex gap-0.5 bg-green-800 rounded-lg p-1 border border-yellow-600/40">
@@ -186,16 +186,14 @@ export default function GameBoard() {
       {problem.isRiichi && (
         <div className="text-center">
           <span className="bg-red-600 text-white text-sm font-black px-4 py-1 rounded-full tracking-widest shadow-lg">
-            🀄 リーチ
-          </span>
+            {t("🀄 リーチ")}</span>
         </div>
       )}
 
       {/* 手牌エリア */}
       <div className="w-full bg-green-900 rounded-2xl px-2 py-3 shadow-xl border border-green-700">
         <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
-          切る牌をタップ
-        </p>
+          {t("切る牌をタップ")}</p>
         <div className="flex justify-center w-full gap-0">
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
