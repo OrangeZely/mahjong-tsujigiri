@@ -219,20 +219,23 @@ ATTを実装していない＝トラッキングしていない、という理�
 AdMob導入でバイナリのフレームワークが増えたため、**旧手順（署名なしarchive→export時に署名）は使えない**。
 Appleに「does not satisfy its designated Requirement」で弾かれる。**アーカイブ時点から署名する**こと。
 
-前提（構築済み）:
-- 配布用証明書 `Apple Distribution: shintaro yamashita` をAPI経由で作成（id 6S8VVQMF93、期限2027-08-18）
-- 配布用プロファイル `Tsujigiri App Store Manual`（App Store用・手動管理）を作成し `~/Library/Developer/Xcode/UserData/Provisioning Profiles/` に配置
-- **専用キーチェーン `tsujigiri-signing.keychain`** に証明書を入れてある。パスワードはリポジトリ外で管理し、この文書やGitには記載しない。
-  ログインキーチェーンだと `errSecInternalComponent` で署名に失敗する（partition list設定にMacのログインパスワードが必要なため）
-- `project.pbxproj` の App ターゲット **Release のみ** `CODE_SIGN_STYLE = Manual` + `PROVISIONING_PROFILE_SPECIFIER = "Tsujigiri App Store Manual"`。
+前提（構築済み・2026-09-18 に署名構成を差し替え）:
+- 配布用証明書は **`ADZMZCV7AB`（期限2027-09-17）を使う。ログインキーチェーンにある**。
+  Xcodeで新規発行した証明書はログインキーチェーンでも `errSecInternalComponent` にならない（これが起きるのは `.p12` を取り込んだとき）。
+- 配布用プロファイルは **`Tsujigiri App Store Manual v2`**（App Store用・手動管理、UUID `57d8b60c-5695-4b25-8b4e-f04ba05b9e60`）。
+  `~/Library/MobileDevice/Provisioning Profiles/` に配置する。
+- **旧構成は使えない**: 旧プロファイル `Tsujigiri App Store Manual` は証明書 `6S8VVQMF93` に紐付いており、
+  その秘密鍵は専用キーチェーン `tsujigiri-signing.keychain-db` の中だけにある。**このキーチェーンのパスワードは不明**で解錠できない。
+  プロファイルが `ADZMZCV7AB` しか許可しないため、ロックされたキーチェーンが検索パスに残っていてもXcodeは正しい方を選び、パスワード要求は出ない。
+- `project.pbxproj` の App ターゲット **Release のみ** `CODE_SIGN_STYLE = Manual` + `PROVISIONING_PROFILE_SPECIFIER = "Tsujigiri App Store Manual v2"`。
   CLIで `PROVISIONING_PROFILE_SPECIFIER` を渡すとSPMパッケージにも適用され失敗するので、必ずプロジェクト設定側で指定する
-- **自動署名(-allowProvisioningUpdates)はCLIでは常に開発用を選ぶため使えない**
+- **自動署名(-allowProvisioningUpdates)はCLIでは常に開発用を選ぶため使えない**（チームに実機デバイスが0台のため）
+- **アップロード前にASC APIで既存ビルド番号を確認する**。重複した `CURRENT_PROJECT_VERSION` はaltoolが成功と出してもApple側で弾かれる。
 
 ```bash
 cd ~/mahjong-tsujigiri && npm run build && npx cap sync ios
 # バージョンを上げる（project.pbxproj の MARKETING_VERSION / CURRENT_PROJECT_VERSION）
-# 対話入力またはリポジトリ外の安全な保管先からパスワードを渡して解除する
-security unlock-keychain tsujigiri-signing.keychain
+# キーチェーンの解除は不要（証明書はログインキーチェーンにある）
 cd ios/App
 xcodebuild archive -project App.xcodeproj -scheme App -configuration Release \
   -destination 'generic/platform=iOS' -archivePath ~/mahjong-tsujigiri/build/App.xcarchive \
@@ -254,6 +257,7 @@ xcrun altool --upload-app -f build/export/App.ipa -t ios \
 - 未コミットの作業ツリーからArchiveしない。これにより、公開バイナリのソースを後から再現できる状態を保つ。
 
 - **2026-08-18: v1.1 (build 2) アップロード成功**（Delivery UUID 3dd7f7b8-2bc3-41ec-8453-74646f984007）。広告＋課金入り
+- **2026-09-18: v1.2.0 (build 8) をこの手順でアーカイブ・書き出し成功**（英語対応・符計算モード・UMP同意）。タグ `ios-v1.2.0-build8`。アップロードは未実施
 
 ## iOSビルド＆App Storeアップロード手順（2026-08-15 確立・旧手順／参考）
 
