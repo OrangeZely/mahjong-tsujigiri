@@ -1,6 +1,6 @@
 # English store localization — release draft
 
-For the new build containing English support and Fu Practice. Do not attach these feature claims to the existing build 7. English URLs must be deployed before store submission.
+For version 1.2.0 (build 8), the first build containing English support and Fu Practice. Do not attach these feature claims to build 7, which is the published 1.1.1. The English URLs below are live as of 2026-09-18.
 
 ## locale
 
@@ -58,7 +58,14 @@ Support: mahjong.tsujigiri@gmail.com
 
 ## whatsNew
 
-Japanese and English language support, fu practice, translated guides and explanations, and advertising privacy choices where required.
+English is here. Every screen, guide, and problem explanation now reads in English, and you can switch between Japanese and English at any time from the home screen.
+
+Also new since the last release:
+• Fu Practice: a third mode. Read a completed hand, choose its fu from four options, and review a full breakdown of how the total was reached.
+• A new interactive guide for learning fu calculation.
+• Out of plays? Watch a short ad for an extra round. The free plan is now 5 plays per day.
+• Advertising privacy choices, available from the home screen where they are required.
+• Fixes to scoring, fu display, purchase restoration, and the timing of the results-screen ad.
 
 ## marketingUrl
 

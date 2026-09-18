@@ -41,3 +41,13 @@ The English web version is published. `main` was pushed to origin at `13887f8`, 
 Verified on the deployed site: `/en/` serves `lang="en"` with English home, mode cards, and daily-limit text; `/` still serves `lang="ja"` unchanged with the language switcher. A full-flush session was played to the timer, and the results breakdown rendered English explanations and localized tile names and rank from the bundled translations. The Supabase migration is still unapplied, so this confirms the bundle fallback path works in production.
 
 Native releases are unaffected by this deployment. Ad unit IDs for iOS rewarded and all three Android formats remain unset, so those formats would serve Google test ads in a native build; web carries no ads, so this does not affect the deployment above.
+
+## Native 1.2.0 preparation (2026-09-18)
+
+Versions were bumped to iOS `1.2.0` build `8` and Android `versionCode 3` / `versionName 1.2`, then `npx cap sync` copied the deployed static build into both native projects. The build number was chosen after querying App Store Connect: builds 1-7 are all uploaded, and 1.1.1 (READY_FOR_SALE) is the live version, so 8 is the next free build number. Build 7 was uploaded on 2026-09-03, before the 2026-09-07 commits that added Fu Practice, so 1.2.0 is the first released build to contain that mode. Release notes say so rather than describing English support alone.
+
+`store-assets/shoot-store.mjs` captures store screenshots from the deployed site for either locale. It drives headless Chrome over CDP and writes each store's exact pixel size: App Store 6.9in, 6.5in and iPad 13in as plain app screens, and the Play Store phone size composited under a caption, matching the style of the existing Japanese assets. English output is in `store-assets/en/`; run `node store-assets/shoot-store.mjs ja` to refresh the Japanese set the same way. Deploy before shooting, because the script reads the public site.
+
+`store-assets/listing-en-US.json` and `appstore-listing-en.md` are final drafts, regenerated from the JSON so the two cannot drift. Every field is within its store's character limit, and the marketing, support and privacy URLs return 200 on `tsujigiri.orangezely.com`. Release notes disclose that the free plan is now 5 plays per day, down from 10.
+
+Not done: the English localization does not exist in App Store Connect yet, where only `ja` is present, and nothing has been submitted. `store-assets/appstore-listing-ja.md` still describes two modes and needs its own update before this release ships. Ad unit IDs and the AdMob privacy message are unchanged from the web-release note above, and native device testing of consent and purchases is still required.
