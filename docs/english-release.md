@@ -33,3 +33,11 @@ Web has no automatic deployment. Publish with `npm run build && npx wrangler dep
 Static export, TypeScript, ESLint, localization regression checks, and consent mock checks have passed. Browser checks cover English home, fu play/results/breakdown, persisted history, Japanese switching, and discard-question loading. Native consent/purchase behavior and store configuration remain unverified. The concurrent five-play limit and rewarded extra-play feature have been integrated. Ad test IDs are selected per format; reward completion waits for dismissal, and leaving the screen cancels pending displays. Release still requires native testing and the external setup above.
 
 The final static build was synced to both native projects with `npx cap sync`. English guide/legal pages were checked at 375px without horizontal overflow, and the web daily-limit screen hides the native-only rewarded-ad button. Capacitor sync warns that installed core 8.5.0 and Android 8.4.1 differ; native compilation and device testing remain release checks.
+
+## Web release (2026-09-18)
+
+The English web version is published. `main` was pushed to origin at `13887f8`, `npm run build` produced 30 static routes including every `/en/` page, and `npx wrangler deploy` uploaded 152 files (version `07ae8f86-f359-45c0-8cd1-7ee12a32ae03`) to `https://mahjong-tsujigiri.translation-qa-web.workers.dev`.
+
+Verified on the deployed site: `/en/` serves `lang="en"` with English home, mode cards, and daily-limit text; `/` still serves `lang="ja"` unchanged with the language switcher. A full-flush session was played to the timer, and the results breakdown rendered English explanations and localized tile names and rank from the bundled translations. The Supabase migration is still unapplied, so this confirms the bundle fallback path works in production.
+
+Native releases are unaffected by this deployment. Ad unit IDs for iOS rewarded and all three Android formats remain unset, so those formats would serve Google test ads in a native build; web carries no ads, so this does not affect the deployment above.
