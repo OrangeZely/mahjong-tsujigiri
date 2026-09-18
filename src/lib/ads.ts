@@ -51,7 +51,19 @@ let privacyTask: Promise<void> | undefined;
 let bannerHeight = 0;
 const heightListeners = new Set<(height: number) => void>();
 const privacyListeners = new Set<() => void>();
-const { AdMob, BannerAdPluginEvents, BannerAdSize, BannerAdPosition, AdmobConsentStatus, RewardAdPluginEvents } = AdMobPlugin;
+const { AdMob, BannerAdPluginEvents, BannerAdSize, BannerAdPosition, AdmobConsentStatus, AdmobConsentDebugGeography, RewardAdPluginEvents } = AdMobPlugin;
+
+// EEA/UK/スイス以外（日本など）では、UMPの同意フォームは通常出ない。
+// それを検証用に強制するオプション。NEXT_PUBLIC_ADMOB_TEST_DEVICE_IDS が空なら
+// 何も付けない。debugGeography はGoogleのUMP SDKが testDeviceIdentifiers に
+// 載っている端末にしか適用しないため、この変数を設定しない限り本番ビルドに
+// 混じっても実際の利用者には影響しない。IDはUMP SDKが初回起動時にコンソールへ
+// 出力するテスト端末IDを .env.local に控えて使う。
+function consentRequestOptions(): AdMobPlugin.AdmobConsentRequestOptions | undefined {
+  const ids = process.env.NEXT_PUBLIC_ADMOB_TEST_DEVICE_IDS?.split(",").map(s => s.trim()).filter(Boolean);
+  if (!ids?.length) return undefined;
+  return { debugGeography: AdmobConsentDebugGeography.EEA, testDeviceIdentifiers: ids };
+}
 
 function setBannerHeight(height: number) {
   bannerHeight = height;
@@ -96,7 +108,7 @@ export function initAds(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return Promise.resolve();
   return initPromise ??= (async () => {
     try {
-      let info = await bounded(AdMob.requestConsentInfo());
+      let info = await bounded(AdMob.requestConsentInfo(consentRequestOptions()));
       // Keep the privacy entry point even if presenting the first form fails.
       acceptConsentInfo(info);
       canRequestAds = false;
@@ -153,7 +165,7 @@ export function showAdPrivacyOptions(): Promise<void> {
       await removeBanner();
 // A pending banner removes itself if it arrives while permission is suspended.
       await AdMob.showPrivacyOptionsForm();
-      acceptConsentInfo(await bounded(AdMob.requestConsentInfo()));
+      acceptConsentInfo(await bounded(AdMob.requestConsentInfo(consentRequestOptions())));
       await initializeSdk();
       if (bannerWanted && canRequestAds) await showBanner();
     } catch (error) { canRequestAds = false; throw error; }

@@ -103,3 +103,11 @@ The app had only a `ja` localization. Creating the `en-US` app-info localization
 The Japanese screenshots were replaced. The set carried over from 1.1.1 showed only two modes, which contradicts release notes that announce Fu Practice, so `shoot-store.mjs ja` regenerated them from the deployed site and the stale images were deleted. A 6.9-inch set was added for both locales, which neither had before. Nine English and nine Japanese screenshots are uploaded across 6.9-inch, 6.5-inch and 13-inch iPad, and App Store Connect reports every one `COMPLETE` with no errors.
 
 Nothing has been submitted for review. That still waits on the AdMob privacy message being published and on device testing of consent and purchases.
+
+## Debug-only EEA testing (2026-09-19)
+
+Japan is outside the EEA/UK/Switzerland, so the UMP consent form never appears when testing from here, and that path had never been exercised on a device. Added `consentRequestOptions()` in `src/lib/ads.ts`, read at both `requestConsentInfo` call sites (initial launch and after the privacy-options form).
+
+It is inert unless `NEXT_PUBLIC_ADMOB_TEST_DEVICE_IDS` is set. Google's UMP SDK applies `debugGeography` only to devices listed in `testDeviceIdentifiers`, so leaving the variable unset — the default in `.env.local` and on any build that doesn't set it — makes the option a no-op even if it ships to production by mistake; no real user's consent flow can be affected by this code path. To use it, run once with the variable unset, read the test-device hash the UMP SDK prints to the native console on first launch, then set that ID locally before rebuilding.
+
+Confirmed AdMob's own EEA consent message already exists and is published for this app (created 2026-09-16, before this session, covering English and Japanese) — the assumption in the web-release note above that it was still unpublished was wrong; the account had it published for iOS already.
