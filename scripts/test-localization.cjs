@@ -17,12 +17,25 @@ function load(file) {
   vm.runInNewContext(code, {exports, require: name => load(name.startsWith('@/') ? 'src/' + name.slice(2) : path.resolve(path.dirname(file), name)), console, Math, JSON});
   return exports;
 }
-const {localePath, preferredLocale} = load('src/i18n/locale.ts');
+const {localePath, preferredLocale, staticExportHref} = load('src/i18n/locale.ts');
 assert.equal(localePath('/game?mode=casual#hand', 'en'), '/en/game?mode=casual#hand');
 assert.equal(localePath('/en/game?mode=casual#hand', 'ja'), '/game?mode=casual#hand');
 assert.equal(localePath('/en?x=1', 'ja'), '/?x=1');
 assert.equal(localePath('//example.com/a', 'en'), '//example.com/a');
 assert.equal(localePath('https://example.com', 'en'), 'https://example.com');
+
+// ネイティブの全ページ遷移用。拡張子のないパスはCapacitorのアセット配信が解決できないので
+// index.html を直接指す。クエリとハッシュは末尾に保つ。
+assert.equal(staticExportHref('/en/'), '/en/index.html');
+assert.equal(staticExportHref('/en'), '/en/index.html');
+assert.equal(staticExportHref('/'), '/index.html');
+assert.equal(staticExportHref('/en/game/'), '/en/game/index.html');
+assert.equal(staticExportHref('/index.html'), '/index.html');
+assert.equal(staticExportHref('/en/index.html?x=1#h'), '/en/index.html?x=1#h');
+assert.equal(staticExportHref('/en/?x=1#h'), '/en/index.html?x=1#h');
+// localePath と往復しても壊れないこと。
+assert.equal(localePath(staticExportHref('/en/'), 'ja'), '/index.html');
+assert.equal(localePath(staticExportHref('/en/'), 'en'), '/en/index.html');
 assert.equal(preferredLocale('en', ['ja-JP']), 'en');
 assert.equal(preferredLocale(null, ['ja-JP']), 'ja');
 assert.equal(preferredLocale(null, ['fr-FR', 'ja-JP']), 'en');

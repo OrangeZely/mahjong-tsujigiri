@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter as useNextRouter } from "next/navigation";
 import { Capacitor } from "@capacitor/core";
-import { LOCALE_KEY, localePath, preferredLocale, type Locale } from "./locale";
+import { LOCALE_KEY, localePath, preferredLocale, staticExportHref, type Locale } from "./locale";
 import { translate } from "./translate";
 import type { MessageKey } from "./messages";
 const LocaleContext = createContext<Locale>("ja");
@@ -32,7 +32,7 @@ export function LanguageControls() {
     if (Capacitor.isNativePlatform() && pathname === "/") {
       let saved: string | null = null;
       try { saved = localStorage.getItem(LOCALE_KEY); } catch {}
-      if (preferredLocale(saved, navigator.languages) === "en") window.location.replace("/en/" + window.location.search);
+      if (preferredLocale(saved, navigator.languages) === "en") window.location.replace(staticExportHref("/en/") + window.location.search);
     }
   }, [pathname]);
   if (/\/(?:fu-game|game)\/?$/.test(pathname)) return null;
@@ -40,7 +40,8 @@ export function LanguageControls() {
     {(["ja", "en"] as const).map((language) => <a key={language} lang={language} hrefLang={language} href={localePath(pathname, language)} aria-current={language === locale ? "true" : undefined} className={language === locale ? "font-bold text-yellow-300" : "underline"} onClick={(event) => {
       event.preventDefault();
       try { localStorage.setItem(LOCALE_KEY, language); } catch {}
-      window.location.assign(localePath(pathname, language) + window.location.search + window.location.hash);
+      const target = localePath(pathname, language);
+      window.location.assign((Capacitor.isNativePlatform() ? staticExportHref(target) : target) + window.location.search + window.location.hash);
     }}>{language === "ja" ? "日本語" : "English"}</a>)}
   </nav>;
 }
