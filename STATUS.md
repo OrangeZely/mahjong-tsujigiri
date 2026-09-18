@@ -13,7 +13,9 @@
 - [ ] **AdMobの「プライバシーとメッセージ」で同意メッセージを日英で公開する**（アプリ側の実装だけでは同意フォームは出ない）
 - [ ] **実機**でUMP（EEA初回・拒否・選択変更・オフライン）と購入の復元を確認する
 - [ ] `.env.local` に広告IDを設定（iOSリワード／Android3種が未設定。未設定の枠はテスト広告＝収益ゼロ）
-- [ ] `xcrun altool --upload-app` でbuild 8を送信し、App Store Connectにen-USロケールを作成して入稿する
+- [x] `xcrun altool --upload-app` でbuild 8を送信（2026-09-18、Delivery UUID c87add85-b510-496a-8871-f5736d892192）
+- [ ] App Store Connectにen-USロケールを作成して入稿する（現在は `ja` のみ）
+- [ ] v1.2.0 のバージョンレコードを作成し、build 8 を紐づけて審査提出する
 - [ ] AdMobでApp Storeのアプリとのリンク状態と `app-ads.txt` の認識を再確認する
 - [x] 独自ドメイン取得済み。アプリ関連URLは `tsujigiri.orangezely.com` に統一した
 
