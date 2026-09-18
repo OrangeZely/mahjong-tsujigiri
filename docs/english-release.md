@@ -71,3 +71,19 @@ The archive is signed at archive time rather than at export, because signing an 
 Verified in `build/export/App.ipa`: version 1.2.0, build 8, `ja` and `en` localizations with the right display names, App Store entitlements with `get-task-allow` false and `beta-reports-active` true, a valid signature that satisfies its designated requirement, the expected embedded profile, and the bundled web assets containing every `/en/` route.
 
 The binary has not been uploaded. Uploading needs `xcrun altool --upload-app` and the user's go-ahead, and the device testing listed above is still outstanding.
+
+## Two native defects found in the simulator (2026-09-18)
+
+Running the build on an iPhone 17 Pro Max simulator found two problems that no web check could have caught. Both are fixed and re-verified on the simulator.
+
+**English was unreachable in the native app.** Capacitor's `CapacitorRouter` maps every extension-less path to the root `index.html`, which is right for a single-page app and wrong for this static export, where `/en/` and `/game/` each have their own `index.html`. A full page load of `/en/` therefore served the Japanese root, so both the launch redirect and the language links silently stayed in Japanese. `AppDelegate.swift` now defines `StaticExportRouter`, which returns `<path>/index.html` when that file exists and falls back to the root otherwise, and `StaticExportViewController`, which supplies it. `Main.storyboard` points at that controller instead of `CAPBridgeViewController`. The router lives in `AppDelegate.swift` so no file had to be added to the Xcode project. Deep links into `/game/` and the other routes are fixed by the same change.
+
+**The top of the screen sat under the status bar.** The web view covers the whole display, and nothing in the project set `viewport-fit` or read the safe-area insets, so the language switcher overlapped the clock and, worse, the game header hid `残り時間`, `正解 / 回答` and `問題` behind the status bar and the Dynamic Island. The game screen has shipped that way; the language switcher was new in this release. Both layouts now export `viewportFit: "cover"` and `globals.css` pads the body by `env(safe-area-inset-top)`. Two follow-on details matter: the body's background is set to `--color-gray-900` so the inset strip matches the top of every screen instead of showing white, and `.min-h-screen` is reduced by the same inset so screens do not gain a scrollbar the height of the padding.
+
+Three approaches were tried before the body padding. Padding `body > *:first-child` hits the `<div hidden>` that Next puts first; excluding hidden elements then hits the `<template>` that appears on client-rendered routes. Padding the body itself depends on nothing Next injects.
+
+Also worth knowing: `npm run build` did not pick up an edit to `globals.css` until `.next` was deleted. The emitted stylesheet kept its old content hash. Delete `.next` when changing that file.
+
+Verified on the simulator after the fixes: Japanese and English home screens, the language switch, the language preference surviving relaunch, the full-flush start screen and game board in both languages with the header fully visible, no white strip at the top, and AdMob test banners rendering, which also shows the consent gate allows ads outside the EEA.
+
+**Android has the same routing defect and is not fixed.** `WebViewLocalServer` routes any last path segment without a dot to the root `index.html` whenever `html5mode` is on, so `/en/` behaves exactly as it did on iOS. Android's `RouteProcessor` hook cannot repair it, because that branch calls the processor with `/index.html` rather than the requested path, and turning off `server.html5mode` alone would leave `/en/` resolving to a directory. Decide this before shipping English to the Play track; the Android closed test is unaffected today only because its listing does not offer English.

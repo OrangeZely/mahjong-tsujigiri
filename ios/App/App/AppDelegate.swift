@@ -47,3 +47,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+
+/// Capacitor既定のルーター（CapacitorRouter）は、拡張子のないパスをすべてルートの index.html に向ける。
+/// SPA向けの挙動だが、このアプリは Next.js の静的書き出しで `/en/` や `/game/` がそれぞれ
+/// 自分の index.html を持つ。既定のままだと `/en/` を開いても日本語のルートページが返り、
+/// ネイティブから英語版に到達できない。
+/// そこで、そのルートの index.html が実在すればそれを返し、無いときだけ従来どおりルートへ退避する。
+struct StaticExportRouter: Router {
+    var basePath: String = ""
+
+    func route(for path: String) -> String {
+        guard URL(fileURLWithPath: path).pathExtension.isEmpty else {
+            return basePath + path
+        }
+        let directory = path.hasSuffix("/") ? String(path.dropLast()) : path
+        let candidate = basePath + directory + "/index.html"
+        if FileManager.default.fileExists(atPath: candidate) {
+            return candidate
+        }
+        return basePath + "/index.html"
+    }
+}
+
+class StaticExportViewController: CAPBridgeViewController {
+    override func router() -> Router {
+        return StaticExportRouter()
+    }
+}
