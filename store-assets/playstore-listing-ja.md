@@ -37,11 +37,19 @@
 
 かわいいパンダ剣士のオリジナル牌デザインで、麻雀初心者から上級者まで楽しめます。今日から“辻斬り”修行を始めよう！
 
+## リリースノート（versionCode 3 / 1.2・最大500文字）
+英語に対応しました。すべての画面・解説記事・問題の解説が英語で読め、ホーム画面からいつでも日本語と切り替えられます。
+・プレイ回数を使い切ったとき、広告を見ると1回追加できるようになりました。無料プランは1日5回です。
+・広告のプライバシー選択を追加しました（必要な地域でホーム画面から開けます）。
+・スコア計算・符の表示・購入の復元・結果画面の広告が出るタイミングを修正しました。
+
+英語のリリースノートと掲載情報は `listing-en-US.json` にあります。英語のスクリーンショットは `store-assets/en/playstore-*.png`。
+
 ## サポートURL
 https://tsujigiri.orangezely.com
 
 ## プライバシーポリシーURL
-https://tsujigiri.orangezely.com/privacy
+https://tsujigiri.orangezely.com/privacy/
 
 ## お問い合わせ先メール
 mahjong.tsujigiri@gmail.com

@@ -51,3 +51,11 @@ Versions were bumped to iOS `1.2.0` build `8` and Android `versionCode 3` / `ver
 `store-assets/listing-en-US.json` and `appstore-listing-en.md` are final drafts, regenerated from the JSON so the two cannot drift. Every field is within its store's character limit, and the marketing, support and privacy URLs return 200 on `tsujigiri.orangezely.com`. Release notes disclose that the free plan is now 5 plays per day, down from 10.
 
 Not done: the English localization does not exist in App Store Connect yet, where only `ja` is present, and nothing has been submitted. `store-assets/appstore-listing-ja.md` still describes two modes and needs its own update before this release ships. Ad unit IDs and the AdMob privacy message are unchanged from the web-release note above, and native device testing of consent and purchases is still required.
+
+## Japanese listing update (2026-09-18)
+
+`store-assets/appstore-listing-ja.md` was rewritten for 1.2.0. It had gone stale: it described two modes, pointed every URL at `mahjong-tsujigiri.vercel.app`, guessed a 4+ age rating, and said the in-app purchases were not created yet. It now covers three modes plus Oni, carries the subscription terms Apple requires for auto-renewing products, states the actual 12+ rating and the three `READY_TO_SUBMIT` products, links the live `tsujigiri.orangezely.com` pages, and adds Japanese release notes for this version. Every length-limited field was measured against Apple's limit.
+
+`store-assets/playstore-listing-ja.md` only needed release notes for versionCode 3 and a privacy URL that answers 200 instead of redirecting. Its description was already current. Those notes deliberately omit Fu Practice: versionCode 2 went to the closed test on 2026-09-08, after the mode landed, so Android testers already have it. The App Store notes do announce it, because build 7 predates it.
+
+Android still has no RevenueCat public key in `.env.local`, so purchases do not work in an Android build. The Play listing memo already says so and remains accurate.
