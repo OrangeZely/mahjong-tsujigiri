@@ -93,3 +93,13 @@ What works on both platforms is to stop requesting extension-less paths. `static
 The iOS `StaticExportRouter` is kept even though the web-layer fix now covers this case. The two are not redundant: the router repairs *any* full load of an extension-less path, including deep links into `/game/`, which Android has no equivalent hook for.
 
 Verified on a Pixel emulator: the app launches into English on an English device, `/en/index.html` is served with the `(en)` chunks, tapping 日本語 loads `/index.html` with the `(ja)` chunks, and the safe-area padding behaves as it does on iOS. Re-verified on the iOS simulator after the same change.
+
+## App Store Connect listing entry (2026-09-18)
+
+Build 8 uploaded (Delivery UUID `c87add85-b510-496a-8871-f5736d892192`) and reached `VALID`. A 1.2.0 version record was created (`ae79c99a-78af-49a6-9e08-0713b96665ba`, `PREPARE_FOR_SUBMISSION`, release type manual) and build 8 is attached to it.
+
+The app had only a `ja` localization. Creating the `en-US` app-info localization also creates the matching version localization, so the English copy is written with a PATCH rather than a POST. Both locales' text is read from `store-assets/listing-en-US.json` and `store-assets/appstore-listing-ja.md` rather than retyped, so the store and the drafts cannot drift. The Japanese subtitle, keywords, description, promotional text, release notes, privacy-policy URL and marketing/support URLs were updated to the 1.2.0 drafts.
+
+The Japanese screenshots were replaced. The set carried over from 1.1.1 showed only two modes, which contradicts release notes that announce Fu Practice, so `shoot-store.mjs ja` regenerated them from the deployed site and the stale images were deleted. A 6.9-inch set was added for both locales, which neither had before. Nine English and nine Japanese screenshots are uploaded across 6.9-inch, 6.5-inch and 13-inch iPad, and App Store Connect reports every one `COMPLETE` with no errors.
+
+Nothing has been submitted for review. That still waits on the AdMob privacy message being published and on device testing of consent and purchases.
