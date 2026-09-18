@@ -59,3 +59,15 @@ Not done: the English localization does not exist in App Store Connect yet, wher
 `store-assets/playstore-listing-ja.md` only needed release notes for versionCode 3 and a privacy URL that answers 200 instead of redirecting. Its description was already current. Those notes deliberately omit Fu Practice: versionCode 2 went to the closed test on 2026-09-08, after the mode landed, so Android testers already have it. The App Store notes do announce it, because build 7 predates it.
 
 Android still has no RevenueCat public key in `.env.local`, so purchases do not work in an Android build. The Play listing memo already says so and remains accurate.
+
+## iOS signing recovery and the 1.2.0 archive (2026-09-18)
+
+Signing had to be repaired first. The `Tsujigiri App Store Manual` profile is bound to certificate `6S8VVQMF93`, whose private key exists only in the locked `tsujigiri-signing` keychain, and that keychain's password is not known. The login keychain holds certificate `ADZMZCV7AB` (serial `4C98B320...`), which was bound only to the TransLoop profile and so could not sign this bundle id.
+
+With the user's approval, a new App Store profile `Tsujigiri App Store Manual v2` was created through the API for `com.orangezely.mahjongtsujigiru` against `ADZMZCV7AB`, installed to `~/Library/MobileDevice/Provisioning Profiles/`, and named in `project.pbxproj` and `ExportOptions.plist`. Existing certificates and profiles were left untouched. The profile expires 2027-09-17.
+
+The archive is signed at archive time rather than at export, because signing an unsigned archive drops entitlements. `xcodebuild archive` and `-exportArchive` both succeeded, with no keychain prompt: Xcode picked identity `389D2A67...`, the login-keychain copy of `ADZMZCV7AB`, because the profile allows only that certificate.
+
+Verified in `build/export/App.ipa`: version 1.2.0, build 8, `ja` and `en` localizations with the right display names, App Store entitlements with `get-task-allow` false and `beta-reports-active` true, a valid signature that satisfies its designated requirement, the expected embedded profile, and the bundled web assets containing every `/en/` route.
+
+The binary has not been uploaded. Uploading needs `xcrun altool --upload-app` and the user's go-ahead, and the device testing listed above is still outstanding.

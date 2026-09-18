@@ -13,7 +13,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.orangezely.mahjongtsujigiru</key>
-		<string>Tsujigiri App Store Manual</string>
+		<string>Tsujigiri App Store Manual v2</string>
 	</dict>
 	<key>uploadSymbols</key>
 	<true/>
