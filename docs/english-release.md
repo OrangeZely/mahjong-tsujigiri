@@ -111,3 +111,14 @@ Japan is outside the EEA/UK/Switzerland, so the UMP consent form never appears w
 It is inert unless `NEXT_PUBLIC_ADMOB_TEST_DEVICE_IDS` is set. Google's UMP SDK applies `debugGeography` only to devices listed in `testDeviceIdentifiers`, so leaving the variable unset — the default in `.env.local` and on any build that doesn't set it — makes the option a no-op even if it ships to production by mistake; no real user's consent flow can be affected by this code path. To use it, run once with the variable unset, read the test-device hash the UMP SDK prints to the native console on first launch, then set that ID locally before rebuilding.
 
 Confirmed AdMob's own EEA consent message already exists and is published for this app (created 2026-09-16, before this session, covering English and Japanese) — the assumption in the web-release note above that it was still unpublished was wrong; the account had it published for iOS already.
+
+## TestFlight distribution (2026-09-19)
+
+Build 9 (`1.2.0`, Delivery UUID `06ffbb97-6a24-4ba7-b0f1-8516fd4b85d8`) carries the inert EEA test helper and is the build to test. It is `VALID` and assigned to two groups:
+
+- Internal group `内部テスト` (`97533dfc-427d-4853-a07a-82d7a3bc365d`): builds 8 and 9. The tester is the account holder's own Apple ID. Internal groups need no review and cannot have a public link.
+- External group `麻雀` (`82ef943d-b9ad-4702-8bf5-22b4f7d6b6ee`): builds 3-6 from before, plus 9. It already had a public link, `https://testflight.apple.com/join/Ue4775u9`, with no tester limit. Build 9 was submitted to Beta App Review (`WAITING_FOR_REVIEW`) with Japanese and English "what to test" notes.
+
+Until Beta App Review approves build 9, anyone opening that link installs the newest approved build in the group, which is build 6, from before English and Fu Practice existed. The link is only useful for this release once the review clears.
+
+The ASC helper's `post`/`patch` now tolerate 204 empty responses; before, a successful relationship write threw a JSON parse error that looked like a failure.
