@@ -34,11 +34,10 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
-        <!-- AdMobのアプリID。iOSは本番IDを設定済み。Androidは未作成のためテスト用IDのまま。
-             Google Play公開時にAdMobでAndroidアプリを作成し、本番IDに差し替えること -->
+        <!-- AdMob application ID -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-7882004435623034~5083139933"/>
     </application>
 
     <!-- Permissions -->
