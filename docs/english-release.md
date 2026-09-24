@@ -122,3 +122,23 @@ Build 9 (`1.2.0`, Delivery UUID `06ffbb97-6a24-4ba7-b0f1-8516fd4b85d8`) carries 
 Until Beta App Review approves build 9, anyone opening that link installs the newest approved build in the group, which is build 6, from before English and Fu Practice existed. The link is only useful for this release once the review clears.
 
 The ASC helper's `post`/`patch` now tolerate 204 empty responses; before, a successful relationship write threw a JSON parse error that looked like a failure.
+
+## The App Store rejection: a missing Scene lifecycle, unrelated to this release's own changes (2026-09-24)
+
+Build 8 was rejected under Guideline 2.1(a) for crashing on launch on both a real iPhone 17 Pro Max and an iPad Air 11" (iOS 27.0). That submission was made outside this project's own workflow — through App Store Connect directly, with build 8 attached to the `1.2.0` version record and stale review notes carried over from build 7's submission.
+
+Both attached `.ips` crash reports fault at the identical symbol on the main thread, before `AppDelegate.application(_:didFinishLaunchingWithOptions:)` or any Capacitor code runs:
+
+```
+___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption_block_invoke
+```
+
+The app has never adopted UIScene: no `SceneDelegate`, no `UIApplicationSceneManifest` in `Info.plist`, just the classic `AppDelegate` + `UIMainStoryboardFile` launch path that has worked since this project began. Something in Apple's iOS 27 runtime turned "app hasn't adopted scenes" from a console warning into a hard crash. This is unrelated to anything changed for English support, Fu Practice, or the native routing/safe-area fixes earlier in this document — the crash happens before the app's own code has a chance to run.
+
+Fixing it took three attempts, because Capacitor 8.5 ships `CAPSceneDelegateProxy` but it only implements `UISceneDelegate`, not `UIWindowSceneDelegate` — it forwards URL and universal-link notifications and never creates a window:
+
+1. `UIApplicationSceneManifest` + `UISceneDelegateClassName: CAPSceneDelegateProxy` — no longer crashes, but produces a **black screen with no Capacitor activity in the log at all**. Confirmed on an iPhone 17 Pro Max simulator: `strings`-verified `App` in the binary, but the app's own `Capacitor: Handling local request` log line never appears.
+2. `UIApplicationSceneManifest` + `UISceneStoryboardFile: Main`, no delegate class — same black screen, same absence of Capacitor activity, despite this being Apple's documented "storyboard-only" scene adoption path.
+3. **What worked**: a real `SceneDelegate` in `AppDelegate.swift` (`class SceneDelegate: UIResponder, UIWindowSceneDelegate`) that creates the `UIWindow` itself from the connecting `UIWindowScene`, loads `Main.storyboard`'s initial view controller as `rootViewController`, and forwards URL/continuity callbacks to `SceneDelegateProxy.shared` so Capacitor's own deep-link handling still works. `Info.plist` points `UISceneDelegateClassName` at `App.SceneDelegate` (module-qualified, matching how `Main.storyboard`'s `customModule` was already set for `StaticExportViewController`). Verified on the simulator: Japanese and English home screens render correctly, language switching works, and this is the same object graph (`StaticExportViewController` from `Main.storyboard`) as before.
+
+Bumped to build 10 for this. Not yet uploaded — that is done from the user's own terminal, as with every other build in this project.

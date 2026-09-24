@@ -74,3 +74,33 @@ class StaticExportViewController: CAPBridgeViewController {
         return StaticExportRouter()
     }
 }
+
+/// iOS 27でUIScene未対応が起動時クラッシュになったため、明示的なSceneDelegateを用意する。
+/// UIKitに「UISceneStoryboardFileだけでウィンドウを自動生成させる」挙動は、
+/// このプロジェクト構成では実際には動作しなかった（実機・シミュレータともにWebViewが
+/// 一切読み込まれず、画面が黒いまま）。かわりに、Xcodeの標準的なStoryboardベースの
+/// Sceneアプリと同じ手順で、ウィンドウとMain.storyboardの初期画面を自分で生成する。
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        self.window = window
+        window.makeKeyAndVisible()
+
+        // CapacitorのURL/ユニバーサルリンク通知はCAPSceneDelegateProxyに委譲する。
+        // このプロキシはUIWindowSceneDelegateではなくUISceneDelegateのみを実装しており
+        // ウィンドウ生成には関与しないため、両方を同時にInfo.plistへは指定できない。
+        SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        SceneDelegateProxy.shared.scene(scene, openURLContexts: URLContexts)
+    }
+
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        SceneDelegateProxy.shared.scene(scene, continue: userActivity)
+    }
+}

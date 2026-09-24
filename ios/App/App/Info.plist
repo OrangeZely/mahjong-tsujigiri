@@ -237,6 +237,31 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<!-- iOS 27でこの未対応が警告からクラッシュ（EXC_BREAKPOINT、
+		     ___UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption）へ変わった。
+		     UISceneStoryboardFileだけでウィンドウを自動生成させる構成、および
+		     CapacitorのCAPSceneDelegateProxy（UIWindowSceneDelegateではなく
+		     UISceneDelegateしか実装しておらずウィンドウ生成を担わない）を単独指定する構成は
+		     どちらも試したが、実機・シミュレータともにWebViewが一切読み込まれず
+		     画面が黒いままだった。AppDelegate.swiftのSceneDelegateで
+		     ウィンドウとMain.storyboardの初期画面を明示的に生成する。 -->
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>App.SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
