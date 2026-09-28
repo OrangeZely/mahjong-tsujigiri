@@ -152,3 +152,15 @@ Creating the actual `appStoreVersionSubmissions` resource failed with a 403 from
 ## iOS 27.0 simulator note (2026-09-24)
 
 Every earlier simulator verification in this project used an iOS 26.5 device, not iOS 27.0 — the OS the review devices ran. A fresh iOS 27.0 simulator (`iPhone17ProMax-iOS27`) was created to verify the SceneDelegate fix under the actual failing OS version, since the original crash was iOS 27–specific enforcement that iOS 26.5 does not have. Build 10's code launched without crashing and rendered the home screen correctly; an extended white screen mid-launch was cold-start asset loading on a freshly created simulator (confirmed via `log show`: URL scheme handler requests kept completing throughout), not a hang or crash, and no crash report was written to `~/Library/Logs/DiagnosticReports` or the simulator's own diagnostic directory.
+
+## Second rejection: Guideline 2.3.10, other platforms in metadata (2026-09-28)
+
+The launch crash is fixed: App Review opened build 10 on an iPad Air 11-inch and got past launch. It was rejected again under 2.3.10 (accurate metadata), a "bug fix submission" category that Apple lets developers either resolve now or waive with a reply.
+
+The one concrete finding was the English description. `listing-en-US.json` was shared between the App Store and Google Play, and its sentence "Manage or cancel subscriptions in your App Store or Google Play account settings" shipped to the App Store. The App Store copy now says only "App Store". The Play wording is kept under a separate `descriptionGooglePlay` key so the two stores stop sharing one description. A read-back of every App Store text field in both locales, plus the subscription names and descriptions, found no other mention of another platform.
+
+The feedback also asked for screenshots that "accurately reflect the app in use ... and highlight the main features". The old set did not, and the reason was mine: it had been captured from the website in headless Chrome, so the iPad home screenshot included the web-only "Practice on the go ... Get" banner linking to the App Store, and the game screenshot was two-thirds empty. `shoot-store.mjs` now strips that banner, sizes each viewport to its content, and frames every size with a caption. It also clears saved state per shot; without that, the 5-plays-per-day counter ran out partway through the run and one iPad screenshot showed "No plays left today". All 24 images (two locales, three sizes, four screens) reached `COMPLETE` in App Store Connect.
+
+Left as is on purpose: the in-app Terms and Privacy pages still name Google Play, because the same pages serve the Android app. They are legal text, not the description Apple cited, and changing them means a new build. If a later review flags them, make them platform-neutral in 1.2.1.
+
+Metadata edits need no new build; build 10 stays attached. The user resubmits from the App Store Connect website, as before.

@@ -1,5 +1,6 @@
 // ストア用スクリーンショットの撮影＋見出し合成。
-// 使い方: node store-assets/shoot-store.mjs [en|ja]
+// 使い方: node store-assets/shoot-store.mjs [en|ja] [ターゲット名]
+// ターゲット名を渡すとそのサイズだけ撮る（例: shipaton）。
 // Chromeをheadlessで起動してCDPで操作し、各ストアの規定サイズで書き出す。
 // 公開中のサイトを撮るので、撮る前にデプロイを済ませておくこと。
 import { spawn } from 'node:child_process';
@@ -18,28 +19,46 @@ const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 // 各ストアが要求する最終ピクセルサイズと、それを作るための端末エミュレーション。
-// frame: 'plain' はアプリ画面をそのまま出す。既存の日本語App Storeスクショに合わせている。
-// frame: 'caption' は見出しを乗せた背景に画面をはめ込む。Play Store側の既存スタイル。
+// 全サイズを「見出し＋アプリ画面」の構成にする。Appleは「実際に使っている様子で主要機能を
+// 見せること」を求めるので、各画像が1つの機能を言葉でも伝えるようにする。
 const TARGETS = [
-  { name: 'appstore-6.9',  out: [1320, 2868], css: [440, 956],   scale: 3, frame: 'plain' },
-  { name: 'appstore-6.5',  out: [1284, 2778], css: [428, 926],   scale: 3, frame: 'plain' },
-  { name: 'appstore-ipad13', out: [2064, 2752], css: [1032, 1376], scale: 2, frame: 'plain' },
-  { name: 'playstore',     out: [1170, 2532], css: [390, 844],   scale: 3, frame: 'caption' },
+  { name: 'appstore-6.9',  out: [1320, 2868], css: [440, 956],   scale: 3 },
+  { name: 'appstore-6.5',  out: [1284, 2778], css: [428, 926],   scale: 3 },
+  { name: 'appstore-ipad13', out: [2064, 2752], css: [1032, 1376], scale: 2 },
+  { name: 'playstore',     out: [1170, 2532], css: [390, 844],   scale: 3 },
 ];
 
-// 撮る画面と、その上に乗せる見出し。
+// 撮る画面と見出し。h は端末の高さに対する割合（内容が短い画面は詰めて空白を減らす）。
+// wait は画面に入ってから実行する操作（JS式か "wait:ミリ秒"）。
+const START = `(()=>{const b=[...document.querySelectorAll('button')].find(b=>/Begin|斬！/.test(b.textContent));b&&b.click();return !!b})()`;
 const SCREENS = {
   en: [
-    { key: '1-home', path: '/', caption: 'Three ways to train', sub: 'Full flush, discards, and fu' },
-    { key: '2-game', path: '/game/?mode=casual', caption: 'How many in 60 seconds?', sub: 'Tile efficiency you learn by playing', start: true },
-    { key: '3-ranking', path: '/ranking/', caption: 'Climb the ranks', sub: 'Compare scores with other players' },
+    { key: '1-home', path: '/', h: 1, caption: 'Three ways to train', sub: 'Full flush, discards, and fu',
+      wait: [`document.querySelectorAll('button, a').length`, 'scroll-modes'] },
+    { key: '2-discard', path: '/game/?mode=casual', h: 0.42, caption: 'Pick the right discard', sub: 'Sharpen tile efficiency in 60 seconds',
+      wait: [START, 'wait:2500'] },
+    { key: '3-fu', path: '/fu-game/', h: 0.74, caption: 'Master fu calculation', sub: 'Read the hand, choose the fu',
+      wait: [START, 'wait:2500'] },
+    { key: '4-ranking', path: '/ranking/', h: 1, caption: 'Climb the ranks', sub: 'Compare scores with other players',
+      wait: ['wait:2500'] },
   ],
   ja: [
-    { key: '1-home', path: '/', caption: '3つの特訓', sub: '清一色・何切る・符計算' },
-    { key: '2-game', path: '/game/?mode=casual', caption: '60秒で何問斬れる', sub: '牌効率が自然と身につく', start: true },
-    { key: '3-ranking', path: '/ranking/', caption: '全国の剣客と競う', sub: 'スコアと段位で腕試し' },
+    { key: '1-home', path: '/', h: 1, caption: '3つの特訓', sub: '清一色・何切る・符計算',
+      wait: [`document.querySelectorAll('button, a').length`, 'scroll-modes'] },
+    { key: '2-discard', path: '/game/?mode=casual', h: 0.42, caption: '最善の一打を選べ', sub: '60秒で牌効率を鍛える',
+      wait: [START, 'wait:2500'] },
+    { key: '3-fu', path: '/fu-game/', h: 0.74, caption: '符計算をマスター', sub: '手牌を読んで符を答える',
+      wait: [START, 'wait:2500'] },
+    { key: '4-ranking', path: '/ranking/', h: 1, caption: '段位を駆け上がれ', sub: 'スコアで腕試し',
+      wait: ['wait:2500'] },
   ],
 };
+
+// Web専用の「アプリを入手」バナー（App Storeへのリンク）はネイティブアプリには存在しない。
+// 写り込むと「アプリの実際の画面」ではなくなるので撮影前に取り除く。
+const STRIP_WEB_ONLY = `document.querySelectorAll('a[href*="apps.apple.com"]').forEach(e => e.remove())`;
+// 3つの遊びかたカードが上から見えるよう、最初のカードの少し上までスクロールする。
+const SCROLL_TO_MODES = `(()=>{const c=[...document.querySelectorAll('h2, h3, div')].find(e=>/^(Full Flush|清一色モード)$/.test(e.textContent.trim()));if(!c)return 'no-card';const y=c.getBoundingClientRect().top+window.scrollY;window.scrollTo(0,Math.max(0,y-290));return y})()`;
 
 const FONT = LOCALE === 'ja'
   ? "'Hiragino Kaku Gothic ProN',sans-serif"
@@ -87,23 +106,23 @@ async function shoot(client, target, screen) {
   await S('Page.enable');
   await S('Runtime.enable');
   const [width, height] = target.css;
+  const viewH = Math.round(height * screen.h);
   await S('Emulation.setDeviceMetricsOverride', {
-    width, height, deviceScaleFactor: target.scale, mobile: target.scale === 3,
+    width, height: viewH, deviceScaleFactor: target.scale, mobile: target.scale === 3,
   });
+  await S('Page.addScriptToEvaluateOnNewDocument', { source: 'try{localStorage.clear();sessionStorage.clear()}catch(e){}' });
   await S('Page.navigate', { url: BASE + PREFIX + screen.path });
-  await sleep(3000);
+  await sleep(3500);
 
   const evalJs = async (expression) => (await S('Runtime.evaluate', { expression, returnByValue: true })).result.value;
 
-  if (screen.start) {
-    // 開始ボタンを押して盤面が出るまで待つ。文言はロケールで変わるのでaria/文字列に依存しない。
-    await evalJs(`(()=>{const b=[...document.querySelectorAll('button')].filter(e=>e.offsetParent);const t=b.find(e=>/⚔️|斬/.test(e.textContent));if(t)t.click();return !!t;})()`);
-    for (let i = 0; i < 40; i++) {
-      if (await evalJs(`document.querySelectorAll('img[src*="/tiles/"], [class*="tile"]').length > 5`)) break;
-      await sleep(300);
-    }
-    await sleep(2500);
+  for (const step of screen.wait) {
+    if (step.startsWith('wait:')) await sleep(Number(step.slice(5)));
+    else if (step === 'scroll-modes') { await evalJs(STRIP_WEB_ONLY); await evalJs(SCROLL_TO_MODES); await sleep(600); }
+    else await evalJs(step);
   }
+  await evalJs(STRIP_WEB_ONLY);   // 操作の後に現れる場合に備え、撮る直前にもう一度
+  await sleep(300);
 
   const { data } = await S('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   const raw = path.join(RAW, `${target.name}-${screen.key}.png`);
@@ -114,27 +133,27 @@ async function shoot(client, target, screen) {
 
 function compose(raw, target, screen) {
   const [W, H] = target.out;
-  if (target.frame === 'plain') {
-    const dest = path.join(OUT, `${target.name}-${screen.key}.png`);
-    fs.copyFileSync(raw, dest);
-    return Promise.resolve(dest);
-  }
+  const [cssW, cssH] = target.css;
   const shotW = Math.round(W * 0.86);
-  const shotH = Math.round(shotW * target.out[1] / target.out[0]);
+  // 生画像は cssW x (cssH*h) なので、その縦横比のまま載せる。
+  const shotH = Math.round(shotW * (cssH * screen.h) / cssW);
   const x = Math.round((W - shotW) / 2);
-  const y = Math.round(H * 0.118);
+  const top = Math.round(H * 0.118);                         // 見出しの下端
+  const free = H - top - Math.round(H * 0.03);               // 画像を置ける縦の余白
+  const y = top + Math.max(0, Math.round((free - shotH) / 2)); // 短い画面は縦中央に置く
+  const rx = Math.round(W * 0.037);
   const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0%" stop-color="#0f4d31"/><stop offset="55%" stop-color="#08301e"/><stop offset="100%" stop-color="#061a12"/>
 </linearGradient>
-<clipPath id="round"><rect x="${x}" y="${y}" width="${shotW}" height="${shotH}" rx="${Math.round(W * 0.037)}"/></clipPath>
+<clipPath id="round"><rect x="${x}" y="${y}" width="${shotW}" height="${shotH}" rx="${rx}"/></clipPath>
 </defs>
 <rect width="${W}" height="${H}" fill="url(#bg)"/>
 <text x="${W / 2}" y="${Math.round(H * 0.059)}" font-family="${FONT}" font-size="${Math.round(W * 0.065)}" font-weight="bold" fill="#f5c542" text-anchor="middle">${screen.caption}</text>
 <text x="${W / 2}" y="${Math.round(H * 0.09)}" font-family="${FONT}" font-size="${Math.round(W * 0.034)}" fill="#dbeadd" text-anchor="middle">${screen.sub}</text>
-<rect x="${x}" y="${y}" width="${shotW}" height="${shotH}" rx="${Math.round(W * 0.037)}" fill="none" stroke="#f5c542" stroke-width="3" opacity="0.55"/>
-<image x="${x}" y="${y}" width="${shotW}" height="${shotH}" preserveAspectRatio="xMidYMin slice" clip-path="url(#round)" xlink:href="${raw}"/>
+<rect x="${x}" y="${y}" width="${shotW}" height="${shotH}" rx="${rx}" fill="none" stroke="#f5c542" stroke-width="3" opacity="0.55"/>
+<image x="${x}" y="${y}" width="${shotW}" height="${shotH}" preserveAspectRatio="none" clip-path="url(#round)" xlink:href="${raw}"/>
 </svg>`;
   const tmp = path.join(RAW, 'compose.svg');
   fs.writeFileSync(tmp, svg);
@@ -155,7 +174,8 @@ const chrome = spawn(CHROME, [
 try {
   const client = makeClient(await getWsUrl());
   await client.ready;
-  for (const target of TARGETS) {
+  const only = process.argv[3];
+  for (const target of TARGETS.filter(t => !only || t.name === only)) {
     for (const screen of SCREENS[LOCALE]) {
       const raw = await shoot(client, target, screen);
       const dest = await compose(raw, target, screen);

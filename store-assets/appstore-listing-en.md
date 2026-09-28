@@ -47,7 +47,7 @@ KEEP IMPROVING
 • Learn from guides on tile efficiency, full-flush waits, fu, and terminology.
 • Switch between Japanese and English in the app.
 
-The free plan includes 5 plays per day. Premium offers unlimited play, no ads, and new problems added monthly through a monthly or annual auto-renewing subscription. A separate one-time Remove Ads purchase removes ads without removing the daily play limit. Prices are shown in your local store. Manage or cancel subscriptions in your App Store or Google Play account settings. You can restore eligible purchases in the app.
+The free plan includes 5 plays per day. Premium offers unlimited play, no ads, and new problems added monthly through a monthly or annual auto-renewing subscription. A separate one-time Remove Ads purchase removes ads without removing the daily play limit. Prices are shown in your local store. Manage or cancel subscriptions in your App Store account settings. You can restore eligible purchases in the app.
 
 This is a riichi mahjong training game, not a tile-matching solitaire game. There is no wagering or real-money gambling.
 
