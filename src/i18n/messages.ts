@@ -687,6 +687,22 @@ export const messages = {
   "広告を表示できませんでした。もう一度お試しください": {
     "ja": "広告を表示できませんでした。もう一度お試しください",
     "en": "Couldn't show the ad. Please try again."
+  },
+  "横向きで牌が約2倍の大きさに": {
+    "ja": "横向きで牌が約2倍の大きさに",
+    "en": "Turn your phone sideways for tiles about twice as big"
+  },
+  "画面の向きのロックはオフにしてください": {
+    "ja": "画面の向きのロックはオフにしてください",
+    "en": "Make sure rotation lock is off"
+  },
+  "閉じる": {
+    "ja": "閉じる",
+    "en": "Close"
+  },
+  "手牌を2段にして大きく表示": {
+    "ja": "手牌を2段にして大きく表示",
+    "en": "Bigger tiles: show the hand in two rows"
   }
 } as const;
 export type MessageKey = keyof typeof messages;

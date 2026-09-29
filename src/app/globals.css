@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* 横向きのスマホ（高さが足りない画面）。ゲーム画面を詰めて手牌を1画面に収めるのに使う */
+@custom-variant short (@media (orientation: landscape) and (max-height: 500px));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -30,6 +33,9 @@ body {
    Webでは env() が 0px になり、いずれの指定も影響しない。 */
 body {
   padding-top: env(safe-area-inset-top);
+  /* 横向きではノッチ・Dynamic Islandが左右に来る */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   /* 余白部分に見えるのはbodyの背景。各画面は上端が gray-900 なので合わせ、帯が浮かないようにする。 */
   background-color: var(--color-gray-900);
 }

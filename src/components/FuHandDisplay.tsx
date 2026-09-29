@@ -80,7 +80,7 @@ export function PairGroup({
 // 4面子＋雀頭を並べて表示
 export function FuHand({ problem }: { problem: FuProblem }) {
   return (
-    <div className="flex flex-wrap gap-3 justify-center bg-black/20 rounded-xl p-4">
+    <div className="flex flex-wrap gap-3 justify-center bg-black/20 rounded-xl p-4 short:p-2">
       {problem.mentsuList.map((m, i) => (
         <MentsuGroup key={i} mentsu={m} isWaitGroup={problem.waitGroupIndex === i} />
       ))}

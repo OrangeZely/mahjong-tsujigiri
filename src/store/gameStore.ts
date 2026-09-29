@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { Problem, GameAnswer, GameResult, Tile, GameMode } from "@/types/mahjong";
 import { fetchProblems, fetchCasualProblems } from "@/lib/supabase";
 import { saveGameRecord } from "@/lib/history";
+import { trackPlay } from "@/lib/analytics";
 
 export type { GameMode } from "@/types/mahjong";
 
@@ -201,8 +202,16 @@ export const useGameStore = create<GameState>((set, get) => ({
   finishGame: () => {
     set({ phase: "finished", gameTimeLeft: 0 });
     // プレイ履歴を端末に保存
-    const { problems } = get();
-    saveGameRecord(get().getResult(), problems);
+    const { problems, gameMode, oniMode } = get();
+    const result = get().getResult();
+    saveGameRecord(result, problems);
+    trackPlay("finish", {
+      mode: gameMode,
+      oni: oniMode,
+      correct: result.correctCount,
+      answered: result.totalAnswered,
+      score: result.score,
+    });
   },
 
   resetGame: () => {

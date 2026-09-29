@@ -49,3 +49,6 @@ build/
 AuthKey_*.p8
 ios/App/build-archive/
 ios/App/build-sim/
+
+# wrangler dev のローカル秘密
+.dev.vars*

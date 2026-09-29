@@ -11,6 +11,7 @@ import OutOfPlaysCard from "@/components/OutOfPlaysCard";
 import { usePremiumStore } from "@/store/premiumStore";
 import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
 import { useResultGate } from "@/lib/useResultGate";
+import { trackPlay } from "@/lib/analytics";
 
 export default function FuGamePage() {
   const { t } = useI18n();
@@ -43,11 +44,13 @@ export default function FuGamePage() {
     consumePlay(premium);
     refreshRemaining();
     startGame(oni);
+    trackPlay("start", { mode: "fu", oni, source: premium ? "premium" : "free" });
   };
 
   // リワード広告視聴後の追加プレイ。無料枠を消費せずそのまま開始する。
   const handlePlayViaAd = () => {
     startGame(oni);
+    trackPlay("start", { mode: "fu", oni, source: "ad" });
   };
 
   if (phase === "loading") {
@@ -92,7 +95,7 @@ export default function FuGamePage() {
           )}
 
           {outOfPlays ? (
-            <OutOfPlaysCard onPlayViaAd={handlePlayViaAd} />
+            <OutOfPlaysCard mode="fu" onPlayViaAd={handlePlayViaAd} />
           ) : (
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -122,7 +125,7 @@ export default function FuGamePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-900 to-purple-950 flex flex-col items-center justify-start pt-4 relative">
+    <main className="min-h-screen bg-gradient-to-b from-gray-900 to-purple-950 flex flex-col items-center justify-start pt-4 short:pt-0 relative">
       <FuGameBoard />
 
       {phase === "finished" && (

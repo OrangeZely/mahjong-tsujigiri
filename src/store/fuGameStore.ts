@@ -3,6 +3,7 @@ import { GameAnswer, GameResult, GameMode } from "@/types/mahjong";
 import { FuProblem, FuResult } from "@/types/fu";
 import { generateFuProblem, computeFu, generateChoices } from "@/lib/fu";
 import { saveGameRecord } from "@/lib/history";
+import { trackPlay } from "@/lib/analytics";
 
 export type FuGamePhase =
   | "idle"
@@ -188,8 +189,16 @@ export const useFuGameStore = create<FuGameState>((set, get) => ({
 
   finishGame: () => {
     set({ phase: "finished", gameTimeLeft: 0 });
-    const { rounds } = get();
-    saveGameRecord(get().getResult(), rounds.map((r) => r.problem));
+    const { rounds, oniMode } = get();
+    const result = get().getResult();
+    saveGameRecord(result, rounds.map((r) => r.problem));
+    trackPlay("finish", {
+      mode: "fu",
+      oni: oniMode,
+      correct: result.correctCount,
+      answered: result.totalAnswered,
+      score: result.score,
+    });
   },
 
   resetGame: () => {

@@ -6,20 +6,28 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/client";
 import { showRewardedAd } from "@/lib/ads";
 import { DAILY_FREE_PLAYS } from "@/lib/playLimit";
+import { trackPlay } from "@/lib/analytics";
+import { GameMode } from "@/types/mahjong";
 
 interface OutOfPlaysCardProps {
+  mode: GameMode;
   // 広告視聴に成功したときに呼ばれる。呼び出し側でゲームを開始する。
   onPlayViaAd: () => void;
 }
 
 // 無料プレイ回数を使い切った画面。プレミアム誘導に加え、
 // 広告を1本見るごとに1回だけ追加でプレイできる導線を出す。
-export default function OutOfPlaysCard({ onPlayViaAd }: OutOfPlaysCardProps) {
+export default function OutOfPlaysCard({ mode, onPlayViaAd }: OutOfPlaysCardProps) {
   const { t } = useI18n();
   const router = useRouter();
   const [watchingAd, setWatchingAd] = useState(false);
   const [adFailed, setAdFailed] = useState(false);
   const [isNative, setIsNative] = useState(false);
+
+  // 上限に当たった回数（プレミアム・広告導線を検討する材料）。表示1回につき1件。
+  useEffect(() => {
+    trackPlay("limit_hit", { mode });
+  }, [mode]);
 
   const adController = useRef<AbortController | null>(null);
   useEffect(() => {

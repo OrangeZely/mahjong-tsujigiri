@@ -1,5 +1,5 @@
 import EnglishArticle from "@/components/EnglishArticle";
-export const metadata = {"title": "Privacy policy | Mahjong Tsujigiri!", "description": "Last updated: September 16, 2026"};
+export const metadata = {"title": "Privacy policy | Mahjong Tsujigiri!", "description": "Last updated: September 29, 2026"};
 const sections = [
   {
     "title": "About this policy",
@@ -12,6 +12,7 @@ const sections = [
     "bullets": [
       "Player name (nickname): the name you choose when submitting a leaderboard entry. You do not need to use your real name.",
       "Game scores and results: correct answers, total answers, accuracy, score, and game mode submitted to the leaderboard.",
+      "Play usage: when a game starts or ends, and when you reach the daily play limit, the App sends a random ID generated for your device, the game mode, correct answers, total answers, score, platform (iOS, Android, or web), display language, and whether Premium is active. It does not include your player name or advertising identifiers.",
       "Purchase information: purchase history, subscription status, and an app user ID used to manage purchase entitlements.",
       "Device, advertising, usage, and diagnostic information: third-party services may collect device identifiers, advertising data, product interactions, other usage data, approximate location, crash data, and performance data to deliver ads, improve quality, and prevent abuse."
     ],
@@ -25,13 +26,14 @@ const sections = [
       "Providing the leaderboard and calculating rankings.",
       "Managing purchases, subscriptions, and restoration.",
       "Delivering and measuring advertising and preventing abuse.",
-      "Investigating problems and improving performance and app quality."
+      "Investigating problems and improving performance and app quality.",
+      "Understanding how each mode is used, to improve problems and modes. The Developer reviews aggregated numbers only."
     ]
   },
   {
     "title": "3. Information stored on your device",
     "paragraphs": [
-      "Play history and your best score are stored on your device and are not uploaded as history records. You can delete them on the History screen. Your nickname, language choice, daily play count, and review-request status are also stored locally. Browser and native app storage are separate."
+      "Play history and your best score are stored on your device and are not uploaded as history records. The play usage described in section 1 is sent separately for aggregate statistics and does not include the problems you solved or your answers. You can delete them on the History screen. Your nickname, language choice, daily play count, and review-request status are also stored locally. Browser and native app storage are separate."
     ]
   },
   {
@@ -44,7 +46,7 @@ const sections = [
   {
     "title": "5. Third-party services",
     "bullets": [
-      "Supabase: storing leaderboard data and providing practice problems.",
+      "Supabase: storing leaderboard data and play usage, and providing practice problems.",
       "RevenueCat and Apple App Store / Google Play: managing purchases, subscriptions, and restoration.",
       "Google AdMob and UMP: advertising, measurement, abuse prevention, and advertising privacy choices.",
       "LINE LIFF, when using the LINE version: obtaining your display name as described above."
@@ -78,4 +80,4 @@ const sections = [
     ]
   }
 ];
-export default function Page() { return <EnglishArticle title="Privacy policy" intro="Last updated: September 16, 2026" sections={sections} practice="/en/"><p className="mt-6"><a className="underline text-yellow-300" href="https://policies.google.com/technologies/ads?hl=en" target="_blank" rel="noopener noreferrer">Google advertising policy</a></p></EnglishArticle>; }
+export default function Page() { return <EnglishArticle title="Privacy policy" intro="Last updated: September 29, 2026" sections={sections} practice="/en/"><p className="mt-6"><a className="underline text-yellow-300" href="https://policies.google.com/technologies/ads?hl=en" target="_blank" rel="noopener noreferrer">Google advertising policy</a></p></EnglishArticle>; }

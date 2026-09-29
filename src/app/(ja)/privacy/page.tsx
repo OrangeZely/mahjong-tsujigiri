@@ -10,7 +10,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4">
       <div className="max-w-2xl mx-auto py-8">
         <h1 className="text-3xl font-black text-white mb-2">プライバシーポリシー</h1>
-        <p className="text-gray-400 text-sm mb-8">最終更新日: 2026年9月16日</p>
+        <p className="text-gray-400 text-sm mb-8">最終更新日: 2026年9月29日</p>
 
         <div className="space-y-6 text-gray-200 leading-relaxed">
           <section>
@@ -31,6 +31,12 @@ export default function PrivacyPage() {
               <li>
                 <span className="font-bold">ゲームのスコア・成績</span>：
                 ランキング登録時に、正解数・回答数・正答率・スコア・ゲームモードを収集します。
+              </li>
+              <li>
+                <span className="font-bold">プレイの利用状況</span>：
+                ゲームの開始・終了時と、1日のプレイ回数を使い切ったときに、端末ごとに生成するランダムなID、ゲームモード、
+                正解数・回答数・スコア、利用環境（iOS／Android／Web）、表示言語およびプレミアム利用の有無を送信します。
+                プレイヤー名や広告識別子は含みません。
               </li>
               <li>
                 <span className="font-bold">購入に関する情報</span>：
@@ -54,13 +60,15 @@ export default function PrivacyPage() {
               <li>購入、サブスクリプションおよび購入の復元の管理</li>
               <li>広告の配信、効果測定および不正利用の防止</li>
               <li>不具合の調査、パフォーマンスの把握およびアプリ品質の改善</li>
+              <li>各モードの利用状況の把握（問題やモードの改善のため。集計した数値のみを確認します）</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-xl font-bold text-white mb-2">3. 端末内に保存される情報</h2>
             <p>
-              プレイ履歴・過去最高スコアなどのデータは利用者の端末内にのみ保存され、外部サーバーには送信されません。
+              プレイ履歴（解いた問題と解答の記録）・過去最高スコアなどのデータは利用者の端末内にのみ保存され、外部サーバーには送信されません。
+              なお、第1項の「プレイの利用状況」は、問題の内容や解答の記録を含まない集計用の情報として別に送信します。
               これらのデータはアプリ内の「プレイ履歴」画面からいつでも削除できます。
             </p>
           </section>
@@ -90,7 +98,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-white mb-2">5. 第三者サービス</h2>
             <p className="mb-2">本アプリは、以下の第三者サービスを利用しています。</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li>Supabase：ランキングデータの保存</li>
+              <li>Supabase：ランキングデータおよびプレイの利用状況の保存</li>
               <li>RevenueCatおよびApple App Store・Google Play：購入、サブスクリプション、購入の復元の管理</li>
               <li>Google AdMob：広告の配信、効果測定および不正利用の防止</li>
             </ul>

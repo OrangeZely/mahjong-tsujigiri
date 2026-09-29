@@ -43,10 +43,12 @@ export default function Tile({
   size = "md",
 }: TileProps) {
   const {locale} = useI18n();
+  // 牌画像（542×720）は左右に透明な余白があり、牌の面は x=52〜511 の459px。
+  // 箱を面の縦横比にして画像をはみ出させ、余白の分だけ牌を大きく見せる。
   const sizeClasses = {
-    sm: "w-10 h-14",
-    md: "flex-1 min-w-0 aspect-[3/4]",
-    lg: "w-14 h-20",
+    sm: "h-14 aspect-[459/720]",
+    md: "w-full min-w-0 aspect-[459/720]",
+    lg: "h-20 aspect-[459/720]",
   };
 
   const isClickable = onClick && !disabled;
@@ -69,13 +71,15 @@ export default function Tile({
         bg-transparent border-none p-0 min-w-0
       `}
     >
-      <Image
-        src={getTileImagePath(tile)}
-        alt={tileLabel(tile, locale)}
-        fill
-        className="object-contain"
-        unoptimized
-      />
+      <span className="absolute inset-y-0 left-[-11.33%] w-[118.08%]">
+        <Image
+          src={getTileImagePath(tile)}
+          alt={tileLabel(tile, locale)}
+          fill
+          className="object-fill"
+          unoptimized
+        />
+      </span>
     </button>
   );
 }

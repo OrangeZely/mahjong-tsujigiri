@@ -9,9 +9,11 @@ import { useGameStore, GameMode } from "@/store/gameStore";
 import GameBoard from "@/components/GameBoard";
 import ResultModal from "@/components/ResultModal";
 import OutOfPlaysCard from "@/components/OutOfPlaysCard";
+import HandViewOptions from "@/components/HandViewOptions";
 import { usePremiumStore } from "@/store/premiumStore";
 import { canPlay, consumePlay, DAILY_FREE_PLAYS } from "@/lib/playLimit";
 import { useResultGate } from "@/lib/useResultGate";
+import { trackPlay } from "@/lib/analytics";
 
 function GameContent() {
   const { t } = useI18n();
@@ -51,12 +53,13 @@ function GameContent() {
     if (started) {
       consumePlay(premium);
       refreshRemaining();
+      trackPlay("start", { mode, oni, source: premium ? "premium" : "free" });
     }
   };
 
   // リワード広告視聴後の追加プレイ。無料枠を消費せずそのまま開始する。
-  const handlePlayViaAd = () => {
-    void startGame(mode, oni);
+  const handlePlayViaAd = async () => {
+    if (await startGame(mode, oni)) trackPlay("start", { mode, oni, source: "ad" });
   };
 
   const modeLabel = mode === "casual" ? t("何切るモード") : t("清一色モード");
@@ -109,9 +112,11 @@ function GameContent() {
             </div>
           )}
 
+          <HandViewOptions />
+
           {outOfPlays ? (
             // 無料プランの1日の回数を使い切った場合
-            <OutOfPlaysCard onPlayViaAd={handlePlayViaAd} />
+            <OutOfPlaysCard mode={mode} onPlayViaAd={handlePlayViaAd} />
           ) : (
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -141,7 +146,7 @@ function GameContent() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex flex-col items-center justify-start pt-4 relative">
+    <main className="min-h-screen bg-gradient-to-b from-gray-900 to-green-950 flex flex-col items-center justify-start pt-4 short:pt-0 relative">
       <GameBoard />
 
       {phase === "finished" && (

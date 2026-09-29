@@ -1,14 +1,31 @@
 {
-  // Cloudflare Workers（静的アセット配信）の設定。
-  // next build の出力（out/）をそのまま配信するだけで、サーバー側のコードは持たない。
+  // Cloudflare Workers の設定。
+  // サイト本体は next build の出力（out/）をアセット配信層がそのまま返す。
+  // /admin（運営ダッシュボード）だけ worker/index.js を通す。
   "name": "mahjong-tsujigiri",
   "compatibility_date": "2026-08-27",
+  "main": "worker/index.js",
   "assets": {
     "directory": "./out",
+    "binding": "ASSETS",
+    // /admin 以外は Worker を起動せずに静的ファイルを返す（従来どおり）
+    "run_worker_first": ["/admin", "/admin/*"],
     // next.config.ts の trailingSlash: true に合わせる。
     // out/game/index.html を /game/ で配信し、/game へのアクセスはリダイレクトする。
     "html_handling": "force-trailing-slash",
     // 静的な複数ページ構成なので SPA フォールバックは使わず、out/404.html を返す。
     "not_found_handling": "404-page"
-  }
+  },
+  "vars": {
+    // 公開されている値（アプリのバンドルにも入っている）。秘密ではない
+    "SUPABASE_URL": "https://qbuhacmomygvmtfdatzt.supabase.co"
+  },
+  // 秘密（`npx wrangler secret put <NAME>` で登録する。ここには書かない）
+  //   ADMIN_PASSWORD             … /admin のログインパスワード。未設定なら /admin は 404
+  //   SUPABASE_SERVICE_ROLE_KEY  … admin_play_stats() を呼ぶためのキー
+  // 【罠】NAME は変数名。値は次のプロンプトで入力する。コマンド引数に値を書かないこと。
+  "ratelimits": [
+    // /admin/login の総当たり対策。IPごとに1分10回まで
+    { "name": "LOGIN_LIMITER", "namespace_id": "2601", "simple": { "limit": 10, "period": 60 } }
+  ]
 }

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/store/gameStore";
 import Tile from "./Tile";
 import { Tile as TileType } from "@/types/mahjong";
+import { useTwoRowHand } from "@/lib/displayPrefs";
 
 export default function GameBoard() {
   const { t } = useI18n();
@@ -23,6 +24,7 @@ export default function GameBoard() {
     tickGame,
   } = useGameStore();
 
+  const [twoRows] = useTwoRowHand();
   const rafRef = useRef<number | null>(null);
 
   // ゲームタイマー（requestAnimationFrame）
@@ -64,14 +66,14 @@ export default function GameBoard() {
   const isDisabled = phase === "answered";
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-2xl mx-auto px-2 py-4">
+    <div className="flex flex-col items-center gap-4 short:gap-2 w-full max-w-2xl md:max-w-4xl mx-auto px-1 sm:px-2 py-4 short:py-1">
 
       {/* 上部ステータスバー */}
-      <div className="w-full flex items-center justify-between bg-gray-900 text-white rounded-xl px-4 py-3">
+      <div className="w-full flex items-center justify-between bg-gray-900 text-white rounded-xl px-4 py-3 short:py-1">
         {/* 残り時間 */}
         <div className="flex flex-col items-center min-w-[80px]">
           <span className="text-xs text-gray-400">{t("残り時間")}</span>
-          <span className={`text-3xl font-black tabular-nums ${gameSeconds <= 10 ? "text-red-400 animate-pulse" : "text-white"}`}>
+          <span className={`text-3xl short:text-2xl font-black tabular-nums ${gameSeconds <= 10 ? "text-red-400 animate-pulse" : "text-white"}`}>
             {gameSeconds}
           </span>
         </div>
@@ -154,7 +156,7 @@ export default function GameBoard() {
 
       {/* ドラ表示 */}
       {problem.dora && problem.dora.length > 0 && (
-        <div className="w-full bg-gray-900 rounded-xl px-3 py-2 border border-yellow-600/50">
+        <div className="w-full bg-gray-900 rounded-xl px-3 py-2 short:py-1 border border-yellow-600/50">
           <div className="flex items-center justify-center gap-3">
             <span className="text-yellow-400 text-xs font-bold tracking-widest">{t("ドラ")}</span>
             <div className="flex gap-0.5">
@@ -191,10 +193,16 @@ export default function GameBoard() {
       )}
 
       {/* 手牌エリア */}
-      <div className="w-full bg-green-900 rounded-2xl px-2 py-3 shadow-xl border border-green-700">
-        <p className="text-center text-green-300 text-sm mb-3 font-medium tracking-wide">
+      <div className="w-full bg-green-900 rounded-2xl px-1 sm:px-2 py-3 short:py-2 shadow-xl border border-green-700">
+        <p className="text-center text-green-300 text-sm short:text-xs mb-3 short:mb-1.5 font-medium tracking-wide">
           {t("切る牌をタップ")}</p>
-        <div className="flex justify-center w-full gap-0">
+        {/* 1段なら牌の数で等分。2段表示は縦向きのスマホでだけ効かせ、半分ずつ2列に折り返す */}
+        <div
+          className={`grid w-full grid-cols-[repeat(var(--n),minmax(0,1fr))] ${
+            twoRows ? "max-sm:portrait:grid-cols-[repeat(var(--half),minmax(0,1fr))] max-sm:portrait:gap-y-2" : ""
+          }`}
+          style={{ "--n": problem.tiles.length, "--half": Math.ceil(problem.tiles.length / 2) } as React.CSSProperties}
+        >
           {problem.tiles.map((tile: TileType) => {
             let highlighted = false;
             let wrong = false;
