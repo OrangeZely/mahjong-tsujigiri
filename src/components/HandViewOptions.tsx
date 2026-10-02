@@ -16,7 +16,7 @@ export default function HandViewOptions() {
           <span className="text-2xl leading-none mt-0.5" aria-hidden>📱</span>
           <div className="flex-1 text-sm">
             <p className="text-sky-100 font-bold">{t("横向きで牌が約2倍の大きさに")}</p>
-            <p className="text-sky-300/80 text-xs mt-0.5">{t("画面の向きのロックはオフにしてください")}</p>
+            <p className="text-sky-300/80 text-xs mt-0.5">{t("画面の向きのロックはオフに")}</p>
           </div>
           <button
             onClick={dismissHint}

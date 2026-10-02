@@ -692,8 +692,8 @@ export const messages = {
     "ja": "横向きで牌が約2倍の大きさに",
     "en": "Turn your phone sideways for tiles about twice as big"
   },
-  "画面の向きのロックはオフにしてください": {
-    "ja": "画面の向きのロックはオフにしてください",
+  "画面の向きのロックはオフに": {
+    "ja": "画面の向きのロックはオフに",
     "en": "Make sure rotation lock is off"
   },
   "閉じる": {
